@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Compass, Sun, Moon, Download } from 'lucide-react';
+import { Sun, Moon, Download } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
+import { UserScopeLogo } from '@/components/UserScopeLogo';
 
 interface HeaderNavProps {
   onExport: (format: 'json' | 'csv') => void;
@@ -24,10 +25,8 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
         {/* Brand Identity - Native Apple App Icon & Typography */}
         <div className="flex items-center gap-2.5 sm:gap-3">
-          {/* Authentic Apple squircle icon with vibrant gradient and NO white border */}
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-[9px] sm:rounded-[10px] bg-gradient-to-b from-[#0a84ff] to-[#0062cc] text-white flex items-center justify-center shadow-sm shrink-0">
-            <Compass className="w-4 h-4 sm:w-5 sm:h-5 drop-shadow-sm animate-pulse-subtle" />
-          </div>
+          {/* UserScope Target Reticle Squircle Icon */}
+          <UserScopeLogo size={36} className="w-8 h-8 sm:w-9 sm:h-9 shadow-sm" />
           <div>
             <div className="flex items-center gap-1.5 sm:gap-2">
               <span className="font-semibold text-sm sm:text-base md:text-lg tracking-tight text-apple-label">

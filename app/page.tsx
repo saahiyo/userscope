@@ -11,7 +11,7 @@ import { MasonryGrid } from '@/components/MasonryGrid';
 import { RelationshipGraph } from '@/components/RelationshipGraph';
 import { PresenceTimeline } from '@/components/PresenceTimeline';
 import { DiscoveredProfile, SearchAggregatedSummary, SearchStreamEvent } from '@/lib/osint/types';
-import { Sparkles, Compass, ShieldCheck, Search, ArrowRight, CheckCircle2, Download, ArrowLeft } from 'lucide-react';
+import { Sparkles, ShieldCheck, Search, ArrowRight, CheckCircle2, Download, ArrowLeft } from 'lucide-react';
 import { FeatureBento } from '@/components/FeatureBento';
 import { WorkflowSteps } from '@/components/WorkflowSteps';
 import { PlatformShowcase } from '@/components/PlatformShowcase';

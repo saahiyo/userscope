@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Compass, ShieldCheck, Github, ExternalLink } from 'lucide-react';
+import { ShieldCheck, Github, ExternalLink } from 'lucide-react';
+import { UserScopeLogo } from '@/components/UserScopeLogo';
 
 export const LandingFooter: React.FC = () => {
   return (
@@ -11,9 +12,7 @@ export const LandingFooter: React.FC = () => {
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-3">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-[8px] bg-gradient-to-b from-[#0a84ff] to-[#0062cc] text-white flex items-center justify-center shadow-sm">
-                <Compass className="w-4 h-4" />
-              </div>
+              <UserScopeLogo size={28} className="w-7 h-7 shadow-sm" />
               <span className="font-semibold text-sm text-apple-label tracking-tight">UserScope</span>
               <span className="text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded-full bg-apple-well text-apple-label-secondary border border-apple-border">
                 OSINT Studio
