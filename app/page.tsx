@@ -17,6 +17,7 @@ import { WorkflowSteps } from '@/components/WorkflowSteps';
 import { PlatformShowcase } from '@/components/PlatformShowcase';
 import { FaqSection } from '@/components/FaqSection';
 import { LandingFooter } from '@/components/LandingFooter';
+import { useTheme } from '@/components/ThemeProvider';
 import dynamic from 'next/dynamic';
 
 const PatternWaves = dynamic(() => import('@/components/PatternWaves'), {
@@ -24,6 +25,7 @@ const PatternWaves = dynamic(() => import('@/components/PatternWaves'), {
 });
 
 export default function Home() {
+  const { isDark } = useTheme();
   const [query, setQuery] = useState('linkg518');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -208,12 +210,13 @@ export default function Home() {
         }}
       >
         <PatternWaves
+          key={isDark ? 'waves-dark' : 'waves-light'}
           preset="silk"
-          color="#ffffff"
+          color={isDark ? '#ffffff' : '#1d1d1f'}
           backgroundColor="transparent"
           fade="bottom"
           fadeSize={0.75}
-          opacity={0.38}
+          opacity={isDark ? 0.38 : 0.25}
           interactive={true}
           cursorSize={60}
           cursorStrength={0.6}
