@@ -1,0 +1,12 @@
+# UserScope
+
+> Real-time open-source intelligence (OSINT) reconnaissance tool searching public usernames, accounts, and digital footprints across 700+ platforms.
+
+UserScope allows security researchers, developers, and OSINT investigators to discover public account footprints across more than 700 online platforms simultaneously with zero paywalls.
+
+## Capabilities
+
+- [Reconnaissance Engine](https://userscope.app): Probes public APIs and profile endpoints directly with live SSE streaming telemetry.
+- [Identity Synthesis](https://userscope.app): Aggregates profile photos, banners, discovered emails, locations, and aliases.
+- [Multimodal Visualizations](https://userscope.app): Explore results through interactive relationship graphs, presence timelines, or responsive card layouts.
+- [Structured Data Export](https://userscope.app): Download verified findings anytime in JSON or CSV formats.

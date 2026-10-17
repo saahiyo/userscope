@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="apple-blue-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a84ff" />
+      <stop offset="100%" stop-color="#0062cc" />
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="8" fill="url(#apple-blue-grad)" />
+  <circle cx="16" cy="16" r="9" stroke="#ffffff" stroke-width="1.8" fill="none" opacity="0.9" />
+  <polygon points="20,12 17.8,17.8 12,20 14.2,14.2" fill="#ffffff" />
+</svg>
