@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Zap, Network, History, Download, ShieldCheck, Database, ArrowUpRight } from 'lucide-react';
+import { Zap, Network, History, Download, ShieldCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { springs, microinteractions } from '@/lib/motion';
 
 export const FeatureBento: React.FC = () => {
   return (
@@ -19,10 +21,14 @@ export const FeatureBento: React.FC = () => {
         </p>
       </div>
 
-      {/* Bento Grid Container */}
+      {/* Bento Grid Container with animations.dev Spring Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 pt-2">
         {/* Large Feature Card: Real-time Streaming */}
-        <div className="md:col-span-2 apple-card rounded-[20px] sm:rounded-[24px] p-5 sm:p-7 flex flex-col justify-between border border-apple-border relative overflow-hidden group">
+        <motion.div
+          whileHover={microinteractions.cardHover}
+          transition={springs.smooth}
+          className="md:col-span-2 apple-card rounded-[20px] sm:rounded-[24px] p-5 sm:p-7 flex flex-col justify-between border border-apple-border relative overflow-hidden group"
+        >
           <div className="space-y-3 z-10">
             <div className="w-10 h-10 rounded-[12px] bg-apple-blue/15 text-apple-blue flex items-center justify-center shadow-sm">
               <Zap className="w-5 h-5" />
@@ -55,10 +61,14 @@ export const FeatureBento: React.FC = () => {
               <span className="text-[10px] text-apple-green ml-auto">210ms</span>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Small Feature Card: Zero Paywalls */}
-        <div className="apple-card rounded-[20px] sm:rounded-[24px] p-5 sm:p-7 flex flex-col justify-between border border-apple-border group">
+        <motion.div
+          whileHover={microinteractions.cardHover}
+          transition={springs.smooth}
+          className="apple-card rounded-[20px] sm:rounded-[24px] p-5 sm:p-7 flex flex-col justify-between border border-apple-border group"
+        >
           <div className="space-y-3">
             <div className="w-10 h-10 rounded-[12px] bg-apple-green/15 text-apple-green flex items-center justify-center shadow-sm">
               <ShieldCheck className="w-5 h-5" />
@@ -78,10 +88,14 @@ export const FeatureBento: React.FC = () => {
               No API Keys
             </span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Small Feature Card: Multimodal Views */}
-        <div className="apple-card rounded-[20px] sm:rounded-[24px] p-5 sm:p-7 flex flex-col justify-between border border-apple-border group">
+        <motion.div
+          whileHover={microinteractions.cardHover}
+          transition={springs.smooth}
+          className="apple-card rounded-[20px] sm:rounded-[24px] p-5 sm:p-7 flex flex-col justify-between border border-apple-border group"
+        >
           <div className="space-y-3">
             <div className="w-10 h-10 rounded-[12px] bg-apple-purple/15 text-apple-purple flex items-center justify-center shadow-sm">
               <Network className="w-5 h-5" />
@@ -100,10 +114,14 @@ export const FeatureBento: React.FC = () => {
             <span className="px-2 py-0.5 rounded-full bg-apple-well border border-apple-border">Graph</span>
             <span className="px-2 py-0.5 rounded-full bg-apple-well border border-apple-border">Timeline</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Medium Feature Card: Data Portability */}
-        <div className="md:col-span-2 apple-card rounded-[20px] sm:rounded-[24px] p-5 sm:p-7 flex flex-col justify-between border border-apple-border group">
+        <motion.div
+          whileHover={microinteractions.cardHover}
+          transition={springs.smooth}
+          className="md:col-span-2 apple-card rounded-[20px] sm:rounded-[24px] p-5 sm:p-7 flex flex-col justify-between border border-apple-border group"
+        >
           <div className="space-y-3">
             <div className="w-10 h-10 rounded-[12px] bg-apple-orange/15 text-apple-orange flex items-center justify-center shadow-sm">
               <Download className="w-5 h-5" />
@@ -127,7 +145,7 @@ export const FeatureBento: React.FC = () => {
               <span className="text-[10px] text-apple-label-secondary">Excel / Sheets ready</span>
             </span>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

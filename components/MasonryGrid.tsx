@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { DiscoveredProfile } from '@/lib/osint/types';
 import { ProfileCard } from '@/components/ProfileCard';
+import { springs } from '@/lib/motion';
 
 interface MasonryGridProps {
   profiles: DiscoveredProfile[];
@@ -50,17 +52,25 @@ export const MasonryGrid: React.FC<MasonryGridProps> = ({ profiles }) => {
   if (profiles.length === 0) return null;
 
   return (
-    <div className="w-full flex gap-5 lg:gap-6 items-start pt-1 animate-fade-in">
+    <motion.div
+      layout
+      transition={springs.smooth}
+      className="w-full flex gap-5 lg:gap-6 items-start pt-1"
+    >
       {columns.map((colProfiles, colIndex) => (
-        <div
+        <motion.div
           key={`col-${colIndex}`}
+          layout
+          transition={springs.smooth}
           className="flex-1 flex flex-col gap-5 lg:gap-6 min-w-0"
         >
-          {colProfiles.map((profile) => (
-            <ProfileCard key={profile.id} profile={profile} />
-          ))}
-        </div>
+          <AnimatePresence mode="popLayout" initial={false}>
+            {colProfiles.map((profile) => (
+              <ProfileCard key={profile.id} profile={profile} />
+            ))}
+          </AnimatePresence>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 };

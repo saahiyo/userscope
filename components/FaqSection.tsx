@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { springs } from '@/lib/motion';
 
 interface FaqItem {
   question: string;
@@ -58,14 +60,14 @@ export const FaqSection: React.FC = () => {
         </p>
       </div>
 
-      {/* Accordion List */}
+      {/* Accordion List with animations.dev Auto-Height Expansion */}
       <div className="max-w-3xl mx-auto space-y-2.5">
         {faqs.map((faq, idx) => {
           const isOpen = openIndex === idx;
           return (
             <div
               key={faq.question}
-              className="apple-card rounded-[16px] sm:rounded-[18px] border border-apple-border overflow-hidden transition-all duration-200"
+              className="apple-card rounded-[16px] sm:rounded-[18px] border border-apple-border overflow-hidden transition-colors"
             >
               <button
                 type="button"
@@ -74,18 +76,30 @@ export const FaqSection: React.FC = () => {
                 className="w-full px-4 sm:px-5 py-3.5 sm:py-4 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-semibold text-apple-label hover:bg-apple-card-hover transition-colors cursor-pointer"
               >
                 <span>{faq.question}</span>
-                <ChevronDown
-                  className={`w-4 h-4 text-apple-label-secondary shrink-0 transition-transform duration-200 ${
-                    isOpen ? 'rotate-180' : ''
-                  }`}
-                />
+                <motion.div
+                  animate={{ rotate: isOpen ? 180 : 0 }}
+                  transition={springs.snappy}
+                  className="shrink-0"
+                >
+                  <ChevronDown className="w-4 h-4 text-apple-label-secondary" />
+                </motion.div>
               </button>
 
-              {isOpen && (
-                <div className="px-4 sm:px-5 pb-4 pt-1 text-xs text-apple-label-secondary leading-relaxed border-t border-apple-border/50 animate-fade-in">
-                  <p>{faq.answer}</p>
-                </div>
-              )}
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={springs.expand}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-4 sm:px-5 pb-4 pt-1 text-xs text-apple-label-secondary leading-relaxed border-t border-apple-border/50">
+                      <p>{faq.answer}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           );
         })}

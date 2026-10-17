@@ -19,6 +19,8 @@ import { FaqSection } from '@/components/FaqSection';
 import { LandingFooter } from '@/components/LandingFooter';
 import { useTheme } from '@/components/ThemeProvider';
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { springs, microinteractions, easings } from '@/lib/motion';
 import dynamic from 'next/dynamic';
 
 const PatternWaves = dynamic(() => import('@/components/PatternWaves'), {
@@ -278,20 +280,23 @@ export default function Home() {
                 { handle: 'shadcn', note: 'UI' },
                 { handle: 'leerob', note: 'Next.js' },
               ].map((item) => (
-                <button
+                <motion.button
                   key={item.handle}
                   type="button"
+                  whileHover={{ y: -2, scale: 1.03 }}
+                  whileTap={microinteractions.chipTap}
+                  transition={springs.snappy}
                   onClick={() => {
                     setQuery(item.handle);
                     startSearch(item.handle);
                   }}
-                  className="touch-target-expand group px-3 py-1.5 rounded-full bg-apple-well hover:bg-apple-chip border border-apple-border hover:border-apple-border-strong text-xs text-apple-label transition-all flex items-center gap-1.5 shadow-apple-sm active:scale-95"
+                  className="touch-target-expand group px-3 py-1.5 rounded-full bg-apple-well hover:bg-apple-chip border border-apple-border hover:border-apple-border-strong text-xs text-apple-label transition-colors flex items-center gap-1.5 shadow-apple-sm"
                 >
                   <span className="font-mono font-medium">@{item.handle}</span>
                   <span className="text-[10px] text-apple-label-secondary group-hover:text-apple-blue transition-colors">
                     {item.note} &rarr;
                   </span>
-                </button>
+                </motion.button>
               ))}
             </div>
 
@@ -314,107 +319,130 @@ export default function Home() {
         </section>
 
         {/* Real-time Telemetry Bar */}
-        {isLoading && (
-          <ScanProgress
-            checkedCount={stats.checkedCount}
-            totalCount={stats.totalCount}
-            hitsCount={stats.profilesFound}
-            timeElapsed={stats.timeElapsed}
-          />
-        )}
-
-        {/* Results Stream Section */}
-        {searchedQuery ? (
-          <div className="space-y-6 animate-fade-in">
-            {/* Header with Back button & active target */}
-            <div className="flex items-center justify-between pt-2">
-              <button
-                type="button"
-                onClick={resetSearch}
-                className="touch-target-expand inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-apple-well hover:bg-apple-chip border border-apple-border text-xs font-semibold text-apple-label-secondary hover:text-apple-label transition-all shadow-apple-sm"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Back to Overview</span>
-              </button>
-              <span className="text-xs font-mono text-apple-label-secondary">
-                Target: <span className="text-apple-label font-bold">@{searchedQuery}</span>
-              </span>
-            </div>
-
-            {/* Discovered Identity Overview Card */}
-            <IdentityOverview
-              summary={summary}
-              targetUsername={searchedQuery}
-              totalFound={profiles.length}
+        <AnimatePresence>
+          {isLoading && (
+            <ScanProgress
+              checkedCount={stats.checkedCount}
+              totalCount={stats.totalCount}
+              hitsCount={stats.profilesFound}
               timeElapsed={stats.timeElapsed}
-              firstSeen={stats.firstSeen}
-              lastSeen={stats.lastSeen}
             />
+          )}
+        </AnimatePresence>
 
-            {/* Scope Bar & Filter Controls */}
-            <CategoryScopeBar
-              filterQuery={filterQuery}
-              setFilterQuery={setFilterQuery}
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-              categories={categories}
-              totalProfiles={profiles.length}
-              filteredCount={filteredProfiles.length}
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-            />
+        {/* Results Stream Section vs Landing Page with animations.dev View Transition */}
+        <AnimatePresence mode="wait">
+          {searchedQuery ? (
+            <motion.div
+              key="results-stream"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={springs.smooth}
+              className="space-y-6"
+            >
+              {/* Header with Back button & active target */}
+              <div className="flex items-center justify-between pt-2">
+                <motion.button
+                  type="button"
+                  whileHover={{ x: -2 }}
+                  whileTap={microinteractions.buttonTap}
+                  transition={springs.snappy}
+                  onClick={resetSearch}
+                  className="touch-target-expand inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-apple-well hover:bg-apple-chip border border-apple-border text-xs font-semibold text-apple-label-secondary hover:text-apple-label transition-colors shadow-apple-sm"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Back to Overview</span>
+                </motion.button>
+                <span className="text-xs font-mono text-apple-label-secondary">
+                  Target: <span className="text-apple-label font-bold">@{searchedQuery}</span>
+                </span>
+              </div>
 
-            {/* View Mode Switching: Interactive Graph, Chronological Timeline, or Profile Cards */}
-            {viewMode === 'graph' ? (
-              <RelationshipGraph
-                profiles={filteredProfiles}
+              {/* Discovered Identity Overview Card */}
+              <IdentityOverview
                 summary={summary}
                 targetUsername={searchedQuery}
+                totalFound={profiles.length}
+                timeElapsed={stats.timeElapsed}
+                firstSeen={stats.firstSeen}
+                lastSeen={stats.lastSeen}
               />
-            ) : viewMode === 'timeline' ? (
-              <PresenceTimeline
-                profiles={filteredProfiles}
-                targetUsername={searchedQuery}
+
+              {/* Scope Bar & Filter Controls */}
+              <CategoryScopeBar
+                filterQuery={filterQuery}
+                setFilterQuery={setFilterQuery}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                categories={categories}
+                totalProfiles={profiles.length}
+                filteredCount={filteredProfiles.length}
+                viewMode={viewMode}
+                setViewMode={setViewMode}
               />
-            ) : filteredProfiles.length > 0 ? (
-              viewMode === 'grid' ? (
-                <MasonryGrid profiles={filteredProfiles} />
-              ) : (
-                <div className="flex flex-col gap-4 pt-1 animate-fade-in">
-                  {filteredProfiles.map((profile) => (
-                    <ProfileCard key={profile.id} profile={profile} />
-                  ))}
-                </div>
-              )
-            ) : (
-              <div className="text-center py-16 bg-apple-card border border-apple-border rounded-apple-2xl space-y-3">
-                {isLoading ? (
-                  <div className="space-y-2 flex flex-col items-center">
-                    <div className="w-6 h-6 border-2 border-apple-blue/30 border-t-apple-blue rounded-full animate-spin" />
-                    <p className="text-sm text-apple-label-secondary">
-                      Searching 692 public platforms in real time...
-                    </p>
-                  </div>
+
+              {/* View Mode Switching: Interactive Graph, Chronological Timeline, or Profile Cards */}
+              {viewMode === 'graph' ? (
+                <RelationshipGraph
+                  profiles={filteredProfiles}
+                  summary={summary}
+                  targetUsername={searchedQuery}
+                />
+              ) : viewMode === 'timeline' ? (
+                <PresenceTimeline
+                  profiles={filteredProfiles}
+                  targetUsername={searchedQuery}
+                />
+              ) : filteredProfiles.length > 0 ? (
+                viewMode === 'grid' ? (
+                  <MasonryGrid profiles={filteredProfiles} />
                 ) : (
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-apple-label">No matching profiles found</p>
-                    <p className="text-xs text-apple-label-secondary">
-                      Try selecting another category or clearing your filter keyword.
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        ) : (
-          /* Comprehensive Product Landing Sections */
-          <div className="space-y-10 sm:space-y-16 animate-fade-in">
-            <FeatureBento />
-            <WorkflowSteps />
-            <PlatformShowcase />
-            <FaqSection />
-          </div>
-        )}
+                  <motion.div layout transition={springs.smooth} className="flex flex-col gap-4 pt-1">
+                    <AnimatePresence mode="popLayout" initial={false}>
+                      {filteredProfiles.map((profile) => (
+                        <ProfileCard key={profile.id} profile={profile} />
+                      ))}
+                    </AnimatePresence>
+                  </motion.div>
+                )
+              ) : (
+                <div className="text-center py-16 bg-apple-card border border-apple-border rounded-apple-2xl space-y-3">
+                  {isLoading ? (
+                    <div className="space-y-2 flex flex-col items-center">
+                      <div className="w-6 h-6 border-2 border-apple-blue/30 border-t-apple-blue rounded-full animate-spin" />
+                      <p className="text-sm text-apple-label-secondary">
+                        Searching 692 public platforms in real time...
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium text-apple-label">No matching profiles found</p>
+                      <p className="text-xs text-apple-label-secondary">
+                        Try selecting another category or clearing your filter keyword.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </motion.div>
+          ) : (
+            /* Comprehensive Product Landing Sections */
+            <motion.div
+              key="landing-content"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={springs.smooth}
+              className="space-y-10 sm:space-y-16"
+            >
+              <FeatureBento />
+              <WorkflowSteps />
+              <PlatformShowcase />
+              <FaqSection />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
 
       {/* Comprehensive Apple Grouped Footer */}

@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ExternalLink, CheckCircle2, ChevronDown, ChevronUp, MapPin, Mail, Calendar, Sparkles } from 'lucide-react';
+import { ExternalLink, CheckCircle2, ChevronDown, MapPin, Mail, Calendar } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { DiscoveredProfile } from '@/lib/osint/types';
 import { decodeHtmlEntities } from '@/lib/utils/text';
 import { getCategoryToken } from '@/lib/theme/categoryTokens';
+import { springs, microinteractions, itemFadeInUp } from '@/lib/motion';
 
 interface ProfileCardProps {
   profile: DiscoveredProfile;
@@ -17,8 +19,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
   const categoryToken = getCategoryToken(profile.category);
 
   return (
-    <div className="@container w-full">
-      <div className="apple-card apple-card-interactive rounded-apple-card p-4 sm:p-5 flex flex-col group relative overflow-hidden transition-all">
+    <motion.div
+      variants={itemFadeInUp}
+      layout
+      whileHover={microinteractions.cardHover}
+      transition={springs.smooth}
+      className="@container w-full"
+    >
+      <div className="apple-card apple-card-interactive rounded-apple-card p-4 sm:p-5 flex flex-col group relative overflow-hidden transition-colors">
         <div className="space-y-4">
           {/* Banner if available */}
           {profile.bannerUrl && (
@@ -47,18 +55,21 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
               </span>
             </div>
 
-            {/* Apple Action Capsule Button */}
-            <a
+            {/* Apple Action Capsule Button with spring physics */}
+            <motion.a
               href={profile.profileUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="touch-target-expand inline-flex items-center gap-1.5 px-3.5 py-1.5 min-h-[36px] rounded-full bg-apple-blue/15 hover:bg-apple-blue text-apple-blue hover:text-white border border-apple-blue/25 text-xs font-semibold transition-all duration-150 active:scale-95 shadow-sm"
+              whileHover={{ scale: 1.04 }}
+              whileTap={microinteractions.buttonTap}
+              transition={springs.snappy}
+              className="touch-target-expand inline-flex items-center gap-1.5 px-3.5 py-1.5 min-h-[36px] rounded-full bg-apple-blue/15 hover:bg-apple-blue text-apple-blue hover:text-white border border-apple-blue/25 text-xs font-semibold shadow-sm transition-colors"
               title={`Open ${profile.platform} profile`}
               aria-label={`Open ${profile.platform} profile`}
             >
               <span>Open</span>
               <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+            </motion.a>
           </div>
 
           {/* Container-adaptive content area: stacks vertically on small containers, flexes horizontally on @md+ */}
@@ -69,7 +80,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
                 <img
                   src={profile.avatarUrl}
                   alt={profile.displayName || profile.username}
-                  className="w-12 h-12 rounded-[14px] object-cover border border-white/10 shrink-0 shadow-md bg-apple-well"
+                  className="w-12 h-12 rounded-[14px] object-cover border border-white/10 shrink-0 shadow-md bg-apple-well transition-transform group-hover:scale-105"
                   onError={(e) => {
                     (e.target as HTMLElement).style.display = 'none';
                   }}
@@ -154,33 +165,44 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
           </div>
         </div>
 
-        {/* Raw Metadata Accordion */}
+        {/* Raw Metadata Accordion with animations.dev Auto-Height Springs */}
         <div className="mt-4 pt-3 border-t border-apple-border">
           {extraEntries.length > 0 ? (
             <div>
               <button
                 type="button"
                 onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
-                className="touch-target-expand w-full flex items-center justify-between text-xs text-apple-label-secondary hover:text-apple-label transition-colors font-medium py-1.5"
+                className="touch-target-expand w-full flex items-center justify-between text-xs text-apple-label-secondary hover:text-apple-label transition-colors font-medium py-1.5 cursor-pointer"
               >
                 <span>Raw metadata ({extraEntries.length})</span>
-                {showTechnicalDetails ? (
-                  <ChevronUp className="w-3.5 h-3.5" />
-                ) : (
+                <motion.div
+                  animate={{ rotate: showTechnicalDetails ? 180 : 0 }}
+                  transition={springs.snappy}
+                >
                   <ChevronDown className="w-3.5 h-3.5" />
-                )}
+                </motion.div>
               </button>
 
-              {showTechnicalDetails && (
-                <div className="mt-2 p-3 apple-tile rounded-[12px] text-xs space-y-1.5 font-mono text-apple-label-secondary animate-fade-in">
-                  {extraEntries.map(([key, val]) => (
-                    <div key={key} className="flex justify-between items-start gap-2">
-                      <span className="text-apple-label-tertiary">{key}:</span>
-                      <span className="text-apple-label text-right break-all">{String(val)}</span>
+              <AnimatePresence initial={false}>
+                {showTechnicalDetails && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={springs.expand}
+                    className="overflow-hidden"
+                  >
+                    <div className="mt-2 p-3 apple-tile rounded-[12px] text-xs space-y-1.5 font-mono text-apple-label-secondary">
+                      {extraEntries.map(([key, val]) => (
+                        <div key={key} className="flex justify-between items-start gap-2">
+                          <span className="text-apple-label-tertiary">{key}:</span>
+                          <span className="text-apple-label text-right break-all">{String(val)}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           ) : (
             <div className="text-[11px] text-apple-label-tertiary">
@@ -189,6 +211,6 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
