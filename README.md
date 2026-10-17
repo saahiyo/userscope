@@ -7,6 +7,8 @@ High-speed OSINT username reconnaissance suite and digital footprint discovery t
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
+![UserScope Interface Preview](public/preview.png)
+
 ```bash
 # Query footprints across 690+ targets via SSE stream
 curl -N "http://localhost:3000/api/search/stream?username=torvalds"
