@@ -68,9 +68,20 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
       // 1. Native View Transitions API (Chrome 111+, Safari 18+)
       if (!prefersReducedMotion && 'startViewTransition' in document) {
-        (document as any).startViewTransition(() => {
+        try {
+          const transition = (document as any).startViewTransition(() => {
+            mutateDom();
+          });
+          // Catch and ignore AbortError if user clicks rapidly or skips transition
+          if (transition && typeof transition.ready?.catch === 'function') {
+            transition.ready.catch(() => {});
+          }
+          if (transition && typeof transition.finished?.catch === 'function') {
+            transition.finished.catch(() => {});
+          }
+        } catch {
           mutateDom();
-        });
+        }
         return;
       }
 

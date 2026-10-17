@@ -162,7 +162,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-apple-bg text-apple-label antialiased selection:bg-apple-blue/20 selection:text-apple-blue">
+      <body
+        className="min-h-screen bg-apple-bg text-apple-label antialiased selection:bg-apple-blue/20 selection:text-apple-blue"
+        suppressHydrationWarning
+      >
         <ThemeProvider>
           <SmoothScroll>{children}</SmoothScroll>
         </ThemeProvider>
