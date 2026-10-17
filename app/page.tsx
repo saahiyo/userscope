@@ -28,7 +28,7 @@ const PatternWaves = dynamic(() => import('@/components/PatternWaves'), {
 export default function Home() {
   const { isDark } = useTheme();
   const isReducedMotion = useReducedMotion();
-  const [query, setQuery] = useState('linkg518');
+  const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   // Search Results State
@@ -273,10 +273,10 @@ export default function Home() {
                 Explore targets:
               </span>
               {[
-                { handle: 'linkg518', note: '16 hits' },
                 { handle: 'torvalds', note: 'Linux' },
                 { handle: 'taylorotwell', note: 'Laravel' },
                 { handle: 'shadcn', note: 'UI' },
+                { handle: 'leerob', note: 'Next.js' },
               ].map((item) => (
                 <button
                   key={item.handle}
