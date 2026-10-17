@@ -4,7 +4,7 @@ Real-time username reconnaissance across 700+ platforms with zero telemetry leak
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-userscope.space-10b981?style=flat-square)](https://userscope.space) [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org/) [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/) [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/) [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-![UserScope Interface Preview](public/preview.png)
+![UserScope Interface Preview](public/og.png)
 
 ```bash
 # Query footprints across 690+ targets via SSE stream
