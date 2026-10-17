@@ -27,38 +27,40 @@ export const LandingFooter: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Technical Links */}
+          {/* Project & Community */}
           <div className="space-y-2">
-            <p className="text-xs font-semibold text-apple-label uppercase tracking-wider">Resources</p>
+            <p className="text-xs font-semibold text-apple-label uppercase tracking-wider">Project</p>
             <ul className="space-y-1.5 text-xs text-apple-label-secondary">
               <li>
                 <a
-                  href="/robots.txt"
+                  href="https://github.com/saahiyo/userscope"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-apple-label transition-colors"
+                  className="hover:text-apple-label transition-colors inline-flex items-center gap-1.5"
                 >
-                  Robots Directives
+                  <Github className="w-3.5 h-3.5" />
+                  <span>GitHub Repository</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="/sitemap.xml"
+                  href="https://github.com/saahiyo/userscope/issues"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-apple-label transition-colors"
+                  className="hover:text-apple-label transition-colors inline-flex items-center gap-1"
                 >
-                  XML Sitemap
+                  <span>Request a Platform</span>
+                  <ExternalLink className="w-3 h-3 opacity-60" />
                 </a>
               </li>
               <li>
                 <a
-                  href="/llms.txt"
+                  href="https://github.com/saahiyo/userscope/releases"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-apple-label transition-colors"
                 >
-                  llms.txt Specification
+                  Releases & Changelog
                 </a>
               </li>
             </ul>
