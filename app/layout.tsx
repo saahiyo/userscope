@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import 'lenis/dist/lenis.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { SmoothScroll } from '@/components/SmoothScroll';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.app';
 
@@ -161,7 +163,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-apple-bg text-apple-label antialiased selection:bg-apple-blue/20 selection:text-apple-blue">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <SmoothScroll>{children}</SmoothScroll>
+        </ThemeProvider>
       </body>
     </html>
   );
