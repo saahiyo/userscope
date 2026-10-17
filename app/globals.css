@@ -309,3 +309,55 @@
   -webkit-mask-image: radial-gradient(ellipse 80% 65% at 50% 30%, black 20%, transparent 85%);
 }
 
+/* ==========================================================================
+   WCAG 2.3.3 (AAA) & C39 Technique: Tiered Accessible Animation
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  /* Global safety net: 0.01ms prevents breaking JS transitionend/animationend listeners */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Tier 3: Retain essential state transitions (color, background, opacity, focus rings) */
+  .transition-colors,
+  .transition-opacity,
+  button,
+  a,
+  input {
+    transition-duration: 150ms !important;
+    transition-property: color, background-color, border-color, opacity, box-shadow !important;
+  }
+
+  /* Tier 1: Neutralize vestibular displacement triggers */
+  .apple-card-interactive:hover,
+  .apple-tile:hover,
+  .apple-chip:hover,
+  .touch-target-expand:active,
+  button:active {
+    transform: none !important;
+  }
+
+  /* Tier 1: Disable continuous infinite ambient animations (pings, pulses) */
+  .animate-pulse,
+  .animate-ping,
+  .animate-pulse-subtle {
+    animation: none !important;
+  }
+
+  /* Tier 2: Soften entry animations into a gentle opacity-only crossfade */
+  .animate-fade-in {
+    animation: accessibleFadeIn 150ms ease forwards !important;
+  }
+}
+
+@keyframes accessibleFadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+

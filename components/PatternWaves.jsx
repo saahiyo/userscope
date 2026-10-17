@@ -618,7 +618,14 @@ const PatternWaves = ({
       })
     });
 
-    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    let reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const motionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+    const onMotionChange = e => {
+      reducedMotion = e.matches;
+      dirty = true;
+      start();
+    };
+    motionQuery?.addEventListener?.('change', onMotionChange);
 
     let width = 1;
     let height = 1;
@@ -879,6 +886,7 @@ const PatternWaves = ({
       window.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('blur', onPointerLeave);
       document.removeEventListener('visibilitychange', onVisibility);
+      motionQuery?.removeEventListener?.('change', onMotionChange);
       wakeRef.current = null;
       if (ripple) {
         dispose(ripple.read);

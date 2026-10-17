@@ -18,6 +18,7 @@ import { PlatformShowcase } from '@/components/PlatformShowcase';
 import { FaqSection } from '@/components/FaqSection';
 import { LandingFooter } from '@/components/LandingFooter';
 import { useTheme } from '@/components/ThemeProvider';
+import { useReducedMotion } from '@/lib/hooks/useReducedMotion';
 import dynamic from 'next/dynamic';
 
 const PatternWaves = dynamic(() => import('@/components/PatternWaves'), {
@@ -26,6 +27,7 @@ const PatternWaves = dynamic(() => import('@/components/PatternWaves'), {
 
 export default function Home() {
   const { isDark } = useTheme();
+  const isReducedMotion = useReducedMotion();
   const [query, setQuery] = useState('linkg518');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -210,17 +212,18 @@ export default function Home() {
         }}
       >
         <PatternWaves
-          key={isDark ? 'waves-dark' : 'waves-light'}
+          key={`${isDark ? 'dark' : 'light'}-${isReducedMotion ? 'reduced' : 'motion'}`}
           preset="silk"
           color={isDark ? '#ffffff' : '#1d1d1f'}
           backgroundColor="transparent"
           fade="bottom"
           fadeSize={0.75}
           opacity={isDark ? 0.38 : 0.25}
-          interactive={true}
+          interactive={!isReducedMotion}
+          paused={isReducedMotion}
           cursorSize={60}
-          cursorStrength={0.6}
-          speed={0.32}
+          cursorStrength={isReducedMotion ? 0 : 0.6}
+          speed={isReducedMotion ? 0 : 0.32}
           scale={1.1}
         />
       </div>
