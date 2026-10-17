@@ -1,47 +1,35 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32" fill="none">
   <defs>
-    <linearGradient id="scope-bg-grad" x1="10" y1="5" x2="90" y2="95" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#006aff" />
-      <stop offset="42%" stop-color="#0052e6" />
-      <stop offset="78%" stop-color="#3020c8" />
-      <stop offset="100%" stop-color="#49139e" />
+    <linearGradient id="prem-scope-bg" x1="10" y1="5" x2="90" y2="95" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1488ff" />
+      <stop offset="28%" stop-color="#0066ff" />
+      <stop offset="65%" stop-color="#3428e8" />
+      <stop offset="100%" stop-color="#211082" />
     </linearGradient>
-    <linearGradient id="scope-facet-grad" x1="40" y1="0" x2="100" y2="60" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.35" />
-      <stop offset="100%" stop-color="#1e105e" stop-opacity="0.5" />
-    </linearGradient>
-    <linearGradient id="scope-sheen" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22" />
-      <stop offset="35%" stop-color="#ffffff" stop-opacity="0.05" />
-      <stop offset="65%" stop-color="#000000" stop-opacity="0" />
-      <stop offset="100%" stop-color="#000000" stop-opacity="0.25" />
-    </linearGradient>
-    <linearGradient id="scope-cast-shadow" x1="50" y1="50" x2="90" y2="90" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#020617" stop-opacity="0.4" />
-      <stop offset="100%" stop-color="#020617" stop-opacity="0" />
-    </linearGradient>
-    <filter id="scope-icon-elevation" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="2.5" stdDeviation="2.2" flood-color="#000000" flood-opacity="0.32" />
+    <radialGradient id="prem-scope-glow" cx="35%" cy="25%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" />
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.2" />
+    </radialGradient>
+    <filter id="prem-scope-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2.2" stdDeviation="2.2" flood-color="#070a24" flood-opacity="0.38" />
     </filter>
-    <clipPath id="scope-squircle-clip">
-      <rect x="0" y="0" width="100" height="100" rx="22.5" />
+    <clipPath id="squircle-smooth-clip">
+      <rect x="0" y="0" width="100" height="100" rx="26" ry="26" />
     </clipPath>
   </defs>
 
-  <g clip-path="url(#scope-squircle-clip)">
-    <rect x="0" y="0" width="100" height="100" fill="url(#scope-bg-grad)" />
-    <path d="M 50 0 L 100 0 L 100 70 L 65 100 L 40 100 Z" fill="url(#scope-facet-grad)" />
-    <path d="M 68 0 L 100 0 L 100 40 Z" fill="#ffffff" opacity="0.06" />
-    <rect x="0" y="0" width="100" height="100" fill="url(#scope-sheen)" />
-    <path d="M 50 50 L 85 85 L 65 100 L 35 100 L 50 50 Z" fill="url(#scope-cast-shadow)" opacity="0.6" />
-    <g filter="url(#scope-icon-elevation)">
-      <circle cx="50" cy="50" r="21.5" stroke="#ffffff" stroke-width="3.6" fill="none" />
-      <line x1="50" y1="18" x2="50" y2="30" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" />
-      <line x1="50" y1="70" x2="50" y2="82" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" />
-      <line x1="18" y1="50" x2="30" y2="50" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" />
-      <line x1="70" y1="50" x2="82" y2="50" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" />
-      <circle cx="50" cy="43.5" r="7.2" fill="#ffffff" />
-      <path d="M 35.5 67 C 35.5 57.5, 41.5 54, 50 54 C 58.5 54, 64.5 57.5, 64.5 67 C 64.5 67.8, 35.5 67.8, 35.5 67 Z" fill="#ffffff" />
+  <g clip-path="url(#squircle-smooth-clip)">
+    <rect x="0" y="0" width="100" height="100" fill="url(#prem-scope-bg)" />
+    <rect x="0" y="0" width="100" height="100" fill="url(#prem-scope-glow)" />
+    <g filter="url(#prem-scope-shadow)">
+      <circle cx="50" cy="50" r="21" stroke="#ffffff" stroke-width="3.5" fill="none" />
+      <line x1="50" y1="18.5" x2="50" y2="29.5" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" />
+      <line x1="50" y1="70.5" x2="50" y2="81.5" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" />
+      <line x1="18.5" y1="50" x2="29.5" y2="50" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" />
+      <line x1="70.5" y1="50" x2="81.5" y2="50" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" />
+      <circle cx="50" cy="43.5" r="7" fill="#ffffff" />
+      <path d="M 36 66.5 C 36 57.5, 41.5 54.5, 50 54.5 C 58.5 54.5, 64 57.5, 64 66.5 C 64 67.2, 36 67.2, 36 66.5 Z" fill="#ffffff" />
     </g>
   </g>
 </svg>

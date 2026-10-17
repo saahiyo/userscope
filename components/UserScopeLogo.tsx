@@ -20,76 +20,53 @@ export const UserScopeLogo: React.FC<UserScopeLogoProps> = ({
       aria-label="UserScope Logo"
     >
       <defs>
-        {/* Base Gradient: Vibrant Azure Blue to Deep Royal Violet */}
-        <linearGradient id="scope-bg-grad" x1="10" y1="5" x2="90" y2="95" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#006aff" />
-          <stop offset="42%" stopColor="#0052e6" />
-          <stop offset="78%" stopColor="#3020c8" />
-          <stop offset="100%" stopColor="#49139e" />
+        {/* Premium Multi-Stop Smooth Gradient (Seamless, No Hard Facet Angles) */}
+        <linearGradient id="prem-scope-bg" x1="10" y1="5" x2="90" y2="95" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#1488ff" />
+          <stop offset="28%" stopColor="#0066ff" />
+          <stop offset="65%" stopColor="#3428e8" />
+          <stop offset="100%" stopColor="#211082" />
         </linearGradient>
 
-        {/* Diagonal Facet Light: Apple-style Refraction */}
-        <linearGradient id="scope-facet-grad" x1="40" y1="0" x2="100" y2="60" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="#1e105e" stopOpacity="0.5" />
-        </linearGradient>
+        {/* Soft Ambient Radial Specular Glow */}
+        <radialGradient id="prem-scope-glow" cx="35%" cy="25%" r="65%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.25" />
+          <stop offset="50%" stopColor="#ffffff" stopOpacity="0.0" />
+          <stop offset="100%" stopColor="#000000" stopOpacity="0.2" />
+        </radialGradient>
 
-        {/* Glass Ambient Specular Sheen */}
-        <linearGradient id="scope-sheen" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.22" />
-          <stop offset="35%" stopColor="#ffffff" stopOpacity="0.05" />
-          <stop offset="65%" stopColor="#000000" stopOpacity="0" />
-          <stop offset="100%" stopColor="#000000" stopOpacity="0.25" />
-        </linearGradient>
-
-        {/* 45-degree Soft Long Shadow from Icon */}
-        <linearGradient id="scope-cast-shadow" x1="50" y1="50" x2="90" y2="90" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#020617" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#020617" stopOpacity="0" />
-        </linearGradient>
-
-        {/* Icon Drop Shadow */}
-        <filter id="scope-icon-elevation" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="2.5" stdDeviation="2.2" floodColor="#000000" floodOpacity="0.32" />
+        {/* Soft Icon Elevation Shadow */}
+        <filter id="prem-scope-shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2.2" stdDeviation="2.2" floodColor="#070a24" floodOpacity="0.38" />
         </filter>
 
-        {/* Squircle Clip Mask */}
-        <clipPath id="scope-squircle-clip">
-          <rect x="0" y="0" width="100" height="100" rx="22.5" />
+        {/* Smooth Continuous Apple Squircle Clip (Without Sharp Corners) */}
+        <clipPath id="squircle-smooth-clip">
+          <rect x="0" y="0" width="100" height="100" rx="26" ry="26" />
         </clipPath>
       </defs>
 
-      {/* Clipped Squircle Container */}
-      <g clipPath="url(#scope-squircle-clip)">
-        {/* Background Base */}
-        <rect x="0" y="0" width="100" height="100" fill="url(#scope-bg-grad)" />
+      {/* Clipped Smooth Squircle Body */}
+      <g clipPath="url(#squircle-smooth-clip)">
+        <rect x="0" y="0" width="100" height="100" fill="url(#prem-scope-bg)" />
+        <rect x="0" y="0" width="100" height="100" fill="url(#prem-scope-glow)" />
 
-        {/* Top-right to bottom-right diagonal faceted planes */}
-        <path d="M 50 0 L 100 0 L 100 70 L 65 100 L 40 100 Z" fill="url(#scope-facet-grad)" />
-        <path d="M 68 0 L 100 0 L 100 40 Z" fill="#ffffff" opacity="0.06" />
-
-        {/* Ambient Glass Sheen */}
-        <rect x="0" y="0" width="100" height="100" fill="url(#scope-sheen)" />
-
-        {/* Diagonal Cast Shadow from Icon towards bottom-right */}
-        <path d="M 50 50 L 85 85 L 65 100 L 35 100 L 50 50 Z" fill="url(#scope-cast-shadow)" opacity="0.6" />
-
-        {/* Reticle and User Silhouette */}
-        <g filter="url(#scope-icon-elevation)">
-          {/* Outer Target Ring */}
-          <circle cx="50" cy="50" r="21.5" stroke="#ffffff" strokeWidth="3.6" fill="none" />
+        {/* Reticle and User Silhouette (Clean, Centered, Perfectly Balanced) */}
+        <g filter="url(#prem-scope-shadow)">
+          {/* Target Reticle Ring */}
+          <circle cx="50" cy="50" r="21" stroke="#ffffff" strokeWidth="3.5" fill="none" />
 
           {/* Crosshair Ticks */}
-          <line x1="50" y1="18" x2="50" y2="30" stroke="#ffffff" strokeWidth="3.6" strokeLinecap="round" />
-          <line x1="50" y1="70" x2="50" y2="82" stroke="#ffffff" strokeWidth="3.6" strokeLinecap="round" />
-          <line x1="18" y1="50" x2="30" y2="50" stroke="#ffffff" strokeWidth="3.6" strokeLinecap="round" />
-          <line x1="70" y1="50" x2="82" y2="50" stroke="#ffffff" strokeWidth="3.6" strokeLinecap="round" />
+          <line x1="50" y1="18.5" x2="50" y2="29.5" stroke="#ffffff" strokeWidth="3.5" strokeLinecap="round" />
+          <line x1="50" y1="70.5" x2="50" y2="81.5" stroke="#ffffff" strokeWidth="3.5" strokeLinecap="round" />
+          <line x1="18.5" y1="50" x2="29.5" y2="50" stroke="#ffffff" strokeWidth="3.5" strokeLinecap="round" />
+          <line x1="70.5" y1="50" x2="81.5" y2="50" stroke="#ffffff" strokeWidth="3.5" strokeLinecap="round" />
 
-          {/* User Head Circle */}
-          <circle cx="50" cy="43.5" r="7.2" fill="#ffffff" />
+          {/* User Head */}
+          <circle cx="50" cy="43.5" r="7" fill="#ffffff" />
 
-          {/* User Shoulders / Bust */}
-          <path d="M 35.5 67 C 35.5 57.5, 41.5 54, 50 54 C 58.5 54, 64.5 57.5, 64.5 67 C 64.5 67.8, 35.5 67.8, 35.5 67 Z" fill="#ffffff" />
+          {/* User Shoulders */}
+          <path d="M 36 66.5 C 36 57.5, 41.5 54.5, 50 54.5 C 58.5 54.5, 64 57.5, 64 66.5 C 64 67.2, 36 67.2, 36 66.5 Z" fill="#ffffff" />
         </g>
       </g>
     </svg>

@@ -27,16 +27,16 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
         <div className="flex items-center gap-2.5 sm:gap-3">
           {/* UserScope Target Reticle Squircle Icon */}
           <UserScopeLogo size={36} className="w-8 h-8 sm:w-9 sm:h-9 shadow-sm" />
-          <div>
+          <div className="flex flex-col justify-center">
             <div className="flex items-center gap-1.5 sm:gap-2">
-              <span className="font-semibold text-sm sm:text-base md:text-lg tracking-tight text-apple-label">
+              <span className="font-semibold text-sm sm:text-base md:text-lg tracking-tight text-apple-label leading-tight">
                 UserScope
               </span>
-              <span className="text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase px-1.5 sm:px-2 py-0.5 rounded-full bg-apple-well text-apple-label-secondary border border-apple-border">
+              <span className="text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase px-1.5 sm:px-2 py-0.5 rounded-full bg-apple-well text-apple-label-secondary border border-apple-border leading-none">
                 OSINT Studio
               </span>
             </div>
-            <p className="text-[10px] sm:text-[11px] text-apple-label-tertiary hidden sm:block">
+            <p className="text-[10px] sm:text-[11px] text-apple-label-tertiary hidden sm:block leading-tight mt-0.5">
               Public Profile Reconnaissance
             </p>
           </div>

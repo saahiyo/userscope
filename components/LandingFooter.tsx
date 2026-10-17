@@ -11,7 +11,7 @@ export const LandingFooter: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-3">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               <UserScopeLogo size={28} className="w-7 h-7 shadow-sm" />
               <span className="font-semibold text-sm text-apple-label tracking-tight">UserScope</span>
               <span className="text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded-full bg-apple-well text-apple-label-secondary border border-apple-border">
