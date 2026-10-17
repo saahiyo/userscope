@@ -4,7 +4,7 @@ import 'lenis/dist/lenis.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { SmoothScroll } from '@/components/SmoothScroll';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.app';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.space';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

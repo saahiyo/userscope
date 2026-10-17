@@ -6,7 +6,7 @@ UserScope allows security researchers, developers, and OSINT investigators to di
 
 ## Capabilities
 
-- [Reconnaissance Engine](https://userscope.app): Probes public APIs and profile endpoints directly with live SSE streaming telemetry.
-- [Identity Synthesis](https://userscope.app): Aggregates profile photos, banners, discovered emails, locations, and aliases.
-- [Multimodal Visualizations](https://userscope.app): Explore results through interactive relationship graphs, presence timelines, or responsive card layouts.
-- [Structured Data Export](https://userscope.app): Download verified findings anytime in JSON or CSV formats.
+- [Reconnaissance Engine](https://userscope.space): Probes public APIs and profile endpoints directly with live SSE streaming telemetry.
+- [Identity Synthesis](https://userscope.space): Aggregates profile photos, banners, discovered emails, locations, and aliases.
+- [Multimodal Visualizations](https://userscope.space): Explore results through interactive relationship graphs, presence timelines, or responsive card layouts.
+- [Structured Data Export](https://userscope.space): Download verified findings anytime in JSON or CSV formats.
