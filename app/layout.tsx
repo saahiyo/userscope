@@ -44,12 +44,21 @@ export const metadata: Metadata = {
     siteName: 'UserScope',
     locale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: '/og.png',
+        width: 1200,
+        height: 630,
+        alt: 'UserScope — Public Footprint Reconnaissance across 700+ platforms',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'UserScope — Public Footprint Reconnaissance',
     description:
       'Search public handles and digital footprints across 700+ platforms in real time with live streaming telemetry.',
+    images: ['/og.png'],
   },
   robots: {
     index: true,
