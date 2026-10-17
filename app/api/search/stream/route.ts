@@ -5,6 +5,7 @@ import { checkRateLimit, releaseActiveScan } from '@/lib/security/rateLimiter';
 import { validateUsername } from '@/lib/security/inputValidation';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
 function getClientIp(req: NextRequest): string {
   const forwardedFor = req.headers.get('x-forwarded-for');
