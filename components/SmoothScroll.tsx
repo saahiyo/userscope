@@ -26,13 +26,14 @@ export const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Apple-like fluid inertial ease-out curve
+      duration: 1.45,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -6.5 * t)), // low-friction exponential glide with extended silky tail
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 1.15, // lighter, more responsive travel per wheel notch
+      touchMultiplier: 1.8,
+      infinite: false,
       autoResize: true,
     });
 
