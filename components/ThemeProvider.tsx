@@ -52,19 +52,44 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return () => mediaQuery.removeEventListener('change', handleSystemChange);
   }, []);
 
-  const applyTheme = (t: Theme) => {
+  const applyTheme = (t: Theme, withTransition: boolean = true) => {
     const root = document.documentElement;
-    if (t === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
+
+    const mutateDom = () => {
+      if (t === 'dark') {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+    };
+
+    if (withTransition && typeof document !== 'undefined') {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // 1. Native View Transitions API (Chrome 111+, Safari 18+)
+      if (!prefersReducedMotion && 'startViewTransition' in document) {
+        (document as any).startViewTransition(() => {
+          mutateDom();
+        });
+        return;
+      }
+
+      // 2. Smooth CSS transition class fallback
+      root.classList.add('theme-transitioning');
+      mutateDom();
+      setTimeout(() => {
+        root.classList.remove('theme-transitioning');
+      }, 450);
+      return;
     }
+
+    mutateDom();
   };
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
     localStorage.setItem('userscope-theme', newTheme);
-    applyTheme(newTheme);
+    applyTheme(newTheme, true);
   };
 
   const toggleTheme = () => {

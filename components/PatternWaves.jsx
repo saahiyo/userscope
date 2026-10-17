@@ -641,6 +641,8 @@ const PatternWaves = ({
     let rippleClock = 0;
     let atlasKey = '';
     const pointer = { x: 0, y: 0, inside: false, placed: false, lastX: 0, lastY: 0, burst: 0 };
+    let smoothColor = [...(settingsRef.current?.color?.slice(0, 3) || [1, 1, 1])];
+    let smoothOpacity = settingsRef.current?.opacity ?? 1;
 
     const buildRipple = () => {
       if (!floatTargets) return;
@@ -772,10 +774,31 @@ const PatternWaves = ({
       fieldUniforms.uAmp.value = amp;
       fieldUniforms.uDepth.value = clamp(s.depth, 0, 1.5);
       fieldUniforms.uLight.value = [Math.cos(lightAngle) * 0.78, Math.sin(lightAngle) * 0.78, 0.62];
+      // Smooth color and opacity interpolation for theme transitions
+      const targetColor = s.color.slice(0, 3);
+      const lerpColorFactor = Math.min(1, dt * 10);
+      smoothColor[0] += (targetColor[0] - smoothColor[0]) * lerpColorFactor;
+      smoothColor[1] += (targetColor[1] - smoothColor[1]) * lerpColorFactor;
+      smoothColor[2] += (targetColor[2] - smoothColor[2]) * lerpColorFactor;
+
+      const targetOpacity = clamp(s.opacity, 0, 1);
+      smoothOpacity += (targetOpacity - smoothOpacity) * lerpColorFactor;
+
+      const isColorTransitioning =
+        Math.hypot(
+          targetColor[0] - smoothColor[0],
+          targetColor[1] - smoothColor[1],
+          targetColor[2] - smoothColor[2]
+        ) > 0.005 || Math.abs(targetOpacity - smoothOpacity) > 0.005;
+
+      if (isColorTransitioning) {
+        dirty = true;
+      }
+
       fieldUniforms.uShine.value = clamp(s.shine, 0, 2);
       fieldUniforms.uContrast.value = clamp(s.contrast, 0.3, 3);
       fieldUniforms.uInk.value = ink ? 1 : 0;
-      fieldUniforms.uOpacity.value = clamp(s.opacity, 0, 1);
+      fieldUniforms.uOpacity.value = smoothOpacity;
       fieldUniforms.uFade.value = FADES[s.fade] ?? 0;
       fieldUniforms.uFadeSize.value = clamp(s.fadeSize, 0.05, 1);
       fieldUniforms.uAppear.value = appear;
@@ -791,13 +814,13 @@ const PatternWaves = ({
       markUniforms.uStroke.value = patternIndex === 3 ? 0.9 * dpr : Math.max(1.1 * dpr, pitchY * 0.08);
       const tint = ink ? 0 : 1;
       const blend = ink ? 0.35 : 0.55;
-      markUniforms.uColor.value = s.color.slice(0, 3);
-      markUniforms.uAccent.value = s.color.slice(0, 3).map(channel => channel + (tint - channel) * blend);
+      markUniforms.uColor.value = smoothColor;
+      markUniforms.uAccent.value = smoothColor.map(channel => channel + (tint - channel) * blend);
       markUniforms.uBackground.value = background;
       renderer.render({ scene: markMesh });
       dirty = false;
 
-      if (visible && (moving || introClock < 1 || rippleActive || dirty)) raf = requestAnimationFrame(frame);
+      if (visible && (moving || introClock < 1 || rippleActive || isColorTransitioning || dirty)) raf = requestAnimationFrame(frame);
     };
 
     const start = () => {

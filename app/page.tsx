@@ -212,7 +212,7 @@ export default function Home() {
         }}
       >
         <PatternWaves
-          key={`${isDark ? 'dark' : 'light'}-${isReducedMotion ? 'reduced' : 'motion'}`}
+          key={isReducedMotion ? 'reduced' : 'motion'}
           preset="silk"
           color={isDark ? '#ffffff' : '#1d1d1f'}
           backgroundColor="transparent"
