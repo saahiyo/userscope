@@ -22,6 +22,7 @@ export interface DiscoveredProfile {
   verified?: boolean;
   avatarUrl?: string;
   bannerUrl?: string;
+  faviconUrl?: string;
   displayName?: string;
   bio?: string;
   location?: string;

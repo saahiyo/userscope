@@ -18,6 +18,7 @@ import {
   Sparkles,
   Maximize2
 } from 'lucide-react';
+import { PlatformFavicon, resolveFaviconUrl } from '@/components/PlatformFavicon';
 
 interface RelationshipGraphProps {
   profiles: DiscoveredProfile[];
@@ -31,6 +32,7 @@ interface GraphNode {
   type: 'target' | 'category' | 'platform' | 'email' | 'location' | 'name';
   color: string;
   avatarUrl?: string;
+  faviconUrl?: string;
   profileUrl?: string;
   x: number;
   y: number;
@@ -129,6 +131,7 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
       const y = catPos.y + Math.sin(angle) * distFromCat;
 
       const pColor = getCategoryToken(cat).colorHex;
+      const pFavicon = resolveFaviconUrl({ src: p.faviconUrl, url: p.profileUrl, name: p.platform });
 
       const pNodeId = `plat-${p.id}`;
       nList.push({
@@ -137,6 +140,7 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
         type: 'platform',
         color: pColor,
         avatarUrl: p.avatarUrl,
+        faviconUrl: pFavicon || undefined,
         profileUrl: p.profileUrl,
         x,
         y,
@@ -540,6 +544,15 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
                         height="30"
                         clipPath={`url(#clip-${node.id})`}
                       />
+                    ) : node.faviconUrl ? (
+                      <image
+                        href={node.faviconUrl}
+                        x="-11"
+                        y="-11"
+                        width="22"
+                        height="22"
+                        clipPath={`url(#clip-${node.id})`}
+                      />
                     ) : (
                       <text
                         x="0"
@@ -625,11 +638,37 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
 
             <div className="flex items-center gap-3">
               {activeNode.avatarUrl ? (
-                <img
-                  src={activeNode.avatarUrl}
-                  alt={activeNode.label}
-                  className="w-12 h-12 rounded-[14px] object-cover border border-white/10 shrink-0 bg-apple-well"
-                />
+                <div className="relative shrink-0">
+                  <img
+                    src={activeNode.avatarUrl}
+                    alt={activeNode.label}
+                    className="w-12 h-12 rounded-[14px] object-cover border border-white/10 shrink-0 bg-apple-well"
+                  />
+                  {activeNode.type === 'platform' && (
+                    <div
+                      className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-apple-card border-2 border-apple-bg flex items-center justify-center p-0.5 shadow-sm overflow-hidden"
+                      title={activeNode.label}
+                    >
+                      <PlatformFavicon
+                        src={activeNode.faviconUrl}
+                        url={activeNode.profileUrl}
+                        name={activeNode.label}
+                        className="w-3 h-3 object-contain"
+                        fallbackSize={10}
+                      />
+                    </div>
+                  )}
+                </div>
+              ) : activeNode.type === 'platform' ? (
+                <div className="w-12 h-12 rounded-[14px] bg-apple-well border border-apple-border flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+                  <PlatformFavicon
+                    src={activeNode.faviconUrl}
+                    url={activeNode.profileUrl}
+                    name={activeNode.label}
+                    className="w-6 h-6 object-contain"
+                    fallbackSize={20}
+                  />
+                </div>
               ) : (
                 <div
                   className="w-12 h-12 rounded-[14px] flex items-center justify-center font-bold text-sm text-white shrink-0 shadow-sm"

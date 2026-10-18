@@ -14,6 +14,7 @@ import {
   TrendingUp,
   History
 } from 'lucide-react';
+import { PlatformFavicon } from '@/components/PlatformFavicon';
 
 interface PresenceTimelineProps {
   profiles: DiscoveredProfile[];
@@ -223,20 +224,29 @@ export const PresenceTimeline: React.FC<PresenceTimelineProps> = ({ profiles, ta
 
                   {/* Header Row */}
                   <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold tracking-wider uppercase text-apple-label">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-4 h-4 rounded-[4px] p-0.5 bg-apple-well border border-apple-border flex items-center justify-center shrink-0 overflow-hidden shadow-apple-sm">
+                        <PlatformFavicon
+                          url={evt.profileUrl}
+                          name={evt.platform}
+                          alt={evt.platform}
+                          className="w-3 h-3 object-contain"
+                          fallbackSize={10}
+                        />
+                      </div>
+                      <span className="text-xs font-bold tracking-wider uppercase text-apple-label truncate">
                         {evt.platform}
                       </span>
-                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${catToken.badgeClass}`}>
+                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border shrink-0 ${catToken.badgeClass}`}>
                         {catToken.label}
                       </span>
                       {evt.highlight && (
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-apple-blue/10 text-apple-blue">
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-apple-blue/10 text-apple-blue shrink-0">
                           {evt.highlight}
                         </span>
                       )}
                     </div>
-                    <span className="text-xs font-mono font-semibold text-apple-label-secondary">
+                    <span className="text-xs font-mono font-semibold text-apple-label-secondary shrink-0">
                       {evt.dateStr}
                     </span>
                   </div>
@@ -253,8 +263,14 @@ export const PresenceTimeline: React.FC<PresenceTimelineProps> = ({ profiles, ta
                         }}
                       />
                     ) : (
-                      <div className="w-8 h-8 rounded-apple-sm bg-apple-well border border-white/10 flex items-center justify-center font-bold text-xs text-apple-label shrink-0">
-                        {evt.platform.slice(0, 1)}
+                      <div className="w-8 h-8 rounded-apple-sm bg-apple-well border border-apple-border flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+                        <PlatformFavicon
+                          url={evt.profileUrl}
+                          name={evt.platform}
+                          alt={evt.platform}
+                          className="w-4 h-4 object-contain"
+                          fallbackSize={14}
+                        />
                       </div>
                     )}
 
@@ -332,14 +348,34 @@ export const PresenceTimeline: React.FC<PresenceTimelineProps> = ({ profiles, ta
               {/* Identity Display */}
               <div className="flex items-center gap-3.5">
                 {activeEvent.avatarUrl ? (
-                  <img
-                    src={activeEvent.avatarUrl}
-                    alt={activeEvent.displayName || activeEvent.platform}
-                    className="w-16 h-16 rounded-apple-card object-cover border border-white/10 shadow-md bg-apple-well"
-                  />
+                  <div className="relative shrink-0">
+                    <img
+                      src={activeEvent.avatarUrl}
+                      alt={activeEvent.displayName || activeEvent.platform}
+                      className="w-16 h-16 rounded-apple-card object-cover border border-white/10 shadow-md bg-apple-well"
+                    />
+                    <div
+                      className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-apple-card border-2 border-apple-bg flex items-center justify-center p-0.5 shadow-sm overflow-hidden"
+                      title={activeEvent.platform}
+                    >
+                      <PlatformFavicon
+                        url={activeEvent.profileUrl}
+                        name={activeEvent.platform}
+                        alt={activeEvent.platform}
+                        className="w-3.5 h-3.5 object-contain"
+                        fallbackSize={12}
+                      />
+                    </div>
+                  </div>
                 ) : (
-                  <div className="w-16 h-16 rounded-apple-card bg-apple-well border border-white/10 flex items-center justify-center font-bold text-lg text-apple-label shadow-md">
-                    {activeEvent.platform.slice(0, 1)}
+                  <div className="w-16 h-16 rounded-apple-card bg-apple-well border border-apple-border flex items-center justify-center shadow-md overflow-hidden">
+                    <PlatformFavicon
+                      url={activeEvent.profileUrl}
+                      name={activeEvent.platform}
+                      alt={activeEvent.platform}
+                      className="w-8 h-8 object-contain"
+                      fallbackSize={28}
+                    />
                   </div>
                 )}
                 <div className="min-w-0 flex-1">

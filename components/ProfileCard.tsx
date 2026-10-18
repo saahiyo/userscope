@@ -7,6 +7,7 @@ import { DiscoveredProfile } from '@/lib/osint/types';
 import { decodeHtmlEntities } from '@/lib/utils/text';
 import { getCategoryToken } from '@/lib/theme/categoryTokens';
 import { springs, microinteractions, itemFadeInUp } from '@/lib/motion';
+import { PlatformFavicon } from '@/components/PlatformFavicon';
 
 interface ProfileCardProps {
   profile: DiscoveredProfile;
@@ -42,14 +43,24 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
             </div>
           )}
 
-          {/* Top Header Row: Platform Name, Category Tag, & Outbound Link */}
+          {/* Top Header Row: Platform Favicon & Name, Category Tag, & Outbound Link */}
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-xs tracking-wider uppercase text-apple-label">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-5 h-5 rounded-[6px] p-0.5 bg-apple-well border border-apple-border flex items-center justify-center shrink-0 overflow-hidden shadow-apple-sm">
+                <PlatformFavicon
+                  src={profile.faviconUrl}
+                  url={profile.profileUrl}
+                  name={profile.platform}
+                  alt={profile.platform}
+                  className="w-3.5 h-3.5 object-contain"
+                  fallbackSize={12}
+                />
+              </div>
+              <span className="font-bold text-xs tracking-wider uppercase text-apple-label truncate">
                 {profile.platform}
               </span>
               <span
-                className={`text-[10px] font-semibold uppercase px-2.5 py-0.5 rounded-full border shadow-sm ${categoryToken.badgeClass}`}
+                className={`text-[10px] font-semibold uppercase px-2.5 py-0.5 rounded-full border shadow-sm shrink-0 ${categoryToken.badgeClass}`}
               >
                 {categoryToken.label}
               </span>
@@ -74,20 +85,43 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
 
           {/* Container-adaptive content area: stacks vertically on small containers, flexes horizontally on @md+ */}
           <div className="@md:flex @md:items-start @md:gap-5 space-y-3 @md:space-y-0">
-            {/* Identity Row: Apple Squircle Avatar, Names, Handle */}
+            {/* Identity Row: Apple Squircle Avatar with Platform Badge, Names, Handle */}
             <div className="flex items-start gap-3.5 @md:w-64 shrink-0">
               {profile.avatarUrl ? (
-                <img
-                  src={profile.avatarUrl}
-                  alt={profile.displayName || profile.username}
-                  className="w-12 h-12 rounded-[14px] object-cover border border-white/10 shrink-0 shadow-md bg-apple-well transition-transform group-hover:scale-105"
-                  onError={(e) => {
-                    (e.target as HTMLElement).style.display = 'none';
-                  }}
-                />
+                <div className="relative shrink-0">
+                  <img
+                    src={profile.avatarUrl}
+                    alt={profile.displayName || profile.username}
+                    className="w-12 h-12 rounded-[14px] object-cover border border-white/10 shrink-0 shadow-md bg-apple-well transition-transform group-hover:scale-105"
+                    onError={(e) => {
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                  {/* Miniature Platform Favicon Badge on avatar corner */}
+                  <div
+                    className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-apple-card border-2 border-apple-bg flex items-center justify-center p-0.5 shadow-sm overflow-hidden"
+                    title={profile.platform}
+                  >
+                    <PlatformFavicon
+                      src={profile.faviconUrl}
+                      url={profile.profileUrl}
+                      name={profile.platform}
+                      alt={profile.platform}
+                      className="w-3 h-3 object-contain"
+                      fallbackSize={10}
+                    />
+                  </div>
+                </div>
               ) : (
-                <div className="w-12 h-12 rounded-[14px] bg-gradient-to-br from-apple-well to-apple-chip border border-white/10 flex items-center justify-center font-bold text-sm text-apple-label shrink-0 shadow-md">
-                  {profile.platform.slice(0, 1).toUpperCase()}
+                <div className="w-12 h-12 rounded-[14px] bg-apple-well border border-apple-border flex items-center justify-center shrink-0 shadow-md group-hover:scale-105 transition-transform overflow-hidden">
+                  <PlatformFavicon
+                    src={profile.faviconUrl}
+                    url={profile.profileUrl}
+                    name={profile.platform}
+                    alt={profile.platform}
+                    className="w-6 h-6 object-contain"
+                    fallbackSize={22}
+                  />
                 </div>
               )}
 
