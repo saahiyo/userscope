@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sun, Moon, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/components/ThemeProvider';
 import { UserScopeLogo } from '@/components/UserScopeLogo';
-import { springs, microinteractions } from '@/lib/motion';
+import { springs, microinteractions, easings } from '@/lib/motion';
 
 import Link from 'next/link';
 
@@ -23,10 +23,34 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   totalPlatforms = 653,
 }) => {
   const { isDark, toggleTheme } = useTheme();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-transparent transition-colors duration-200 pt-safe">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+    <header
+      className={`sticky top-0 z-50 w-full pt-safe transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        isScrolled
+          ? 'bg-apple-bg/80 dark:bg-[#090a0c]/80 backdrop-blur-xl backdrop-saturate-150 border-b border-apple-border shadow-apple-sm'
+          : 'bg-transparent border-b border-transparent'
+      }`}
+    >
+      {/* Subtle top sheen highlight */}
+      <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/15 dark:via-white/5 to-transparent pointer-events-none" />
+
+      <div
+        className={`max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isScrolled ? 'h-13 sm:h-14' : 'h-14 sm:h-16'
+        }`}
+      >
         {/* Brand Identity - Native Apple App Icon & Typography */}
         <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
           <motion.div
@@ -57,7 +81,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           {/* Platform Directory Link */}
           <Link
             href="/platforms"
-            className="px-3 py-1.5 rounded-full bg-apple-well hover:bg-apple-chip text-xs font-medium text-apple-label-secondary hover:text-apple-label border border-apple-border transition-colors shadow-apple-sm flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-full bg-apple-well/80 hover:bg-apple-chip text-xs font-medium text-apple-label-secondary hover:text-apple-label border border-apple-border transition-all shadow-apple-sm flex items-center gap-1.5 active:scale-95"
           >
             <span>Directory</span>
           </Link>
