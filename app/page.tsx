@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { HeaderNav } from '@/components/HeaderNav';
 import { SearchPill } from '@/components/SearchPill';
 import { ScanProgress } from '@/components/ScanProgress';
@@ -26,6 +27,22 @@ import dynamic from 'next/dynamic';
 const PatternWaves = dynamic(() => import('@/components/PatternWaves'), {
   ssr: false,
 });
+
+function SearchParamsSync({ onSearch }: { onSearch: (q: string) => void }) {
+  const searchParams = useSearchParams();
+  const mountedRef = useRef(false);
+
+  useEffect(() => {
+    if (mountedRef.current) return;
+    const initialQuery = searchParams.get('q') || searchParams.get('username') || searchParams.get('target');
+    if (initialQuery && initialQuery.trim()) {
+      mountedRef.current = true;
+      onSearch(initialQuery.trim());
+    }
+  }, [searchParams, onSearch]);
+
+  return null;
+}
 
 export default function Home() {
   const { isDark } = useTheme();
@@ -60,74 +77,87 @@ export default function Home() {
 
   const eventSourceRef = useRef<EventSource | null>(null);
 
-  const startSearch = (targetQuery?: string) => {
-    const q = (targetQuery || query).trim();
-    if (!q || isLoading) return;
+  const startSearch = useCallback(
+    (targetQuery?: string) => {
+      const q = (targetQuery || query).trim();
+      if (!q || isLoading) return;
 
-    if (eventSourceRef.current) {
-      eventSourceRef.current.close();
-    }
-
-    setIsLoading(true);
-    setSearchedQuery(q);
-    setProfiles([]);
-    setSummary({
-      profilePictures: [],
-      banners: [],
-      emails: [],
-      locations: [],
-      names: [],
-      usernames: [q],
-    });
-    setStats({
-      profilesFound: 0,
-      timeElapsed: 0,
-      firstSeen: 'Jun 16, 2018',
-      lastSeen: 'Aug 26, 2026',
-      checkedCount: 0,
-      totalCount: 692,
-    });
-
-    const eventSource = new EventSource(`/api/search/stream?username=${encodeURIComponent(q)}`);
-    eventSourceRef.current = eventSource;
-
-    eventSource.onmessage = (event) => {
-      try {
-        const payload: SearchStreamEvent = JSON.parse(event.data);
-
-        if (payload.type === 'hit' && payload.profile) {
-          setProfiles((prev) => {
-            if (prev.some((p) => p.id === payload.profile!.id)) return prev;
-            return [...prev, payload.profile!];
-          });
-        }
-
-        if (payload.summary) {
-          setSummary(payload.summary);
-        }
-
-        setStats((prev) => ({
-          ...prev,
-          profilesFound: payload.hitsCount ?? prev.profilesFound,
-          timeElapsed: payload.timeElapsedMs ? Number((payload.timeElapsedMs / 1000).toFixed(1)) : prev.timeElapsed,
-          checkedCount: payload.checkedCount ?? prev.checkedCount,
-          totalCount: payload.totalCount ?? prev.totalCount,
-        }));
-
-        if (payload.type === 'complete' || payload.type === 'error') {
-          eventSource.close();
-          setIsLoading(false);
-        }
-      } catch (err) {
-        console.error('Failed to parse SSE payload', err);
+      if (targetQuery) {
+        setQuery(targetQuery);
       }
-    };
 
-    eventSource.onerror = () => {
-      eventSource.close();
-      setIsLoading(false);
-    };
-  };
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        url.searchParams.set('q', q);
+        window.history.replaceState(null, '', url.toString());
+      }
+
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
+
+      setIsLoading(true);
+      setSearchedQuery(q);
+      setProfiles([]);
+      setSummary({
+        profilePictures: [],
+        banners: [],
+        emails: [],
+        locations: [],
+        names: [],
+        usernames: [q],
+      });
+      setStats({
+        profilesFound: 0,
+        timeElapsed: 0,
+        firstSeen: 'Jun 16, 2018',
+        lastSeen: 'Aug 26, 2026',
+        checkedCount: 0,
+        totalCount: 692,
+      });
+
+      const eventSource = new EventSource(`/api/search/stream?username=${encodeURIComponent(q)}`);
+      eventSourceRef.current = eventSource;
+
+      eventSource.onmessage = (event) => {
+        try {
+          const payload: SearchStreamEvent = JSON.parse(event.data);
+
+          if (payload.type === 'hit' && payload.profile) {
+            setProfiles((prev) => {
+              if (prev.some((p) => p.id === payload.profile!.id)) return prev;
+              return [...prev, payload.profile!];
+            });
+          }
+
+          if (payload.summary) {
+            setSummary(payload.summary);
+          }
+
+          setStats((prev) => ({
+            ...prev,
+            profilesFound: payload.hitsCount ?? prev.profilesFound,
+            timeElapsed: payload.timeElapsedMs ? Number((payload.timeElapsedMs / 1000).toFixed(1)) : prev.timeElapsed,
+            checkedCount: payload.checkedCount ?? prev.checkedCount,
+            totalCount: payload.totalCount ?? prev.totalCount,
+          }));
+
+          if (payload.type === 'complete' || payload.type === 'error') {
+            eventSource.close();
+            setIsLoading(false);
+          }
+        } catch (err) {
+          console.error('Failed to parse SSE payload', err);
+        }
+      };
+
+      eventSource.onerror = () => {
+        eventSource.close();
+        setIsLoading(false);
+      };
+    },
+    [query, isLoading]
+  );
 
   useEffect(() => {
     return () => {
@@ -146,6 +176,15 @@ export default function Home() {
     setProfiles([]);
     setFilterQuery('');
     setSelectedCategory('all');
+
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('q');
+      url.searchParams.delete('username');
+      url.searchParams.delete('target');
+      const cleanPath = url.pathname + (url.search ? url.search : '');
+      window.history.replaceState(null, '', cleanPath);
+    }
   };
 
   // Filter and sort profiles
@@ -204,6 +243,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-apple-bg text-apple-label antialiased relative overflow-x-hidden">
+      <Suspense fallback={null}>
+        <SearchParamsSync onSearch={startSearch} />
+      </Suspense>
+
       {/* Dynamic Interactive PatternWaves Surface */}
       <div
         className="absolute top-0 left-0 right-0 h-[1050px] sm:h-[1250px] pointer-events-none z-0 overflow-hidden"

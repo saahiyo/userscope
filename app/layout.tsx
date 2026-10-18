@@ -14,10 +14,11 @@ export const metadata: Metadata = {
     template: '%s | UserScope',
   },
   description:
-    'Real-time open-source intelligence (OSINT) reconnaissance tool. Search public usernames, accounts, and digital footprints across 700+ platforms with zero paywalls.',
+    'Search public usernames and digital footprints across 700+ platforms in real time with zero paywalls. Free passive OSINT reconnaissance with live streaming.',
   keywords: [
     'UserScope',
     'OSINT',
+    'OSINT username search',
     'username search',
     'digital footprint checker',
     'reverse username search',
@@ -26,6 +27,8 @@ export const metadata: Metadata = {
     'sherlock alternative online',
     'whatsmyname alternative',
     'find accounts by handle',
+    'social media handle search',
+    'passive OSINT reconnaissance',
   ],
   authors: [{ name: 'UserScope' }],
   creator: 'UserScope',
@@ -78,17 +81,58 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
+      name: 'UserScope',
+      description:
+        'Real-time open-source intelligence (OSINT) reconnaissance tool searching public usernames across 700+ platforms.',
+      publisher: {
+        '@type': 'Organization',
+        name: 'UserScope',
+        url: siteUrl,
+        sameAs: ['https://github.com/saahiyo/userscope'],
+      },
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: `${siteUrl}/?q={search_term_string}`,
+        },
+        'query-input': 'required name=search_term_string',
+      },
+    },
+    {
       '@type': 'WebApplication',
+      '@id': `${siteUrl}/#app`,
       name: 'UserScope',
       url: siteUrl,
       applicationCategory: 'SecurityApplication',
-      operatingSystem: 'All',
+      applicationSubCategory: 'OSINT & Digital Footprint Reconnaissance',
+      operatingSystem: 'Any (Web Browser)',
       description:
         'Real-time open-source intelligence reconnaissance tool searching public usernames and digital footprints across 700+ platforms.',
+      screenshot: `${siteUrl}/og.png`,
+      softwareVersion: '0.1.0',
+      license: 'https://opensource.org/licenses/MIT',
+      featureList: [
+        'Real-time SSE streaming reconnaissance',
+        '700+ public platform engines',
+        'Interactive identity relationship graph',
+        'Chronological presence timeline',
+        'One-click JSON & CSV forensic intelligence export',
+        '100% client-side investigative privacy with zero query logging',
+      ],
       offers: {
         '@type': 'Offer',
         price: '0',
         priceCurrency: 'USD',
+      },
+      author: {
+        '@type': 'Organization',
+        name: 'UserScope',
+        url: 'https://github.com/saahiyo/userscope',
+        sameAs: ['https://github.com/saahiyo/userscope'],
       },
     },
     {
@@ -138,6 +182,7 @@ const jsonLd = {
     },
   ],
 };
+
 
 
 export default function RootLayout({

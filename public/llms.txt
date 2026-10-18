@@ -1,12 +1,38 @@
 # UserScope
 
-> Real-time open-source intelligence (OSINT) reconnaissance tool searching public usernames, accounts, and digital footprints across 700+ platforms.
+> Real-time open-source intelligence (OSINT) reconnaissance tool searching public usernames, accounts, and digital footprints across 700+ platforms with zero paywalls.
 
-UserScope allows security researchers, developers, and OSINT investigators to discover public account footprints across more than 700 online platforms simultaneously with zero paywalls.
+UserScope allows security researchers, penetration testers, developers, and OSINT investigators to discover public account footprints across more than 700 online platforms simultaneously with zero paywalls.
+
+- **Website**: https://userscope.space
+- **GitHub Repository**: https://github.com/saahiyo/userscope
+- **License**: MIT Open Source
 
 ## Capabilities
 
-- [Reconnaissance Engine](https://userscope.space): Probes public APIs and profile endpoints directly with live SSE streaming telemetry.
-- [Identity Synthesis](https://userscope.space): Aggregates profile photos, banners, discovered emails, locations, and aliases.
-- [Multimodal Visualizations](https://userscope.space): Explore results through interactive relationship graphs, presence timelines, or responsive card layouts.
-- [Structured Data Export](https://userscope.space): Download verified findings anytime in JSON or CSV formats.
+- **Real-Time Reconnaissance Engine**: Probes public APIs and profile endpoints directly with live Server-Sent Events (SSE) streaming telemetry.
+- **Identity Synthesis**: Aggregates verified profile photos, banners, discovered emails, locations, account creation dates, and aliases.
+- **Multimodal Visualizations**: Explore results through interactive relationship graphs, chronological presence timelines, or responsive masonry card layouts.
+- **Forensic Data Export**: Download verified findings anytime in standardized JSON or spreadsheet-ready CSV formats.
+
+## Query Syntax & Deep Linking
+
+Users and automated agents can link directly to a reconnaissance scan using query parameters:
+- `https://userscope.space/?q={username}`
+- `https://userscope.space/?username={username}`
+
+Example: `https://userscope.space/?q=torvalds`
+
+## Supported Platform Categories (692+ Engines)
+
+- **Developer & Code**: GitHub, GitLab, Docker Hub, npm, PyPI, Bitbucket, Kaggle, HackerRank, Codeberg.
+- **Social & Identity**: X (Twitter), Reddit, Bluesky, Mastodon, Telegram, Discourse, Pinterest, Tumblr.
+- **Professional & Writing**: Dev.to, Medium, Substack, ProductHunt, Hashnode, About.me, Freelancer.
+- **Media & Creative**: YouTube, Spotify, SoundCloud, Vimeo, Behance, Dribbble, Flickr, Bandcamp.
+- **Gaming & Virtual**: Steam, Twitch, Roblox, Chess.com, Speedrun.com, Lichess, NexusMods.
+- **Global & Niche Services**: Forums, messaging platforms, domain registries, and international web services.
+
+## Privacy & Ethical OSINT Architecture
+
+- **Passive Unauthenticated Queries**: UserScope only queries public endpoints open to the worldwide web. It never bypasses access controls or authenticates as a user.
+- **Zero Search Query Logging**: UserScope does not store, track, sell, or log searched usernames. Streams directly to the active browser session.
