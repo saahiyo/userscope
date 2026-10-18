@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Search, Globe, ArrowRight, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Globe, ArrowRight, X, CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { microinteractions } from '@/lib/motion';
 import { PlatformRecord, CategoryKey, CATEGORIES } from '@/lib/osint/platformDirectory';
@@ -12,25 +12,14 @@ interface PlatformDirectoryClientProps {
   platforms: PlatformRecord[];
 }
 
-const PAGE_SIZE = 24; // 8 rows on 3-column desktop, 12 rows on 2-column tablet
-
-function getPageNumbers(current: number, total: number): (number | '...')[] {
-  if (total <= 7) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-  if (current <= 3) {
-    return [1, 2, 3, 4, '...', total];
-  }
-  if (current >= total - 2) {
-    return [1, '...', total - 3, total - 2, total - 1, total];
-  }
-  return [1, '...', current - 1, current, current + 1, '...', total];
-}
+const BATCH_SIZE = 24; // 8 rows on 3-column desktop, 12 rows on 2-column tablet
 
 export const PlatformDirectoryClient: React.FC<PlatformDirectoryClientProps> = ({ platforms }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<CategoryKey>('all');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const categoryKeys: CategoryKey[] = [
@@ -65,29 +54,52 @@ export const PlatformDirectoryClient: React.FC<PlatformDirectoryClientProps> = (
     });
   }, [platforms, selectedCategory, searchQuery]);
 
-  // Reset to page 1 whenever search query or category filter changes
+  // Reset to initial batch size whenever search query or category filter changes
   useEffect(() => {
-    setCurrentPage(1);
+    setVisibleCount(BATCH_SIZE);
   }, [searchQuery, selectedCategory]);
 
-  const totalPages = Math.ceil(filteredPlatforms.length / PAGE_SIZE) || 1;
+  const hasMore = visibleCount < filteredPlatforms.length;
 
-  const paginatedPlatforms = useMemo(() => {
-    const start = (currentPage - 1) * PAGE_SIZE;
-    return filteredPlatforms.slice(start, start + PAGE_SIZE);
-  }, [filteredPlatforms, currentPage]);
+  // Infinite loading triggered automatically when user scrolls near bottom
+  useEffect(() => {
+    if (!hasMore) return;
 
-  const handlePageChange = (newPage: number) => {
-    if (newPage < 1 || newPage > totalPages || newPage === currentPage) return;
-    setCurrentPage(newPage);
-    if (containerRef.current) {
-      containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting && !isLoadingMore) {
+          setIsLoadingMore(true);
+          // Micro-tick delay ensures 60/120fps fluid scrolling without layout thrashing
+          setTimeout(() => {
+            setVisibleCount((prev) => Math.min(prev + BATCH_SIZE, filteredPlatforms.length));
+            setIsLoadingMore(false);
+          }, 120);
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px 0px 400px 0px', // preload next batch 400px before user hits bottom
+        threshold: 0.05,
+      }
+    );
+
+    const currentSentinel = sentinelRef.current;
+    if (currentSentinel) {
+      observer.observe(currentSentinel);
     }
-  };
 
-  const startRecord = (currentPage - 1) * PAGE_SIZE + 1;
-  const endRecord = Math.min(currentPage * PAGE_SIZE, filteredPlatforms.length);
-  const pageNumbers = getPageNumbers(currentPage, totalPages);
+    return () => {
+      if (currentSentinel) {
+        observer.unobserve(currentSentinel);
+      }
+      observer.disconnect();
+    };
+  }, [hasMore, isLoadingMore, filteredPlatforms.length]);
+
+  const visiblePlatforms = useMemo(() => {
+    return filteredPlatforms.slice(0, visibleCount);
+  }, [filteredPlatforms, visibleCount]);
 
   return (
     <div ref={containerRef} className="space-y-6 sm:space-y-8 scroll-mt-20">
@@ -154,15 +166,17 @@ export const PlatformDirectoryClient: React.FC<PlatformDirectoryClientProps> = (
 
       {/* Metrics Bar */}
       <div className="flex items-center justify-between text-xs text-apple-label-secondary border-b border-apple-border pb-3">
-        <span>
-          Showing <strong className="text-apple-label">{filteredPlatforms.length > 0 ? `${startRecord}–${endRecord}` : 0}</strong> of{' '}
-          <strong className="text-apple-label">{filteredPlatforms.length}</strong> platforms
-          {totalPages > 1 && (
-            <span className="text-apple-label-tertiary ml-2">
-              (Page {currentPage} of {totalPages})
+        <div className="flex items-center gap-2">
+          <span>
+            Showing <strong className="text-apple-label">{visiblePlatforms.length}</strong> of{' '}
+            <strong className="text-apple-label">{filteredPlatforms.length}</strong> platforms
+          </span>
+          {filteredPlatforms.length > 0 && (
+            <span className="text-[11px] font-mono text-apple-label-tertiary">
+              ({Math.round((visiblePlatforms.length / filteredPlatforms.length) * 100)}%)
             </span>
           )}
-        </span>
+        </div>
         {selectedCategory !== 'all' && (
           <button
             type="button"
@@ -175,10 +189,10 @@ export const PlatformDirectoryClient: React.FC<PlatformDirectoryClientProps> = (
       </div>
 
       {/* Platforms Grid */}
-      {paginatedPlatforms.length > 0 ? (
+      {visiblePlatforms.length > 0 ? (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
-            {paginatedPlatforms.map((platform) => {
+            {visiblePlatforms.map((platform) => {
               return (
                 <div
                   key={platform.slug}
@@ -248,68 +262,30 @@ export const PlatformDirectoryClient: React.FC<PlatformDirectoryClientProps> = (
             })}
           </div>
 
-          {/* Clean Apple-style Pagination Bar */}
-          {totalPages > 1 && (
-            <div className="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-apple-border">
-              <button
-                type="button"
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(currentPage - 1)}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold border transition-all ${
-                  currentPage === 1
-                    ? 'opacity-40 cursor-not-allowed border-apple-border text-apple-label-tertiary bg-apple-well/50'
-                    : 'bg-apple-well hover:bg-apple-chip border-apple-border text-apple-label hover:border-apple-border-strong cursor-pointer shadow-apple-sm'
-                }`}
-              >
-                <ChevronLeft className="w-3.5 h-3.5" />
-                <span>Previous</span>
-              </button>
-
-              {/* Page Number Pills */}
-              <div className="flex items-center gap-1 flex-wrap justify-center">
-                {pageNumbers.map((num, idx) => {
-                  if (num === '...') {
-                    return (
-                      <span
-                        key={`ellipsis-${idx}`}
-                        className="w-8 h-8 flex items-center justify-center text-xs text-apple-label-tertiary"
-                      >
-                        &hellip;
-                      </span>
-                    );
-                  }
-
-                  const isCurrent = num === currentPage;
-                  return (
-                    <button
-                      key={num}
-                      type="button"
-                      onClick={() => handlePageChange(num as number)}
-                      className={`w-8 h-8 rounded-full text-xs font-mono font-medium transition-all flex items-center justify-center cursor-pointer ${
-                        isCurrent
-                          ? 'bg-apple-label text-apple-bg font-bold shadow-sm'
-                          : 'bg-apple-well hover:bg-apple-chip text-apple-label-secondary hover:text-apple-label border border-apple-border shadow-apple-sm'
-                      }`}
-                    >
-                      {num}
-                    </button>
-                  );
-                })}
+          {/* Infinite Scroll Bottom Sentinel or End of Catalog Badge */}
+          {hasMore ? (
+            <div
+              ref={sentinelRef}
+              className="py-10 flex flex-col items-center justify-center gap-2.5 text-center"
+            >
+              <div className="w-6 h-6 border-2 border-apple-blue/30 border-t-apple-blue rounded-full animate-spin" />
+              <span className="text-xs font-mono text-apple-label-tertiary">
+                Loading more platforms as you scroll...
+              </span>
+            </div>
+          ) : (
+            <div className="pt-10 pb-6 border-t border-apple-border flex flex-col items-center justify-center gap-2.5 text-center">
+              <div className="w-8 h-8 rounded-full bg-apple-well border border-apple-border flex items-center justify-center text-apple-green shadow-apple-sm">
+                <CheckCircle2 className="w-4 h-4" />
               </div>
-
-              <button
-                type="button"
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold border transition-all ${
-                  currentPage === totalPages
-                    ? 'opacity-40 cursor-not-allowed border-apple-border text-apple-label-tertiary bg-apple-well/50'
-                    : 'bg-apple-well hover:bg-apple-chip border-apple-border text-apple-label hover:border-apple-border-strong cursor-pointer shadow-apple-sm'
-                }`}
-              >
-                <span>Next</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </button>
+              <div>
+                <p className="text-xs font-semibold text-apple-label">
+                  All {filteredPlatforms.length} platforms loaded
+                </p>
+                <p className="text-[11px] text-apple-label-tertiary mt-0.5">
+                  Verified in real time by UserScope with zero paywalls.
+                </p>
+              </div>
             </div>
           )}
         </>
