@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { ShieldCheck, Github, ExternalLink } from 'lucide-react';
 import { UserScopeLogo } from '@/components/UserScopeLogo';
 
@@ -31,6 +32,14 @@ export const LandingFooter: React.FC = () => {
           <div className="space-y-2">
             <p className="text-xs font-semibold text-apple-label uppercase tracking-wider">Project</p>
             <ul className="space-y-1.5 text-xs text-apple-label-secondary">
+              <li>
+                <Link
+                  href="/platforms"
+                  className="hover:text-apple-label transition-colors"
+                >
+                  Platform Directory
+                </Link>
+              </li>
               <li>
                 <a
                   href="https://github.com/saahiyo/userscope"

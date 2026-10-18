@@ -7,18 +7,20 @@ import { useTheme } from '@/components/ThemeProvider';
 import { UserScopeLogo } from '@/components/UserScopeLogo';
 import { springs, microinteractions } from '@/lib/motion';
 
+import Link from 'next/link';
+
 interface HeaderNavProps {
-  onExport: (format: 'json' | 'csv') => void;
-  hasResults: boolean;
-  isScanning: boolean;
-  totalPlatforms: number;
+  onExport?: (format: 'json' | 'csv') => void;
+  hasResults?: boolean;
+  isScanning?: boolean;
+  totalPlatforms?: number;
 }
 
 export const HeaderNav: React.FC<HeaderNavProps> = ({
   onExport,
-  hasResults,
-  isScanning,
-  totalPlatforms,
+  hasResults = false,
+  isScanning = false,
+  totalPlatforms = 653,
 }) => {
   const { isDark, toggleTheme } = useTheme();
 
@@ -26,7 +28,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
     <header className="sticky top-0 z-50 bg-transparent transition-colors duration-200 pt-safe">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
         {/* Brand Identity - Native Apple App Icon & Typography */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
+        <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
           <motion.div
             whileHover={{ scale: 1.05, rotate: 2 }}
             whileTap={{ scale: 0.95 }}
@@ -37,7 +39,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           </motion.div>
           <div className="flex flex-col justify-center">
             <div className="flex items-center gap-1.5 sm:gap-2">
-              <span className="font-semibold text-sm sm:text-base md:text-lg tracking-tight text-apple-label leading-tight">
+              <span className="font-semibold text-sm sm:text-base md:text-lg tracking-tight text-apple-label leading-tight group-hover:text-apple-blue transition-colors">
                 UserScope
               </span>
               <span className="text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase px-1.5 sm:px-2 py-0.5 rounded-full bg-apple-well text-apple-label-secondary border border-apple-border leading-none">
@@ -48,14 +50,22 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
               Public Profile Reconnaissance
             </p>
           </div>
-        </div>
+        </Link>
 
-        {/* Center / Right Controls: Engine Status & Actions */}
+        {/* Center / Right Controls: Directory, Engine Status & Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Platform Directory Link */}
+          <Link
+            href="/platforms"
+            className="px-3 py-1.5 rounded-full bg-apple-well hover:bg-apple-chip text-xs font-medium text-apple-label-secondary hover:text-apple-label border border-apple-border transition-colors shadow-apple-sm flex items-center gap-1.5"
+          >
+            <span>Directory</span>
+          </Link>
+
           {/* Engine Status Indicator */}
           <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-apple-well text-xs font-mono text-apple-label-secondary border border-apple-border">
             <span className={`w-2 h-2 rounded-full ${isScanning ? 'bg-apple-orange animate-ping' : 'bg-apple-green'}`} />
-            <span>{totalPlatforms || 692} Engines Online</span>
+            <span>{totalPlatforms || 653} Engines Online</span>
           </div>
 
           {/* Export Action Menu with Spring Enter & Tactile Taps */}
@@ -73,7 +83,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
                   whileTap={microinteractions.buttonTap}
                   whileHover={{ scale: 1.03 }}
                   transition={springs.snappy}
-                  onClick={() => onExport('json')}
+                  onClick={() => onExport?.('json')}
                   className="touch-target-expand px-2.5 py-1 text-xs font-medium text-apple-label-secondary hover:text-apple-label rounded-full hover:bg-apple-chip transition-colors flex items-center gap-1 shadow-apple-sm"
                   title="Export JSON report"
                 >
@@ -85,7 +95,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
                   whileTap={microinteractions.buttonTap}
                   whileHover={{ scale: 1.03 }}
                   transition={springs.snappy}
-                  onClick={() => onExport('csv')}
+                  onClick={() => onExport?.('csv')}
                   className="touch-target-expand px-2.5 py-1 text-xs font-medium text-apple-label-secondary hover:text-apple-label rounded-full hover:bg-apple-chip transition-colors flex items-center gap-1 shadow-apple-sm"
                   title="Export CSV spreadsheet"
                 >

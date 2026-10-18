@@ -1,7 +1,55 @@
 'use client';
 
-import React from 'react';
-import { Code2, Globe, Music, Gamepad2, Briefcase, MessageSquare } from 'lucide-react';
+import Link from 'next/link';
+import { Code2, Globe, Music, Gamepad2, Briefcase, MessageSquare, ArrowRight } from 'lucide-react';
+
+const exampleSlugMap: Record<string, string> = {
+  GitHub: 'github',
+  GitLab: 'gitlab',
+  'Docker Hub': 'docker-hub',
+  npm: 'npm',
+  PyPI: 'pypi',
+  Bitbucket: 'bitbucket',
+  Kaggle: 'kaggle',
+  HackerRank: 'hackerrank',
+  'X (Twitter)': 'x-twitter',
+  Reddit: 'reddit',
+  Bluesky: 'bluesky-username',
+  Mastodon: 'mastodon',
+  Telegram: 'telegram',
+  Discourse: 'discourse',
+  Pinterest: 'pinterest',
+  Tumblr: 'tumblr',
+  'Dev.to': 'dev-to',
+  Medium: 'medium',
+  Substack: 'substack',
+  ProductHunt: 'producthunt',
+  Hashnode: 'hashnode',
+  'About.me': 'about-me',
+  Freelancer: 'freelancer',
+  YouTube: 'youtube',
+  Spotify: 'spotify',
+  SoundCloud: 'soundcloud',
+  Vimeo: 'vimeo',
+  Behance: 'behance',
+  Dribbble: 'dribbble',
+  Flickr: 'flickr',
+  Bandcamp: 'bandcamp',
+  Steam: 'steam',
+  Twitch: 'twitch',
+  Roblox: 'roblox',
+  'Chess.com': 'chess-com',
+  'Speedrun.com': 'speedrun-com',
+  Lichess: 'lichess',
+  NexusMods: 'nexusmods',
+  Gravatar: 'gravatar',
+  Keybase: 'keybase',
+  Pastebin: 'pastebin',
+  'Archive.org': 'archive-org',
+  Wikidata: 'wikidata',
+  Wikipedia: 'wikipedia',
+  SourceForge: 'sourceforge',
+};
 
 export const PlatformShowcase: React.FC = () => {
   const categories = [
@@ -52,16 +100,26 @@ export const PlatformShowcase: React.FC = () => {
   return (
     <section className="space-y-6 pt-8 sm:pt-14">
       {/* Section Header */}
-      <div className="text-center space-y-2 max-w-xl mx-auto">
+      <div className="text-center space-y-3 max-w-xl mx-auto">
         <span className="text-[11px] font-semibold tracking-wider uppercase px-3 py-1 rounded-full bg-apple-well text-apple-label-secondary border border-apple-border">
           Ecosystem Coverage
         </span>
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-apple-label">
-          Broad Coverage Across 700+ Public Registries
+          Broad Coverage Across 650+ Public Registries
         </h2>
         <p className="text-xs sm:text-sm text-apple-label-secondary leading-relaxed">
           Comprehensive reconnaissance indexing developer registries, social graphs, creative networks, and global hubs.
         </p>
+
+        <div className="pt-1">
+          <Link
+            href="/platforms"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-apple-well hover:bg-apple-chip border border-apple-border text-xs font-semibold text-apple-label transition-colors shadow-apple-sm"
+          >
+            <span>Explore Full 650+ Platform Directory</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
       </div>
 
       {/* Categories Grid */}
@@ -89,14 +147,19 @@ export const PlatformShowcase: React.FC = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-1.5 pt-1">
-                  {cat.examples.map((item) => (
-                    <span
-                      key={item}
-                      className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-apple-well text-apple-label-secondary border border-apple-border"
-                    >
-                      {item}
-                    </span>
-                  ))}
+                  {cat.examples.map((item) => {
+                    const slug = exampleSlugMap[item];
+                    const href = slug ? `/platforms/${slug}` : '/platforms';
+                    return (
+                      <Link
+                        key={item}
+                        href={href}
+                        className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-apple-well hover:bg-apple-chip text-apple-label-secondary hover:text-apple-label border border-apple-border transition-colors"
+                      >
+                        {item}
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             </div>
