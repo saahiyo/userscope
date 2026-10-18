@@ -348,7 +348,6 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
 
       {/* Main Interactive Canvas Container: fluid height for mobile viewport ergonomics */}
       <div 
-        data-lenis-prevent
         className="relative w-full h-[400px] sm:h-[480px] lg:h-[580px] apple-card rounded-apple-hero overflow-hidden select-none border border-apple-border shadow-apple-card"
       >
         {/* Background Grid Pattern */}

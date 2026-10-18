@@ -109,7 +109,6 @@ export const CategoryScopeBar: React.FC<CategoryScopeBarProps> = ({
       {/* Scope Bar: Dedicated full-width horizontal category filter row with sliding active pill */}
       <div className="relative w-full pt-0.5">
         <div
-          data-lenis-prevent
           className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full [&::-webkit-scrollbar]:hidden"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >

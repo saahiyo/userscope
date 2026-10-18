@@ -33,7 +33,7 @@ UserScope executes checks directly from your local instance via bounded worker p
   - **Relationship Graph**: Interactive force-directed canvas displaying shared identity clusters and metadata links.
   - **Presence Timeline**: Historical profile creation and account presence ordering.
 - **Data Portability**: One-click full forensic report exports to JSON and formatted CSV.
-- **Fluid & Accessible Interface**: Dark and light mode powered by the native View Transitions API, OGL WebGL silk particle wave background, Lenis inertial scrolling, and strict WCAG 2.3.3 reduced-motion gating.
+- **Fluid & Accessible Interface**: Dark and light mode powered by the native View Transitions API, OGL WebGL silk particle wave background, hardware-accelerated native scrolling, and strict WCAG 2.3.3 reduced-motion gating.
 
 ---
 
