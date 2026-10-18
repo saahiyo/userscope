@@ -242,7 +242,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-apple-bg text-apple-label antialiased relative overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-apple-bg text-apple-label antialiased relative overflow-x-clip">
       <Suspense fallback={null}>
         <SearchParamsSync onSearch={startSearch} />
       </Suspense>

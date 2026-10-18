@@ -37,20 +37,16 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full pt-safe transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+      className={`sticky top-0 z-50 w-full backdrop-blur-xl backdrop-saturate-150 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
         isScrolled
-          ? 'bg-apple-bg/80 dark:bg-[#090a0c]/80 backdrop-blur-xl backdrop-saturate-150 border-b border-apple-border shadow-apple-sm'
-          : 'bg-transparent border-b border-transparent'
+          ? 'bg-apple-bg/85 dark:bg-[#090a0c]/85 border-b border-apple-border shadow-apple-sm'
+          : 'bg-apple-bg/70 dark:bg-[#090a0c]/70 border-b border-apple-border/50'
       }`}
     >
       {/* Subtle top sheen highlight */}
       <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/15 dark:via-white/5 to-transparent pointer-events-none" />
 
-      <div
-        className={`max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isScrolled ? 'h-13 sm:h-14' : 'h-14 sm:h-16'
-        }`}
-      >
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
         {/* Brand Identity - Native Apple App Icon & Typography */}
         <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
           <motion.div
