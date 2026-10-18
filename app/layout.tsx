@@ -3,6 +3,7 @@ import './globals.css';
 import 'lenis/dist/lenis.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { SmoothScroll } from '@/components/SmoothScroll';
+import { Analytics } from '@vercel/analytics/next';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.space';
 
@@ -178,6 +179,7 @@ export default function RootLayout({
         <ThemeProvider>
           <SmoothScroll>{children}</SmoothScroll>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
