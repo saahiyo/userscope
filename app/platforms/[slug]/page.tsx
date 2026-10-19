@@ -20,6 +20,10 @@ import {
   Zap,
   Lock,
   ArrowRight,
+  Search,
+  HelpCircle,
+  FileText,
+  Activity,
 } from 'lucide-react';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.space';
@@ -27,7 +31,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.space';
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const popular = getPopularPlatforms(25);
+  const popular = getPopularPlatforms(60);
   return popular.map((p) => ({
     slug: p.slug,
   }));
@@ -55,7 +59,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: {
-      canonical: `/platforms/${platform.slug}`,
+      canonical: `${siteUrl}/platforms/${platform.slug}`,
     },
     openGraph: {
       title: `${title} | UserScope`,
@@ -89,6 +93,25 @@ export default function PlatformPage({ params }: PageProps) {
 
   const related = getRelatedPlatforms(platform, 4);
   const categoryInfo = CATEGORIES[platform.categoryKey];
+
+  const faqs = [
+    {
+      q: `How does UserScope check if a username exists on ${platform.name}?`,
+      a: `UserScope inspects public endpoints on ${platform.name} (${platform.domain}) using passive query patterns (${platform.checkType}). It verifies whether the username returns an active profile or an unregistered 404 response without making unauthorized modifications or alerting the account owner.`,
+    },
+    {
+      q: `Can ${platform.name} account holders see that I performed a username search?`,
+      a: `No. All verification queries through UserScope are passive, unauthenticated, and zero-log. UserScope does not require login credentials or store your search history, ensuring 100% operational privacy.`,
+    },
+    {
+      q: `What format should I use when looking up handles on ${platform.name}?`,
+      a: `Provide the raw alphanumeric handle without URL prefixes or '@' symbols. The standard profile URL pattern for ${platform.name} resolves to ${platform.urlPattern}.`,
+    },
+    {
+      q: `Why is checking ${platform.name} valuable during OSINT investigations?`,
+      a: `As part of the ${platform.category} ecosystem, usernames on ${platform.name} frequently correlate across other public registries. Correlating identical handles across multiple platforms helps identify digital footprints, verify online presence, or protect personal brand identity.`,
+    },
+  ];
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -140,6 +163,17 @@ export default function PlatformPage({ params }: PageProps) {
           priceCurrency: 'USD',
         },
         description: `Real-time public username verification tool probing ${platform.name} and 650+ other public networks.`,
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: faq.a,
+          },
+        })),
       },
     ],
   };
@@ -261,6 +295,125 @@ export default function PlatformPage({ params }: PageProps) {
                 <span>100% Client-Side Privacy Guaranteed</span>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* How to Check & Investigate Guide */}
+        <section className="space-y-4">
+          <div className="space-y-1">
+            <h2 className="text-base sm:text-lg font-bold text-apple-label tracking-tight flex items-center gap-2">
+              <Search className="w-4 h-4 text-apple-blue" />
+              <span>How to Check Username Availability & Presence on {platform.name}</span>
+            </h2>
+            <p className="text-xs text-apple-label-secondary leading-relaxed">
+              Step-by-step guidance for security researchers, brand protection teams, and OSINT investigators:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="apple-card rounded-[16px] p-4 border border-apple-border space-y-2">
+              <div className="w-6 h-6 rounded-full bg-apple-blue/10 text-apple-blue flex items-center justify-center text-xs font-bold font-mono">
+                1
+              </div>
+              <h3 className="text-xs font-semibold text-apple-label">Enter Exact Handle</h3>
+              <p className="text-[12px] text-apple-label-secondary leading-relaxed">
+                Provide the username or handle without extra spaces or symbols. For {platform.name}, usernames resolve directly via <span className="font-mono text-apple-label">{platform.domain}</span>.
+              </p>
+            </div>
+
+            <div className="apple-card rounded-[16px] p-4 border border-apple-border space-y-2">
+              <div className="w-6 h-6 rounded-full bg-apple-purple/10 text-apple-purple flex items-center justify-center text-xs font-bold font-mono">
+                2
+              </div>
+              <h3 className="text-xs font-semibold text-apple-label">Passive Probe Execution</h3>
+              <p className="text-[12px] text-apple-label-secondary leading-relaxed">
+                UserScope leverages high-efficiency {platform.checkType} queries to verify whether the target identity returns a valid public response code.
+              </p>
+            </div>
+
+            <div className="apple-card rounded-[16px] p-4 border border-apple-border space-y-2">
+              <div className="w-6 h-6 rounded-full bg-apple-green/10 text-apple-green flex items-center justify-center text-xs font-bold font-mono">
+                3
+              </div>
+              <h3 className="text-xs font-semibold text-apple-label">Cross-Network Footprint</h3>
+              <p className="text-[12px] text-apple-label-secondary leading-relaxed">
+                Scan {platform.name} individually or probe all 650+ networks simultaneously to correlate alias re-use across the global OSINT surface.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* How to Interpret Scan Results */}
+        <section className="space-y-4">
+          <div className="space-y-1">
+            <h2 className="text-base sm:text-lg font-bold text-apple-label tracking-tight flex items-center gap-2">
+              <Activity className="w-4 h-4 text-apple-purple" />
+              <span>Interpreting {platform.name} Scan Telemetry</span>
+            </h2>
+            <p className="text-xs text-apple-label-secondary leading-relaxed">
+              Understand the meaning of each verification status returned by the UserScope engine:
+            </p>
+          </div>
+
+          <div className="apple-card rounded-[18px] p-5 border border-apple-border divide-y divide-apple-border/60">
+            <div className="py-3 first:pt-0 flex items-start gap-3">
+              <span className="w-2 h-2 rounded-full bg-apple-green mt-1.5 shrink-0" />
+              <div className="space-y-1">
+                <span className="text-xs font-bold text-apple-label font-mono">FOUND / CLAIMED</span>
+                <p className="text-[12px] text-apple-label-secondary leading-relaxed">
+                  An active account or public profile was verified on {platform.name}. You can click through directly to inspect public repository activity, biography details, or profile timestamps.
+                </p>
+              </div>
+            </div>
+
+            <div className="py-3 flex items-start gap-3">
+              <span className="w-2 h-2 rounded-full bg-apple-label-tertiary mt-1.5 shrink-0" />
+              <div className="space-y-1">
+                <span className="text-xs font-bold text-apple-label font-mono">AVAILABLE / UNCLAIMED (404)</span>
+                <p className="text-[12px] text-apple-label-secondary leading-relaxed">
+                  The handle does not currently exist on {platform.name}. It may be available for registration, or previously purged from the platform&apos;s namespace.
+                </p>
+              </div>
+            </div>
+
+            <div className="py-3 last:pb-0 flex items-start gap-3">
+              <span className="w-2 h-2 rounded-full bg-apple-orange mt-1.5 shrink-0" />
+              <div className="space-y-1">
+                <span className="text-xs font-bold text-apple-label font-mono">PROTECTED / RATE LIMITED</span>
+                <p className="text-[12px] text-apple-label-secondary leading-relaxed">
+                  The platform&apos;s anti-scraping or rate limit mechanisms triggered a verification block. Re-probe using direct browser verification via the link provided above.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Frequently Asked Questions */}
+        <section className="space-y-4">
+          <div className="space-y-1">
+            <h2 className="text-base sm:text-lg font-bold text-apple-label tracking-tight flex items-center gap-2">
+              <HelpCircle className="w-4 h-4 text-apple-teal" />
+              <span>Frequently Asked Questions about {platform.name} Reconnaissance</span>
+            </h2>
+            <p className="text-xs text-apple-label-secondary leading-relaxed">
+              Common questions regarding handle verification, privacy, and footprint detection on {platform.name}:
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            {faqs.map((faq, i) => (
+              <div
+                key={i}
+                className="apple-card rounded-[16px] p-4 sm:p-5 border border-apple-border space-y-1.5"
+              >
+                <h3 className="text-xs sm:text-sm font-semibold text-apple-label">
+                  {faq.q}
+                </h3>
+                <p className="text-xs text-apple-label-secondary leading-relaxed">
+                  {faq.a}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 

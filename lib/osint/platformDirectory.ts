@@ -100,17 +100,98 @@ function extractDomain(url: string): string {
   }
 }
 
-function createBaseSlug(name: string): string {
+function slugify(name: string): string {
   return name
     .toLowerCase()
-    .replace(/\s*\([^)]*\)/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
 
-// Build sanitized and deduplicated platform catalog once
-const popularNames = new Set(POPULAR_SITES.map((s) => s.name.toLowerCase()));
+function normalizeForMatching(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
 
+const POPULAR_ALIASES = new Set([
+  'github',
+  'reddit',
+  'duolingo',
+  'chesscom',
+  'hackernews',
+  'deviantart',
+  'steam',
+  'telegram',
+  'medium',
+  'spotify',
+  'soundcloud',
+  'gitlab',
+  'dockerhub',
+  'npm',
+  'ifttt',
+  'patreon',
+  'pinterest',
+  'vimeo',
+  'codepen',
+  'devto',
+  'kaggle',
+  'lichess',
+  'replit',
+  'behance',
+  'dribbble',
+  'substack',
+  'linktree',
+  'letterboxd',
+  'producthunt',
+  'buymeacoffee',
+  'fiverr',
+  'aboutme',
+  'keybase',
+  'lastfm',
+  'bitbucket',
+  'instructables',
+  'twitter',
+  'x',
+  'instagram',
+  'youtube',
+  'tiktok',
+  'twitch',
+  'linkedin',
+  'discord',
+]);
+
+function parsePlatformIdentity(rawName: string): {
+  slug: string;
+  displayName: string;
+  isPrimary: boolean;
+  priority: number;
+} {
+  const match = rawName.match(/^(.*?)\s*\((.*?)\)$/);
+  if (match) {
+    const base = match[1].trim();
+    const modifier = match[2].trim().toLowerCase();
+    if (['user', 'profile', 'profiles', 'public', 'account'].includes(modifier)) {
+      return {
+        slug: slugify(base),
+        displayName: base,
+        isPrimary: true,
+        priority: 1,
+      };
+    }
+    return {
+      slug: slugify(`${base}-${modifier}`),
+      displayName: rawName,
+      isPrimary: false,
+      priority: 2,
+    };
+  }
+  return {
+    slug: slugify(rawName),
+    displayName: rawName,
+    isPrimary: true,
+    priority: 1,
+  };
+}
+
+// Build sanitized and deduplicated platform catalog once
 const allPlatformsList: PlatformRecord[] = [];
 const slugToPlatform = new Map<string, PlatformRecord>();
 const usedSlugs = new Set<string>();
@@ -125,19 +206,22 @@ interface RawWmnItem {
   m_code?: number;
 }
 
-const typedRaw = rawSites as RawWmnItem[];
+const typedRaw = (rawSites as RawWmnItem[]).filter(
+  (item) => !(item.cat || '').toLowerCase().includes('nsfw')
+);
+
+// Sort so primary profiles (priority 1) claim canonical slugs before sub-services
+typedRaw.sort(
+  (a, b) => parsePlatformIdentity(a.name).priority - parsePlatformIdentity(b.name).priority
+);
 
 for (const item of typedRaw) {
-  // Exclude adult/NSFW platforms from public SEO index
-  if ((item.cat || '').toLowerCase().includes('nsfw')) {
-    continue;
-  }
-
   const { key: categoryKey, label: categoryLabel } = mapCategory(item.cat);
   const prettyUrl = item.uri_pretty || item.uri_check;
   const domain = extractDomain(prettyUrl);
+  const identity = parsePlatformIdentity(item.name);
 
-  let baseSlug = createBaseSlug(item.name) || 'platform';
+  let baseSlug = identity.slug || 'platform';
   let slug = baseSlug;
   let counter = 1;
 
@@ -147,7 +231,9 @@ for (const item of typedRaw) {
   }
   usedSlugs.add(slug);
 
-  const isPopular = popularNames.has(item.name.toLowerCase());
+  const cleanNorm = normalizeForMatching(identity.displayName);
+  const isPopular = POPULAR_ALIASES.has(cleanNorm);
+
   const checkType =
     item.uri_check.includes('api.') || item.uri_check.includes('/api/') || item.uri_check.includes('graphql')
       ? 'REST API'
@@ -157,7 +243,7 @@ for (const item of typedRaw) {
 
   const record: PlatformRecord = {
     slug,
-    name: item.name,
+    name: identity.displayName,
     category: categoryLabel,
     categoryKey,
     urlPattern: prettyUrl.replace('{account}', '{username}'),
@@ -172,7 +258,13 @@ for (const item of typedRaw) {
   slugToPlatform.set(slug, record);
 }
 
-// Sort alphabetically, with popular platforms prioritized in listing
+// Sort: popular platforms first, then alphabetically by name
+allPlatformsList.sort((a, b) => {
+  if (a.isPopular && !b.isPopular) return -1;
+  if (!a.isPopular && b.isPopular) return 1;
+  return a.name.localeCompare(b.name);
+});
+
 export const ALL_PLATFORMS = allPlatformsList;
 
 export function getAllPlatforms(): PlatformRecord[] {
