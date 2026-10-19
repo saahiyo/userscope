@@ -28,16 +28,17 @@ const PatternWaves = dynamic(() => import('@/components/PatternWaves'), {
   ssr: false,
 });
 
-function SearchParamsSync({ onSearch }: { onSearch: (q: string) => void }) {
+function SearchParamsSync({ onSearch }: { onSearch: (q: string, platform?: string) => void }) {
   const searchParams = useSearchParams();
   const mountedRef = useRef(false);
 
   useEffect(() => {
     if (mountedRef.current) return;
     const initialQuery = searchParams.get('q') || searchParams.get('username') || searchParams.get('target');
+    const initialPlatform = searchParams.get('platform') || undefined;
     if (initialQuery && initialQuery.trim()) {
       mountedRef.current = true;
-      onSearch(initialQuery.trim());
+      onSearch(initialQuery.trim(), initialPlatform);
     }
   }, [searchParams, onSearch]);
 
@@ -48,6 +49,7 @@ export default function Home() {
   const { isDark } = useTheme();
   const isReducedMotion = useReducedMotion();
   const [query, setQuery] = useState('');
+  const [targetPlatform, setTargetPlatform] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Search Results State
@@ -78,17 +80,27 @@ export default function Home() {
   const eventSourceRef = useRef<EventSource | null>(null);
 
   const startSearch = useCallback(
-    (targetQuery?: string) => {
+    (targetQuery?: string, platformOverride?: string) => {
       const q = (targetQuery || query).trim();
       if (!q || isLoading) return;
 
+      const plat = platformOverride !== undefined ? platformOverride : targetPlatform;
+
       if (targetQuery) {
         setQuery(targetQuery);
+      }
+      if (platformOverride !== undefined) {
+        setTargetPlatform(platformOverride || null);
       }
 
       if (typeof window !== 'undefined') {
         const url = new URL(window.location.href);
         url.searchParams.set('q', q);
+        if (plat) {
+          url.searchParams.set('platform', plat);
+        } else {
+          url.searchParams.delete('platform');
+        }
         window.history.replaceState(null, '', url.toString());
       }
 
@@ -113,10 +125,14 @@ export default function Home() {
         firstSeen: 'Jun 16, 2018',
         lastSeen: 'Aug 26, 2026',
         checkedCount: 0,
-        totalCount: 692,
+        totalCount: plat ? 1 : 692,
       });
 
-      const eventSource = new EventSource(`/api/search/stream?username=${encodeURIComponent(q)}`);
+      const streamUrl = plat
+        ? `/api/search/stream?username=${encodeURIComponent(q)}&platform=${encodeURIComponent(plat)}`
+        : `/api/search/stream?username=${encodeURIComponent(q)}`;
+
+      const eventSource = new EventSource(streamUrl);
       eventSourceRef.current = eventSource;
 
       eventSource.onmessage = (event) => {
@@ -385,7 +401,7 @@ export default function Home() {
               className="space-y-6"
             >
               {/* Header with Back button & active target */}
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
                 <motion.button
                   type="button"
                   whileHover={{ x: -2 }}
@@ -397,9 +413,27 @@ export default function Home() {
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Back to Overview</span>
                 </motion.button>
-                <span className="text-xs font-mono text-apple-label-secondary">
-                  Target: <span className="text-apple-label font-bold">@{searchedQuery}</span>
-                </span>
+                <div className="flex items-center gap-2">
+                  {targetPlatform && (
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-apple-blue/10 border border-apple-blue/20 text-apple-blue font-medium">
+                      Platform: <span className="font-bold uppercase">{targetPlatform}</span>
+                    </span>
+                  )}
+                  {targetPlatform && !isLoading && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        startSearch(searchedQuery, '');
+                      }}
+                      className="text-xs text-apple-blue hover:underline inline-flex items-center gap-1"
+                    >
+                      <span>Scan all 692+ platforms &rarr;</span>
+                    </button>
+                  )}
+                  <span className="text-xs font-mono text-apple-label-secondary">
+                    Target: <span className="text-apple-label font-bold">@{searchedQuery}</span>
+                  </span>
+                </div>
               </div>
 
               {/* Discovered Identity Overview Card */}

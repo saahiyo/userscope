@@ -1,5 +1,6 @@
 import { DiscoveredProfile, SearchStreamEvent, SearchAggregatedSummary } from './types';
 import { cleanDisplayName, cleanLocation } from '@/lib/utils/text';
+import { getPlatformBySlug } from './platformDirectory';
 import wmnSitesData from './wmnData.json';
 
 const USER_AGENTS = [
@@ -421,11 +422,12 @@ async function checkWmnPlatform(site: any, username: string): Promise<Discovered
   }
 }
 
-// Full Orchestrator: Dynamic concurrent scan across all engines
+// Full Orchestrator: Dynamic concurrent scan across all engines or a targeted platform
 export async function runDynamicOsintScan(
   username: string,
   onEvent: (event: SearchStreamEvent) => void,
-  signal?: AbortSignal
+  signal?: AbortSignal,
+  targetPlatformSlug?: string
 ) {
   const startTime = Date.now();
   const cleanUsername = username.trim();
@@ -483,6 +485,59 @@ export async function runDynamicOsintScan(
 
   if (signal?.aborted) return;
 
+  // Single-Platform Scan Mode
+  if (targetPlatformSlug) {
+    const targetPlatform = getPlatformBySlug(targetPlatformSlug);
+    let matchedProfile: DiscoveredProfile | null = null;
+
+    if (targetPlatform) {
+      const lowerSlug = targetPlatformSlug.toLowerCase();
+
+      // Check specialized extractors first if applicable
+      if (lowerSlug === 'github') {
+        matchedProfile = await checkGitHub(cleanUsername);
+      } else if (lowerSlug === 'leetcode') {
+        matchedProfile = await checkLeetCode(cleanUsername);
+      } else if (lowerSlug === 'deviantart') {
+        matchedProfile = await checkDeviantArt(cleanUsername);
+      } else if (lowerSlug === 'duolingo') {
+        matchedProfile = await checkDuolingo(cleanUsername);
+      } else if (lowerSlug === 'chess-com') {
+        matchedProfile = await checkChess(cleanUsername);
+      } else if (lowerSlug === 'pinterest') {
+        matchedProfile = await checkPinterest(cleanUsername);
+      }
+
+      // If not specialized or specialized returned null, run WMN platform check
+      if (!matchedProfile && targetPlatform.rawItem) {
+        matchedProfile = await checkWmnPlatform(targetPlatform.rawItem, cleanUsername);
+      }
+    } else {
+      // Fallback: search wmn sites data by name/slug
+      const site = (wmnSitesData as any[]).find((s) =>
+        s.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').includes(targetPlatformSlug.toLowerCase())
+      );
+      if (site) {
+        matchedProfile = await checkWmnPlatform(site, cleanUsername);
+      }
+    }
+
+    if (matchedProfile) {
+      registerHit(matchedProfile, 1, 1);
+    }
+
+    onEvent({
+      type: 'complete',
+      checkedCount: 1,
+      totalCount: 1,
+      hitsCount: discoveredMap.size,
+      timeElapsedMs: Date.now() - startTime,
+      summary: aggregatedSummary
+    });
+    return;
+  }
+
+  // Multi-Platform Full Scan Mode (Default)
   // 1. Run high-accuracy specialized extractors in parallel
   const specializedExtractors = [
     () => checkRegisteredEmails(cleanUsername),

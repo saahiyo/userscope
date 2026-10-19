@@ -66,6 +66,7 @@ export interface PlatformRecord {
   checkType: 'REST API' | 'HTTP Status' | 'Public Body Matching';
   isPopular: boolean;
   sampleUsers: string[];
+  rawItem?: any;
 }
 
 function mapCategory(rawCat?: string): { key: CategoryKey; label: string } {
@@ -252,6 +253,7 @@ for (const item of typedRaw) {
     checkType,
     isPopular,
     sampleUsers: (item.known || []).slice(0, 4),
+    rawItem: item,
   };
 
   allPlatformsList.push(record);

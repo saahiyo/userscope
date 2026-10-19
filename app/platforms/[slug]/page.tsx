@@ -259,6 +259,7 @@ export default function PlatformPage({ params }: PageProps) {
         {/* Quick Scan Action Form */}
         <PlatformScanForm
           platformName={platform.name}
+          platformSlug={platform.slug}
           sampleUsers={platform.sampleUsers}
         />
 

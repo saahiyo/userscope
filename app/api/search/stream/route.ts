@@ -62,6 +62,7 @@ export async function GET(req: NextRequest) {
   }
 
   const username = validation.sanitized;
+  const targetPlatform = searchParams.get('platform') || searchParams.get('target_platform') || undefined;
 
   // 3. Create SSE stream with client disconnect handling
   const stream = new TransformStream();
@@ -88,7 +89,8 @@ export async function GET(req: NextRequest) {
         (event) => {
           sendEvent(event);
         },
-        req.signal
+        req.signal,
+        targetPlatform
       );
     } catch (err: any) {
       if (!req.signal.aborted) {

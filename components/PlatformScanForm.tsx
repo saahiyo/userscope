@@ -8,20 +8,26 @@ import { springs, microinteractions } from '@/lib/motion';
 
 interface PlatformScanFormProps {
   platformName: string;
+  platformSlug: string;
   sampleUsers: string[];
 }
 
 export const PlatformScanForm: React.FC<PlatformScanFormProps> = ({
   platformName,
+  platformSlug,
   sampleUsers,
 }) => {
   const [handle, setHandle] = useState('');
+  const [scanAll, setScanAll] = useState(false);
   const router = useRouter();
 
   const handleScan = (target?: string) => {
     const q = (target || handle).trim().replace(/^@/, '');
     if (!q) return;
-    router.push(`/?q=${encodeURIComponent(q)}`);
+    const targetUrl = scanAll
+      ? `/?q=${encodeURIComponent(q)}`
+      : `/?q=${encodeURIComponent(q)}&platform=${encodeURIComponent(platformSlug)}`;
+    router.push(targetUrl);
   };
 
   return (
@@ -32,10 +38,10 @@ export const PlatformScanForm: React.FC<PlatformScanFormProps> = ({
           <span>Interactive Reconnaissance</span>
         </div>
         <h2 className="text-base sm:text-xl font-bold text-apple-label tracking-tight">
-          Scan any handle on {platformName} & 650+ Platforms
+          Scan any handle on {platformName}
         </h2>
         <p className="text-xs sm:text-sm text-apple-label-secondary leading-relaxed">
-          Enter a handle to query {platformName} and probe 650+ public ecosystems simultaneously with sub-second live streaming.
+          Enter a handle to probe {platformName}&apos;s public registry in real time with passive reconnaissance.
         </p>
       </div>
 
@@ -66,10 +72,22 @@ export const PlatformScanForm: React.FC<PlatformScanFormProps> = ({
           transition={springs.snappy}
           className="px-6 py-3 rounded-full bg-apple-label text-apple-bg font-semibold text-xs sm:text-sm hover:opacity-95 transition-opacity flex items-center justify-center gap-2 shadow-apple-sm shrink-0 cursor-pointer"
         >
-          <span>Start Live Scan</span>
+          <span>{scanAll ? 'Scan All 692+ Platforms' : `Scan ${platformName}`}</span>
           <ArrowRight className="w-4 h-4" />
         </motion.button>
       </form>
+
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5 text-xs">
+        <label className="inline-flex items-center gap-2 cursor-pointer text-xs text-apple-label-secondary hover:text-apple-label select-none">
+          <input
+            type="checkbox"
+            checked={scanAll}
+            onChange={(e) => setScanAll(e.target.checked)}
+            className="w-3.5 h-3.5 rounded accent-apple-blue cursor-pointer"
+          />
+          <span>Also probe all 692+ other platforms simultaneously</span>
+        </label>
+      </div>
 
       {sampleUsers.length > 0 && (
         <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs">
