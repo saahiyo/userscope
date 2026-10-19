@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'UserScope' }],
   creator: 'UserScope',
   alternates: {
-    canonical: '/',
+    canonical: siteUrl,
   },
   icons: {
     icon: '/icon.svg',

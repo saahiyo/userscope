@@ -189,6 +189,7 @@ export default function Home() {
     }
     setIsLoading(false);
     setSearchedQuery('');
+    setTargetPlatform(null);
     setProfiles([]);
     setFilterQuery('');
     setSelectedCategory('all');
@@ -198,6 +199,7 @@ export default function Home() {
       url.searchParams.delete('q');
       url.searchParams.delete('username');
       url.searchParams.delete('target');
+      url.searchParams.delete('platform');
       const cleanPath = url.pathname + (url.search ? url.search : '');
       window.history.replaceState(null, '', cleanPath);
     }

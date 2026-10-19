@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     'Explore 650+ public platforms and developer registries monitored by UserScope. Verify handle footprints, accounts, and profile links across the web in real time.',
   alternates: {
-    canonical: '/platforms',
+    canonical: `${siteUrl}/platforms`,
   },
   openGraph: {
     title: 'OSINT Platform Directory (650+ Public Registries) | UserScope',
