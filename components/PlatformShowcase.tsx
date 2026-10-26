@@ -45,9 +45,8 @@ const exampleSlugMap: Record<string, string> = {
   Gravatar: 'gravatar',
   Keybase: 'keybase',
   Pastebin: 'pastebin',
-  'Archive.org': 'archive-org',
-  Wikidata: 'wikidata',
-  Wikipedia: 'wikipedia',
+  Wikidot: 'wikidot',
+  'OpenStreetMap Wiki': 'openstreetmap-wiki',
   SourceForge: 'sourceforge',
 };
 
@@ -93,7 +92,7 @@ export const PlatformShowcase: React.FC = () => {
       icon: Globe,
       count: '100+ Platforms',
       badgeClass: 'text-apple-teal bg-apple-teal/10 border-apple-teal/20',
-      examples: ['Gravatar', 'Keybase', 'Pastebin', 'Archive.org', 'Wikidata', 'Wikipedia', 'SourceForge'],
+      examples: ['Gravatar', 'Keybase', 'Pastebin', 'Wikidot', 'OpenStreetMap Wiki', 'SourceForge'],
     },
   ];
 

@@ -48,6 +48,50 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/platforms/arduino',
+        destination: '/platforms/arduino-forum',
+        permanent: true,
+      },
+      {
+        source: '/platforms/arduino-2',
+        destination: '/platforms/arduino-project-hub',
+        permanent: true,
+      },
+      {
+        source: '/platforms/freelancehunt-2',
+        destination: '/platforms/freelancehunt-freelancer',
+        permanent: true,
+      },
+      {
+        source: '/platforms/meta-wiki',
+        destination: '/platforms/meta-wiki-wikimedia',
+        permanent: true,
+      },
+      {
+        source: '/platforms/mastodonbooks-net',
+        destination: '/platforms/mastodonbooks-net-mastodon-instance',
+        permanent: true,
+      },
+      {
+        source: '/platforms/wikidata',
+        destination: '/platforms',
+        permanent: true,
+      },
+      {
+        source: '/platforms/wikipedia',
+        destination: '/platforms',
+        permanent: true,
+      },
+      {
+        source: '/platforms/archive-org',
+        destination: '/platforms',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = withDualmark(nextConfig, {
