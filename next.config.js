@@ -1,3 +1,5 @@
+const { withDualmark } = require('@dualmark/nextjs');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -48,4 +50,6 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withDualmark(nextConfig, {
+  siteUrl: 'https://userscope.space',
+});
