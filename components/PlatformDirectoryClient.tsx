@@ -250,9 +250,9 @@ export const PlatformDirectoryClient: React.FC<PlatformDirectoryClientProps> = (
                     </Link>
 
                     <Link
-                      href={`/?q=${encodeURIComponent(platform.sampleUsers[0] || 'test')}&platform=${encodeURIComponent(platform.slug)}`}
+                      href={`/platforms/${platform.slug}#scan`}
                       className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-apple-well hover:bg-apple-chip border border-apple-border text-[11px] font-medium text-apple-label transition-colors shadow-apple-sm"
-                      title={`Quick scan sample handle on ${platform.name}`}
+                      title={`Open ${platform.name} scan portal`}
                     >
                       <span>Quick Scan</span>
                     </Link>

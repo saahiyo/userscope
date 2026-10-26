@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, ArrowRight, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -20,6 +20,14 @@ export const PlatformScanForm: React.FC<PlatformScanFormProps> = ({
   const [handle, setHandle] = useState('');
   const [scanAll, setScanAll] = useState(false);
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash === '#scan') {
+      inputRef.current?.focus();
+      inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, []);
 
   const handleScan = (target?: string) => {
     const q = (target || handle).trim().replace(/^@/, '');
@@ -31,7 +39,10 @@ export const PlatformScanForm: React.FC<PlatformScanFormProps> = ({
   };
 
   return (
-    <div className="apple-card rounded-[22px] sm:rounded-[26px] p-5 sm:p-7 border border-apple-border space-y-4 shadow-apple-md">
+    <div
+      id="scan"
+      className="apple-card rounded-[22px] sm:rounded-[26px] p-5 sm:p-7 border border-apple-border space-y-4 shadow-apple-md scroll-mt-24"
+    >
       <div className="space-y-1.5">
         <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-apple-label-secondary">
           <Sparkles className="w-3.5 h-3.5 text-apple-blue" />
@@ -57,6 +68,7 @@ export const PlatformScanForm: React.FC<PlatformScanFormProps> = ({
             @
           </span>
           <input
+            ref={inputRef}
             type="text"
             value={handle}
             onChange={(e) => setHandle(e.target.value)}
