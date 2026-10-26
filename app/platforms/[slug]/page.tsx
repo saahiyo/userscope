@@ -261,6 +261,9 @@ export default function PlatformPage({ params }: PageProps) {
           platformName={platform.name}
           platformSlug={platform.slug}
           sampleUsers={platform.sampleUsers}
+          domain={platform.domain}
+          urlPattern={platform.urlPattern}
+          faviconUrl={platform.faviconUrl}
         />
 
         {/* Technical Reconnaissance Blueprint */}
