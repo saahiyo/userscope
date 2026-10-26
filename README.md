@@ -1,10 +1,11 @@
 # UserScope
 
-Real-time username reconnaissance across 700+ platforms with zero telemetry leakage.
+Real-time username reconnaissance across 690+ platforms with zero telemetry leakage.  
+**Live Application:** [userscope.space](https://userscope.space)
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-userscope.space-10b981?style=flat-square)](https://userscope.space) [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org/) [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/) [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/) [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-![UserScope Interface Preview](public/og.png)
+[![UserScope Interface Preview](https://userscope.space/og.png)](https://userscope.space)
 
 ```bash
 # Query footprints across 690+ targets via SSE stream
@@ -33,7 +34,20 @@ UserScope executes checks directly from your local instance via bounded worker p
   - **Relationship Graph**: Interactive force-directed canvas displaying shared identity clusters and metadata links.
   - **Presence Timeline**: Historical profile creation and account presence ordering.
 - **Data Portability**: One-click full forensic report exports to JSON and formatted CSV.
-- **Fluid & Accessible Interface**: Dark and light mode powered by the native View Transitions API, OGL WebGL silk particle wave background, hardware-accelerated native scrolling, and strict WCAG 2.3.3 reduced-motion gating.
+- **Fast, Accessible Web UI**: Client-side reactive graphs, keyboard navigation, light/dark modes, and WCAG-compliant reduced motion support.
+
+---
+
+## Platform Coverage
+
+UserScope verifies public handles across 690+ target services, including:
+
+- **Developer & Code**: GitHub, GitLab, Bitbucket, NPM, PyPI, Docker Hub, Stack Overflow, Dev.to, Kaggle.
+- **Gaming & Virtual**: Steam, Roblox, Chess.com, Minecraft, Epic Games.
+- **Creative & Media**: DeviantArt, Behance, ArtStation, SoundCloud, Spotify, Flickr, 500px.
+- **Identity & Social**: Keybase, Pastebin, About.me, Reddit, Telegram, Gravatar.
+
+Browse individual platform reconnaissance methods and availability endpoints in the [Platform Directory](https://userscope.space/platforms).
 
 ---
 
