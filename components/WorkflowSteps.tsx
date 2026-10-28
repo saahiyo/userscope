@@ -3,7 +3,7 @@
 import React from 'react';
 import { Search, Cpu, CheckCircle2 } from 'lucide-react';
 
-export const WorkflowSteps: React.FC = () => {
+export const WorkflowSteps: React.FC<{ scanRuleCount: number }> = ({ scanRuleCount }) => {
   const steps = [
     {
       num: '01',
@@ -15,7 +15,7 @@ export const WorkflowSteps: React.FC = () => {
       num: '02',
       icon: Cpu,
       title: 'Parallel Asynchronous Scan',
-      desc: 'UserScope dispatches concurrent GraphQL and REST probe workers across 700+ public registries, streaming responses back in real time.',
+      desc: `UserScope checks ${scanRuleCount} endpoint rules on its server and streams matches to your browser.`,
     },
     {
       num: '03',

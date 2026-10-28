@@ -2,17 +2,17 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Analytics } from '@vercel/analytics/next';
+import { PLATFORM_COUNT, SCAN_RULE_COUNT } from '@/lib/osint/platformDirectory';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.space';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'UserScope — Public Footprint Reconnaissance',
+    default: 'Free Username Search Across Public Platforms | UserScope',
     template: '%s | UserScope',
   },
-  description:
-    'Search public usernames and digital footprints across 700+ platforms in real time with zero paywalls. Free passive OSINT reconnaissance with live streaming.',
+  description: `Free username search across ${PLATFORM_COUNT} public platforms. Check public profile endpoints and follow results as they stream to your browser.`,
   keywords: [
     'UserScope',
     'OSINT',
@@ -48,9 +48,8 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: 'UserScope — Public Footprint Reconnaissance',
-    description:
-      'Search public handles and digital footprints across 700+ platforms in real time with live streaming telemetry.',
+    title: 'Free Username Search Across Public Platforms | UserScope',
+    description: `Search public handles across ${PLATFORM_COUNT} public platforms with live result streaming.`,
     url: siteUrl,
     siteName: 'UserScope',
     locale: 'en_US',
@@ -60,15 +59,14 @@ export const metadata: Metadata = {
         url: '/og.png',
         width: 1200,
         height: 630,
-        alt: 'UserScope — Public Footprint Reconnaissance across 700+ platforms',
+        alt: `UserScope username search across ${PLATFORM_COUNT} public platforms`,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'UserScope — Public Footprint Reconnaissance',
-    description:
-      'Search public handles and digital footprints across 700+ platforms in real time with live streaming telemetry.',
+    title: 'Free Username Search Across Public Platforms | UserScope',
+    description: `Search public handles across ${PLATFORM_COUNT} public platforms with live result streaming.`,
     images: ['/og.png'],
   },
   robots: {
@@ -92,8 +90,7 @@ const jsonLd = {
       '@id': `${siteUrl}/#website`,
       url: siteUrl,
       name: 'UserScope',
-      description:
-        'Real-time open-source intelligence (OSINT) reconnaissance tool searching public usernames across 700+ platforms.',
+      description: `Username search across ${PLATFORM_COUNT} public platforms.`,
       publisher: {
         '@type': 'Organization',
         name: 'UserScope',
@@ -117,18 +114,17 @@ const jsonLd = {
       applicationCategory: 'SecurityApplication',
       applicationSubCategory: 'OSINT & Digital Footprint Reconnaissance',
       operatingSystem: 'Any (Web Browser)',
-      description:
-        'Real-time open-source intelligence reconnaissance tool searching public usernames and digital footprints across 700+ platforms.',
+      description: `Username reconnaissance across ${PLATFORM_COUNT} public platforms with server-side checks streamed to your browser.`,
       screenshot: `${siteUrl}/og.png`,
       softwareVersion: '0.1.0',
       license: 'https://opensource.org/licenses/MIT',
       featureList: [
         'Real-time SSE streaming reconnaissance',
-        '700+ public platform engines',
+        `${PLATFORM_COUNT} public platform listings and ${SCAN_RULE_COUNT} scan rules`,
         'Interactive identity relationship graph',
         'Chronological presence timeline',
         'One-click JSON & CSV forensic intelligence export',
-        '100% client-side investigative privacy with zero query logging',
+        'Server-side public endpoint checks streamed to the browser',
       ],
       offers: {
         '@type': 'Offer',
@@ -141,51 +137,6 @@ const jsonLd = {
         url: 'https://github.com/saahiyo/userscope',
         sameAs: ['https://github.com/saahiyo/userscope'],
       },
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'What is UserScope and what is it used for?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'UserScope is an open-source intelligence (OSINT) reconnaissance platform that allows security researchers, penetration testers, and developers to determine where a specific handle or alias exists across 700+ public online platforms in real time.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'How does real-time Server-Sent Events (SSE) scanning work?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'When you initiate a scan, UserScope dispatches concurrent, asynchronous workers against public API endpoints. As soon as a platform verifies handle existence, the hit is streamed directly to your browser over an SSE connection in sub-second latency.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is querying public handles legal and safe?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. UserScope solely performs passive, unauthenticated queries against public endpoints that are open to the internet. It never accesses private communications, breaks authentication, or bypasses access controls.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Does UserScope store, track, or sell searched usernames?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No. UserScope does not maintain query databases or track user searches. The tool operates client-side streaming directly to your active browser session with complete investigative privacy.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Can I export the gathered reconnaissance intelligence?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. With one click, you can export all discovered profiles, verified URLs, avatar links, and metadata into standardized JSON or a spreadsheet-compatible CSV file.',
-          },
-        },
-      ],
     },
   ],
 };

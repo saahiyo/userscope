@@ -20,7 +20,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   onExport,
   hasResults = false,
   isScanning = false,
-  totalPlatforms = 653,
+  totalPlatforms,
 }) => {
   const { isDark, toggleTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -83,10 +83,12 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           </Link>
 
           {/* Engine Status Indicator */}
+        {totalPlatforms !== undefined && (
           <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-apple-well text-xs font-mono text-apple-label-secondary border border-apple-border">
             <span className={`w-2 h-2 rounded-full ${isScanning ? 'bg-apple-orange animate-ping' : 'bg-apple-green'}`} />
-            <span>{totalPlatforms || 653} Engines Online</span>
+            <span>{totalPlatforms} Platforms Listed</span>
           </div>
+        )}
 
           {/* Export Action Menu with Spring Enter & Tactile Taps */}
           <AnimatePresence>

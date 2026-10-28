@@ -211,6 +211,8 @@ const typedRaw = (rawSites as RawWmnItem[]).filter(
   (item) => !(item.cat || '').toLowerCase().includes('nsfw')
 );
 
+export const SCAN_RULE_COUNT = (rawSites as RawWmnItem[]).length;
+
 // Sort so primary profiles (priority 1) claim canonical slugs before sub-services
 typedRaw.sort(
   (a, b) => parsePlatformIdentity(a.name).priority - parsePlatformIdentity(b.name).priority
@@ -268,6 +270,7 @@ allPlatformsList.sort((a, b) => {
 });
 
 export const ALL_PLATFORMS = allPlatformsList;
+export const PLATFORM_COUNT = ALL_PLATFORMS.length;
 
 export function getAllPlatforms(): PlatformRecord[] {
   return ALL_PLATFORMS;

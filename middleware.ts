@@ -1,7 +1,7 @@
 import { createDualmarkMiddleware } from '@dualmark/nextjs';
 
 export default createDualmarkMiddleware({
-  siteUrl: 'https://userscope.space',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.space',
   middleware: {
     injectLinkHeader: true,
   },

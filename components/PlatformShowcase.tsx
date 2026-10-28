@@ -50,47 +50,41 @@ const exampleSlugMap: Record<string, string> = {
   SourceForge: 'sourceforge',
 };
 
-export const PlatformShowcase: React.FC = () => {
+export const PlatformShowcase: React.FC<{ platformCount: number }> = ({ platformCount }) => {
   const categories = [
     {
       name: 'Developer & Code',
       icon: Code2,
-      count: '90+ Platforms',
       badgeClass: 'text-apple-blue bg-apple-blue/10 border-apple-blue/20',
       examples: ['GitHub', 'GitLab', 'Docker Hub', 'npm', 'PyPI', 'Bitbucket', 'Kaggle', 'HackerRank'],
     },
     {
       name: 'Social & Identity',
       icon: MessageSquare,
-      count: '180+ Platforms',
       badgeClass: 'text-apple-purple bg-apple-purple/10 border-apple-purple/20',
       examples: ['X (Twitter)', 'Reddit', 'Bluesky', 'Mastodon', 'Telegram', 'Discourse', 'Pinterest', 'Tumblr'],
     },
     {
       name: 'Professional & Writing',
       icon: Briefcase,
-      count: '110+ Platforms',
       badgeClass: 'text-apple-orange bg-apple-orange/10 border-apple-orange/20',
       examples: ['Dev.to', 'Medium', 'Substack', 'ProductHunt', 'Hashnode', 'About.me', 'Freelancer'],
     },
     {
       name: 'Media & Creative',
       icon: Music,
-      count: '130+ Platforms',
       badgeClass: 'text-apple-pink bg-apple-pink/10 border-apple-pink/20',
       examples: ['YouTube', 'Spotify', 'SoundCloud', 'Vimeo', 'Behance', 'Dribbble', 'Flickr', 'Bandcamp'],
     },
     {
       name: 'Gaming & Virtual',
       icon: Gamepad2,
-      count: '80+ Platforms',
       badgeClass: 'text-apple-green bg-apple-green/10 border-apple-green/20',
       examples: ['Steam', 'Twitch', 'Roblox', 'Chess.com', 'Speedrun.com', 'Lichess', 'NexusMods'],
     },
     {
       name: 'Global & Niche Services',
       icon: Globe,
-      count: '100+ Platforms',
       badgeClass: 'text-apple-teal bg-apple-teal/10 border-apple-teal/20',
       examples: ['Gravatar', 'Keybase', 'Pastebin', 'Wikidot', 'OpenStreetMap Wiki', 'SourceForge'],
     },
@@ -104,10 +98,10 @@ export const PlatformShowcase: React.FC = () => {
           Ecosystem Coverage
         </span>
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-apple-label">
-          Broad Coverage Across 650+ Public Registries
+          Browse {platformCount} Public Platforms
         </h2>
         <p className="text-xs sm:text-sm text-apple-label-secondary leading-relaxed">
-          Comprehensive reconnaissance indexing developer registries, social graphs, creative networks, and global hubs.
+          Browse developer, social, creative, and global services, then open a platform page to check a username.
         </p>
 
         <div className="pt-1">
@@ -115,7 +109,7 @@ export const PlatformShowcase: React.FC = () => {
             href="/platforms"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-apple-well hover:bg-apple-chip border border-apple-border text-xs font-semibold text-apple-label transition-colors shadow-apple-sm"
           >
-            <span>Explore Full 650+ Platform Directory</span>
+            <span>Explore All {platformCount} Platforms</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -140,9 +134,6 @@ export const PlatformShowcase: React.FC = () => {
                       {cat.name}
                     </h3>
                   </div>
-                  <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full border ${cat.badgeClass}`}>
-                    {cat.count}
-                  </span>
                 </div>
 
                 <div className="flex flex-wrap gap-1.5 pt-1">

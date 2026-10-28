@@ -1,6 +1,6 @@
 # UserScope
 
-Real-time username reconnaissance across 690+ platforms with zero telemetry leakage.  
+Username reconnaissance across a directory of public platforms, with scan results streamed from the server.
 **Live Application:** [userscope.space](https://userscope.space)
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-userscope.space-10b981?style=flat-square)](https://userscope.space) [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org/) [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/) [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/) [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
@@ -8,7 +8,7 @@ Real-time username reconnaissance across 690+ platforms with zero telemetry leak
 [![UserScope Interface Preview](https://userscope.space/og.png)](https://userscope.space)
 
 ```bash
-# Query footprints across 690+ targets via SSE stream
+# Query public username footprints via SSE stream
 curl -N "http://localhost:3000/api/search/stream?username=torvalds"
 ```
 
@@ -19,7 +19,7 @@ curl -N "http://localhost:3000/api/search/stream?username=torvalds"
 Most username OSINT tools (Sherlock, WhatsMyName CLI, Blackbird) either:
 - **Run solely in terminal shells**, making visual analysis, timeline correlation, and entity filtering tedious.
 - **Buffer scans synchronously**, forcing you to wait minutes before seeing a single hit.
-- **Rely on external third-party cloud APIs**, leaking the target handle to remote telemetry servers.
+- **Use cloud-hosted tools** that can add services to the data path and require their own privacy review.
 
 UserScope executes checks directly from your local instance via bounded worker pools, streaming live hits over Server-Sent Events the millisecond they are detected.
 
@@ -27,7 +27,7 @@ UserScope executes checks directly from your local instance via bounded worker p
 
 ## Core Capabilities
 
-- **Streaming Reconnaissance**: Scans 690+ target platforms concurrently with immediate SSE event dispatching.
+- **Streaming Reconnaissance**: Checks configured public profile endpoints concurrently and streams results with SSE.
 - **Defensive Safeguards**: Built-in sliding-window IP rate limiting, active scan concurrency gates, and regex-level SSRF / shell-injection rejection.
 - **Multiple Analysis Views**:
   - **Masonry Grid**: Real-time platform cards grouped by service category (developer, social, gaming, finance).
@@ -40,7 +40,7 @@ UserScope executes checks directly from your local instance via bounded worker p
 
 ## Platform Coverage
 
-UserScope verifies public handles across 690+ target services, including:
+UserScope checks public handles across its listed platform directory, including:
 
 - **Developer & Code**: GitHub, GitLab, Bitbucket, NPM, PyPI, Docker Hub, Stack Overflow, Dev.to, Kaggle.
 - **Gaming & Virtual**: Steam, Roblox, Chess.com, Minecraft, Epic Games.
@@ -59,7 +59,7 @@ flowchart LR
     Router["Next.js Route Handler (/api/search/stream)"]
     Sec["Security Layer (Validation + Rate Limiter)"]
     Pool["Worker Concurrency Pool"]
-    Targets["690+ Platform Endpoints"]
+    Targets["Configured Public Endpoints"]
 
     Client -->|"GET ?username=handle"| Router
     Router -->|"Sanitize & Rate Limit"| Sec

@@ -10,29 +10,29 @@ interface FaqItem {
   answer: string;
 }
 
-export const FaqSection: React.FC = () => {
+export const FaqSection: React.FC<{ platformCount: number }> = ({ platformCount }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqs: FaqItem[] = [
     {
       question: 'What is UserScope and what is it used for?',
       answer:
-        'UserScope is an open-source intelligence (OSINT) reconnaissance platform. It allows security researchers, penetration testers, and developers to determine where a specific handle or alias exists across 700+ public online platforms in real time.',
+        `UserScope is an open-source intelligence platform for checking usernames across ${platformCount} listed public platforms.`,
     },
     {
       question: 'How does real-time Server-Sent Events (SSE) scanning work?',
       answer:
-        'When you initiate a scan, UserScope dispatches concurrent, asynchronous workers against public API endpoints. As soon as a platform verifies handle existence, the hit is streamed directly to your browser over an SSE connection in sub-second latency.',
+        'When you start a scan, UserScope sends the username to its server, checks public platform endpoints, and streams results to your browser as checks complete.',
     },
     {
-      question: 'Is querying public handles legal and safe?',
+      question: 'What does UserScope check?',
       answer:
-        'Yes. UserScope solely performs passive, unauthenticated queries against public endpoints that are open to the internet. It never accesses private communications, breaks authentication, or bypasses access controls.',
+        'UserScope checks public profile endpoints without logging in to target accounts or accessing private communications. Use the tool only where permitted by applicable law and platform terms.',
     },
     {
-      question: 'Does UserScope store, track, or sell searched usernames?',
+      question: 'How are searched usernames handled?',
       answer:
-        'No. UserScope does not maintain query databases or track user searches. The tool operates client-side streaming directly to your active browser session with complete investigative privacy.',
+        'Searches are sent to UserScope’s server for processing and streamed to your browser. The app does not provide saved search history; infrastructure log retention depends on the service operator.',
     },
     {
       question: 'Can I export the gathered reconnaissance intelligence?',

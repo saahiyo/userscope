@@ -95,5 +95,5 @@ const nextConfig = {
 };
 
 module.exports = withDualmark(nextConfig, {
-  siteUrl: 'https://userscope.space',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.space',
 });

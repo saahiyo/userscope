@@ -30,6 +30,8 @@ interface PlatformScanFormProps {
   domain?: string;
   urlPattern?: string;
   faviconUrl?: string;
+  platformCount: number;
+  scanRuleCount: number;
 }
 
 type ScanStatus = 'idle' | 'scanning' | 'found' | 'not_found' | 'error';
@@ -41,6 +43,8 @@ export const PlatformScanForm: React.FC<PlatformScanFormProps> = ({
   domain,
   urlPattern,
   faviconUrl,
+  platformCount,
+  scanRuleCount,
 }) => {
   const [handle, setHandle] = useState('');
   const [scanAll, setScanAll] = useState(false);
@@ -214,7 +218,7 @@ export const PlatformScanForm: React.FC<PlatformScanFormProps> = ({
             </>
           ) : (
             <>
-              <span>{scanAll ? 'Scan All 692+ Platforms' : `Scan ${platformName}`}</span>
+              <span>{scanAll ? `Scan ${scanRuleCount} endpoint rules` : `Scan ${platformName}`}</span>
               <ArrowRight className="w-4 h-4" />
             </>
           )}
@@ -230,7 +234,7 @@ export const PlatformScanForm: React.FC<PlatformScanFormProps> = ({
             onChange={(e) => setScanAll(e.target.checked)}
             className="w-3.5 h-3.5 rounded accent-apple-blue cursor-pointer"
           />
-          <span>Redirect to main page to scan all 692+ platforms simultaneously</span>
+          <span>Redirect to main page to scan all {scanRuleCount} endpoint rules</span>
         </label>
       </div>
 
@@ -409,7 +413,7 @@ export const PlatformScanForm: React.FC<PlatformScanFormProps> = ({
                 className="inline-flex items-center gap-1.5 text-apple-blue hover:underline font-medium"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Search @{scannedHandle} across all 692+ other platforms</span>
+                <span>Search @{scannedHandle} across {platformCount} listed platforms</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
               <button
@@ -465,7 +469,7 @@ export const PlatformScanForm: React.FC<PlatformScanFormProps> = ({
                 className="inline-flex items-center gap-1.5 text-apple-blue hover:underline font-medium"
               >
                 <Layers className="w-3.5 h-3.5" />
-                <span>Probe other 692+ registries for @{scannedHandle}</span>
+                <span>Search @{scannedHandle} across {platformCount} listed platforms</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
               <button

@@ -3,22 +3,22 @@ import Link from 'next/link';
 import { HeaderNav } from '@/components/HeaderNav';
 import { LandingFooter } from '@/components/LandingFooter';
 import { PlatformDirectoryClient } from '@/components/PlatformDirectoryClient';
-import { getAllPlatforms } from '@/lib/osint/platformDirectory';
+import { getAllPlatforms, PLATFORM_COUNT } from '@/lib/osint/platformDirectory';
 import { ArrowLeft, ChevronRight, Layers, ShieldCheck } from 'lucide-react';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.space';
 
 export const metadata: Metadata = {
-  title: 'OSINT Platform Directory (650+ Public Registries)',
+  title: `Username Search Platforms (${PLATFORM_COUNT})`,
   description:
-    'Explore 650+ public platforms and developer registries monitored by UserScope. Verify handle footprints, accounts, and profile links across the web in real time.',
+    `Browse ${PLATFORM_COUNT} public platforms supported by UserScope. Search by platform name, domain, or category, then check a username.`,
   alternates: {
     canonical: `${siteUrl}/platforms`,
   },
   openGraph: {
-    title: 'OSINT Platform Directory (650+ Public Registries) | UserScope',
+    title: `Username Search Platforms (${PLATFORM_COUNT}) | UserScope`,
     description:
-      'Search and verify public accounts across 650+ developer, social, gaming, media, and professional registries.',
+      `Browse ${PLATFORM_COUNT} public platforms supported by UserScope and open a platform page to check a username.`,
     url: `${siteUrl}/platforms`,
     siteName: 'UserScope',
     images: [
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'OSINT Platform Directory (650+ Public Registries) | UserScope',
+    title: `Username Search Platforms (${PLATFORM_COUNT}) | UserScope`,
     description:
-      'Search and verify public accounts across 650+ developer, social, gaming, media, and professional registries.',
+      `Browse ${PLATFORM_COUNT} public platforms supported by UserScope and open a platform page to check a username.`,
     images: ['/og.png'],
   },
 };
@@ -49,9 +49,9 @@ export default function PlatformsPage() {
         '@type': 'CollectionPage',
         '@id': `${siteUrl}/platforms/#webpage`,
         url: `${siteUrl}/platforms`,
-        name: 'OSINT Platform Directory (650+ Public Registries)',
+        name: `Username Search Platforms (${PLATFORM_COUNT})`,
         description:
-          'Directory of public platform endpoints monitored for open-source intelligence and username presence reconnaissance.',
+            `Directory of ${PLATFORM_COUNT} public platforms supported for username presence checks.`,
         isPartOf: {
           '@type': 'WebSite',
           '@id': `${siteUrl}/#website`,
@@ -105,15 +105,15 @@ export default function PlatformsPage() {
         <header className="space-y-3 max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-apple-well border border-apple-border text-[11px] font-medium text-apple-label-secondary shadow-apple-sm">
             <span className="w-2 h-2 rounded-full bg-apple-green animate-pulse" />
-            <span>650+ Monitored Ecosystems</span>
+            <span>{PLATFORM_COUNT} Listed Platforms</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-apple-label">
-            Public Platform & Registry Directory
+            Search Platforms by Username
           </h1>
 
           <p className="text-xs sm:text-sm text-apple-label-secondary leading-relaxed">
-            Index of 650+ verified online platforms, code registries, social hubs, and digital ecosystems monitored in real time by UserScope with zero paywalls.
+            Find a platform by name, domain, or category, then open its page to check a public username.
           </p>
         </header>
 
@@ -121,7 +121,7 @@ export default function PlatformsPage() {
         <PlatformDirectoryClient platforms={platforms} />
       </main>
 
-      <LandingFooter />
+      <LandingFooter platformCount={PLATFORM_COUNT} />
     </div>
   );
 }

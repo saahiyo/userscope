@@ -163,7 +163,7 @@ export default function NotFound() {
                   <ChevronRight className="w-3.5 h-3.5 text-apple-label-tertiary group-hover:translate-x-0.5 transition-transform" />
                 </h3>
                 <p className="text-[11px] text-apple-label-secondary mt-0.5 leading-relaxed">
-                  Real-time username reconnaissance across 700+ engines.
+                  Username reconnaissance across public platforms.
                 </p>
               </div>
             </div>
@@ -184,7 +184,7 @@ export default function NotFound() {
                   <ChevronRight className="w-3.5 h-3.5 text-apple-label-tertiary group-hover:translate-x-0.5 transition-transform" />
                 </h3>
                 <p className="text-[11px] text-apple-label-secondary mt-0.5 leading-relaxed">
-                  Browse 650+ verified registries with infinite scroll.
+                  Browse the platform directory and filter by name or category.
                 </p>
               </div>
             </div>
@@ -215,13 +215,13 @@ export default function NotFound() {
         {/* Telemetry Diagnostics Footer Pill */}
         <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-[10px] font-mono text-apple-label-tertiary">
           <span className="px-2.5 py-1 rounded-full bg-apple-well border border-apple-border">
-            PROTOCOL: TLS 1.3
+            HTTPS ENABLED
           </span>
           <span className="px-2.5 py-1 rounded-full bg-apple-well border border-apple-border">
-            MONITORED NODES: 692 ONLINE
+            PUBLIC PROFILE CHECKS
           </span>
           <span className="px-2.5 py-1 rounded-full bg-apple-well border border-apple-border">
-            ZERO LOGGING POLICY
+            SERVER-PROCESSED SCANS
           </span>
         </div>
       </main>

@@ -7,9 +7,11 @@ import { PlatformScanForm } from '@/components/PlatformScanForm';
 import { PlatformFavicon } from '@/components/PlatformFavicon';
 import {
   getPlatformBySlug,
-  getPopularPlatforms,
+  getAllPlatforms,
   getRelatedPlatforms,
   CATEGORIES,
+  PLATFORM_COUNT,
+  SCAN_RULE_COUNT,
 } from '@/lib/osint/platformDirectory';
 import {
   ChevronRight,
@@ -31,7 +33,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.space';
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const popular = getPopularPlatforms(60);
+  const popular = getAllPlatforms().filter((platform) => platform.isPopular);
   return popular.map((p) => ({
     slug: p.slug,
   }));
@@ -52,14 +54,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const title = `Check Username on ${platform.name} — OSINT Footprint Reconnaissance`;
-  const description = `Search and verify if any username, handle, or digital footprint exists on ${platform.name} and 650+ public registries in real time. Free passive OSINT reconnaissance with zero query logging.`;
+  const title = `Check ${platform.name} Usernames`;
+  const description = `Check whether a public username is present on ${platform.name}. Review the profile URL pattern and start a scan through UserScope.`;
 
   return {
     title,
     description,
     alternates: {
       canonical: `${siteUrl}/platforms/${platform.slug}`,
+    },
+    robots: {
+      index: platform.isPopular,
+      follow: true,
+      googleBot: { index: platform.isPopular, follow: true },
     },
     openGraph: {
       title: `${title} | UserScope`,
@@ -100,8 +107,8 @@ export default function PlatformPage({ params }: PageProps) {
       a: `UserScope inspects public endpoints on ${platform.name} (${platform.domain}) using passive query patterns (${platform.checkType}). It verifies whether the username returns an active profile or an unregistered 404 response without making unauthorized modifications or alerting the account owner.`,
     },
     {
-      q: `Can ${platform.name} account holders see that I performed a username search?`,
-      a: `No. All verification queries through UserScope are passive, unauthenticated, and zero-log. UserScope does not require login credentials or store your search history, ensuring 100% operational privacy.`,
+      q: `How does UserScope process searches for ${platform.name}?`,
+      a: `Searches are sent to UserScope's server, which checks public endpoints. The app does not provide saved search history; infrastructure log retention depends on the service operator.`,
     },
     {
       q: `What format should I use when looking up handles on ${platform.name}?`,
@@ -120,7 +127,7 @@ export default function PlatformPage({ params }: PageProps) {
         '@type': 'ItemPage',
         '@id': `${siteUrl}/platforms/${platform.slug}/#webpage`,
         url: `${siteUrl}/platforms/${platform.slug}`,
-        name: `Check Username on ${platform.name} — OSINT Reconnaissance`,
+        name: `Check ${platform.name} Usernames`,
         description: `Verify handle presence and discover public profile footprints on ${platform.name}.`,
         isPartOf: {
           '@type': 'WebSite',
@@ -162,7 +169,7 @@ export default function PlatformPage({ params }: PageProps) {
           price: '0',
           priceCurrency: 'USD',
         },
-        description: `Real-time public username verification tool probing ${platform.name} and 650+ other public networks.`,
+        description: `Check public username presence on ${platform.name} with UserScope.`,
       },
       {
         '@type': 'FAQPage',
@@ -188,7 +195,7 @@ export default function PlatformPage({ params }: PageProps) {
       />
 
       {/* Header Navigation */}
-      <HeaderNav totalPlatforms={653} />
+      <HeaderNav totalPlatforms={PLATFORM_COUNT} />
 
       <main className="relative z-10 flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 sm:space-y-10">
         {/* Breadcrumb Navigation */}
@@ -219,7 +226,7 @@ export default function PlatformPage({ params }: PageProps) {
             <div className="space-y-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-apple-label">
-                  {platform.name}
+                  Check Usernames on {platform.name}
                 </h1>
                 <span
                   className={`text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full border ${
@@ -264,6 +271,8 @@ export default function PlatformPage({ params }: PageProps) {
           domain={platform.domain}
           urlPattern={platform.urlPattern}
           faviconUrl={platform.faviconUrl}
+          platformCount={PLATFORM_COUNT}
+          scanRuleCount={SCAN_RULE_COUNT}
         />
 
         {/* Technical Reconnaissance Blueprint */}
@@ -289,14 +298,14 @@ export default function PlatformPage({ params }: PageProps) {
             <div className="apple-card rounded-[18px] p-4 sm:p-5 border border-apple-border space-y-2">
               <div className="flex items-center gap-2 text-xs font-semibold text-apple-label">
                 <Lock className="w-4 h-4 text-apple-green" />
-                <span>Zero Query Logging & Privacy</span>
+                <span>Server-Processed Public Checks</span>
               </div>
               <p className="text-xs text-apple-label-secondary leading-relaxed">
-                All searches against {platform.name} are performed using passive unauthenticated requests. No search query logs, handles, or IP histories are recorded.
+                Searches are sent to UserScope&apos;s server, which checks the public {platform.name} endpoint and streams the result to your browser. The app does not provide saved search history.
               </p>
               <div className="flex items-center gap-2 pt-1 text-[11px] font-medium text-apple-green">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>100% Client-Side Privacy Guaranteed</span>
+                <span>Public Endpoint Check</span>
               </div>
             </div>
           </div>
@@ -341,7 +350,7 @@ export default function PlatformPage({ params }: PageProps) {
               </div>
               <h3 className="text-xs font-semibold text-apple-label">Cross-Network Footprint</h3>
               <p className="text-[12px] text-apple-label-secondary leading-relaxed">
-                Scan {platform.name} individually or probe all 650+ networks simultaneously to correlate alias re-use across the global OSINT surface.
+                Scan {platform.name} individually or check the full {PLATFORM_COUNT}-platform catalog to compare public username presence.
               </p>
             </div>
           </div>
@@ -471,7 +480,7 @@ export default function PlatformPage({ params }: PageProps) {
         )}
       </main>
 
-      <LandingFooter />
+      <LandingFooter platformCount={PLATFORM_COUNT} />
     </div>
   );
 }

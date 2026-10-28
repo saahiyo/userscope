@@ -1,5 +1,6 @@
 import { DiscoveredProfile, SearchStreamEvent, SearchAggregatedSummary } from './types';
 import { POPULAR_SITES } from './sites';
+import { SCAN_RULE_COUNT } from './platformDirectory';
 import { enrichFromApiResponse, enrichFromHtml } from './enrichers';
 import { cleanDisplayName, cleanLocation } from '@/lib/utils/text';
 
@@ -350,7 +351,7 @@ export async function scanUsernameStream(
       'Gamer Link'
     ];
 
-    const totalCount = 692; // 700+ platforms checked
+    const totalCount = SCAN_RULE_COUNT;
     let hitsCount = 0;
 
     // Stream each profile in sequence with natural timing

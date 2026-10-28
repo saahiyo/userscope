@@ -114,7 +114,7 @@ export const PlatformDirectoryClient: React.FC<PlatformDirectoryClientProps> = (
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search 650+ platforms by name, domain, or category..."
+            placeholder={`Search ${platforms.length} platforms by name, domain, or category...`}
             className="w-full pl-11 pr-10 py-3.5 rounded-full bg-apple-well/90 hover:bg-apple-chip/70 focus:bg-apple-well border border-apple-border focus:border-apple-blue/50 text-sm text-apple-label placeholder:text-apple-label-tertiary focus:outline-none focus:ring-2 focus:ring-apple-blue/20 transition-all shadow-apple-sm"
           />
           {searchQuery && (
@@ -288,6 +288,21 @@ export const PlatformDirectoryClient: React.FC<PlatformDirectoryClientProps> = (
               </div>
             </div>
           )}
+
+          <details className="border-t border-apple-border pt-5">
+            <summary className="cursor-pointer text-sm font-semibold text-apple-label">
+              Browse all {filteredPlatforms.length} platforms
+            </summary>
+            <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2 text-xs sm:grid-cols-3 lg:grid-cols-4">
+              {filteredPlatforms.map((platform) => (
+                <li key={platform.slug}>
+                  <Link className="text-apple-blue hover:underline" href={`/platforms/${platform.slug}`}>
+                    {platform.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </details>
         </>
       ) : (
         <div className="text-center py-16 bg-apple-card border border-apple-border rounded-apple-2xl space-y-3">

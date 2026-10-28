@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ShieldCheck, Github, ExternalLink } from 'lucide-react';
 import { UserScopeLogo } from '@/components/UserScopeLogo';
 
-export const LandingFooter: React.FC = () => {
+export const LandingFooter: React.FC<{ platformCount?: number }> = ({ platformCount }) => {
   return (
     <footer className="mt-16 border-t border-apple-border bg-apple-well/40 py-10 pb-safe text-xs text-apple-label-secondary">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
@@ -20,11 +20,11 @@ export const LandingFooter: React.FC = () => {
               </span>
             </div>
             <p className="text-xs text-apple-label-secondary max-w-sm leading-relaxed">
-              Real-time open-source intelligence reconnaissance tool. Query public usernames and digital footprints across 700+ public ecosystems with zero paywalls.
+              Username reconnaissance across the listed public platforms. Searches are processed by UserScope’s server and streamed to your browser.
             </p>
             <div className="flex items-center gap-2 text-[11px] font-medium text-apple-green">
               <span className="w-2 h-2 rounded-full bg-apple-green animate-pulse" />
-              <span>All 692 Recon Engines Active</span>
+              {platformCount !== undefined && <span>{platformCount} Public Platforms Listed</span>}
             </div>
           </div>
 
@@ -79,7 +79,7 @@ export const LandingFooter: React.FC = () => {
           <div className="space-y-2">
             <p className="text-xs font-semibold text-apple-label uppercase tracking-wider">Ethics & Privacy</p>
             <ul className="space-y-1.5 text-xs text-apple-label-secondary">
-              <li>No search query logs kept</li>
+              <li>No saved search history in the app</li>
               <li>Passive public queries only</li>
               <li>Zero credential storage</li>
               <li>MIT Open-Source Software</li>

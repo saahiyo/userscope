@@ -5,7 +5,7 @@ import { Zap, Network, History, Download, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { springs, microinteractions } from '@/lib/motion';
 
-export const FeatureBento: React.FC = () => {
+export const FeatureBento: React.FC<{ scanRuleCount: number }> = ({ scanRuleCount }) => {
   return (
     <section className="space-y-6 pt-6 sm:pt-12">
       {/* Section Header */}
@@ -14,7 +14,7 @@ export const FeatureBento: React.FC = () => {
           Engine Architecture
         </span>
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-apple-label">
-          Built for High-Velocity Digital Investigation
+          Public Endpoint Checks with Live Results
         </h2>
         <p className="text-xs sm:text-sm text-apple-label-secondary leading-relaxed">
           Engineered from the ground up for open-source investigators, security researchers, and developers.
@@ -38,7 +38,7 @@ export const FeatureBento: React.FC = () => {
                 Concurrent SSE Streaming Telemetry
               </h3>
               <p className="text-xs sm:text-sm text-apple-label-secondary max-w-md leading-relaxed">
-                Probe up to 700+ platform endpoints simultaneously. Hits stream back instantly over Server-Sent Events with millisecond-accurate telemetry as platforms confirm registration.
+                Probe {scanRuleCount} endpoint rules and stream matches to your browser as public profiles are confirmed.
               </p>
             </div>
           </div>

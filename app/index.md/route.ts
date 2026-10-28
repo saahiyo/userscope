@@ -1,11 +1,12 @@
 import { markdownResponse } from '@dualmark/core';
+import { PLATFORM_COUNT, SCAN_RULE_COUNT } from '@/lib/osint/platformDirectory';
 
 export const dynamic = 'force-static';
 
 export async function GET() {
-  const content = `# UserScope — Public Footprint Reconnaissance
+  const content = `# UserScope — Username Search Across Public Platforms
 
-> Real-time open-source intelligence (OSINT) reconnaissance tool. Search public usernames, accounts, and digital footprints across 700+ platforms with zero paywalls.
+> Search usernames across ${PLATFORM_COUNT} listed public platforms. Full scans process ${SCAN_RULE_COUNT} endpoint rules and stream results to your browser.
 
 **Live Application**: [https://userscope.space](https://userscope.space)  
 **Source Code**: [https://github.com/saahiyo/userscope](https://github.com/saahiyo/userscope)  
@@ -15,19 +16,19 @@ export async function GET() {
 
 ## Overview
 
-UserScope allows security researchers, penetration testers, and developers to determine where a specific handle or alias exists across 700+ public online platforms simultaneously in real time.
+UserScope helps security researchers, developers, and account owners check public username presence across the listed platform directory.
 
 Unlike traditional OSINT tools that run solely in terminal shells or gate search results behind credit subscriptions, UserScope provides:
-- **Instant Browser Streaming**: Live Server-Sent Events (SSE) push verified account hits directly to your active browser session with millisecond latencies.
-- **Client-Side Privacy**: Zero query tracking, zero search history storage, and zero telemetry leakage. Every probe queries public platform endpoints directly.
-- **Broad Coverage**: Over 700 monitored registries across code repositories, social networks, gaming ecosystems, media communities, and financial platforms.
+- **Live Results**: Server-Sent Events (SSE) stream scan results to your browser as checks complete.
+- **Server-Processed Checks**: Searches are sent to UserScope's server, which queries public profile endpoints.
+- **Broad Coverage**: The directory groups public profiles across code repositories, social networks, gaming ecosystems, media communities, and financial platforms.
 - **Forensic Export**: One-click export to standardized JSON and CSV formats for threat intelligence reports and identity investigations.
 
 ---
 
 ## Key Capabilities
 
-1. **High-Velocity Parallel Probes**: Dispatches concurrent, asynchronous workers against public profile APIs. Most full-spectrum scans complete in under 20 seconds.
+1. **Concurrent Checks**: Dispatches workers against configured public endpoints and streams results as checks complete.
 2. **Defensive Safeguards**: Built-in sliding-window IP rate limiting, active scan concurrency gates, and regex-level SSRF / shell-injection rejection.
 3. **Multimodal Analysis Views**:
    - **Masonry Grid**: Real-time platform cards grouped by service category with status badges and response latency.
@@ -78,16 +79,16 @@ UserScope monitors platforms across 6 main ecosystems:
 ## Frequently Asked Questions
 
 ### What is UserScope?
-UserScope is an open-source intelligence (OSINT) reconnaissance platform that discovers public digital footprints across 700+ websites in real time.
+UserScope is an open-source intelligence (OSINT) reconnaissance platform that checks public username presence across ${PLATFORM_COUNT} listed platforms.
 
 ### How does the real-time scan work?
 When an investigation starts, UserScope dispatches concurrent, asynchronous HTTP workers against public platform profile endpoints. Confirmed hits are pushed immediately over an active SSE stream.
 
 ### Is querying public usernames legal?
-Yes. UserScope exclusively performs passive, unauthenticated queries against public profile URLs that are open to the internet. It never accesses private communications, breaks authentication, or bypasses access controls.
+UserScope checks public profile endpoints without logging in to target accounts or accessing private communications. Use the tool only where permitted by applicable law and platform terms.
 
-### Does UserScope store search history?
-No. UserScope maintains zero search logs and zero query databases. Investigations remain completely private to your local session.
+### How are searched usernames handled?
+Searches are sent to UserScope's server for processing and streamed back to your browser. The app does not provide saved search history; infrastructure log retention depends on the service operator.
 `;
 
   return markdownResponse(content, {
