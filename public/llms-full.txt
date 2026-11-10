@@ -93,3 +93,17 @@ UserScope is designed strictly for authorized reconnaissance, brand defense, and
 - Does not log, sell, or monetize search queries.
 - Queries are executed in-memory and streamed to the requesting client.
 - Always consult applicable platform terms of service and local cyber regulations before conducting OSINT investigations.
+
+---
+
+## 7. Educational Guides & Knowledge Base
+
+UserScope publishes long-form educational technical guides detailing OSINT principles, account enumeration, and footprint defense:
+- **Guides Hub**: https://userscope.space/guides
+- **How to Check Username Availability Across 650+ Platforms**: https://userscope.space/guides/check-username-availability-across-platforms
+- **What is Username Enumeration? Mechanics, Defense, and OSINT Techniques**: https://userscope.space/guides/what-is-username-enumeration
+- **How to Find Someone's Public Social Media Footprint by Username**: https://userscope.space/guides/find-social-media-profiles-by-username
+- **What is OSINT? The Definitive Guide to Open Source Intelligence in 2026**: https://userscope.space/guides/what-is-osint-guide
+- **Top OSINT Tools for Security Researchers & Penetration Testers**: https://userscope.space/guides/top-osint-tools-for-reconnaissance
+- **How to Protect Your Digital Footprint & Audit Your Online Presence**: https://userscope.space/guides/protect-digital-identity-footprint
+

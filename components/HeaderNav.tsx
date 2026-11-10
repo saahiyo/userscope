@@ -72,8 +72,16 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           </div>
         </Link>
 
-        {/* Center / Right Controls: Directory, Engine Status & Actions */}
+        {/* Center / Right Controls: Directory, Guides, Engine Status & Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Guides Link */}
+          <Link
+            href="/guides"
+            className="px-3 py-1.5 rounded-full bg-apple-well/80 hover:bg-apple-chip text-xs font-medium text-apple-label-secondary hover:text-apple-label border border-apple-border transition-all shadow-apple-sm flex items-center gap-1.5 active:scale-95"
+          >
+            <span>Guides</span>
+          </Link>
+
           {/* Platform Directory Link */}
           <Link
             href="/platforms"

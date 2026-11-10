@@ -34,6 +34,14 @@ export const LandingFooter: React.FC<{ platformCount?: number }> = ({ platformCo
             <ul className="space-y-1 text-xs text-apple-label-secondary">
               <li>
                 <Link
+                  href="/guides"
+                  className="hover:text-apple-label transition-colors inline-flex items-center min-h-[28px] py-1"
+                >
+                  OSINT & Security Guides
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/platforms"
                   className="hover:text-apple-label transition-colors inline-flex items-center min-h-[28px] py-1"
                 >

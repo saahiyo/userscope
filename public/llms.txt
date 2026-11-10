@@ -12,6 +12,13 @@ UserScope helps security researchers, developers, and account owners check publi
 
 - [UserScope Web Application](https://userscope.space/): Real-time OSINT username search across 653 public platforms.
 - [Public Platform Directory](https://userscope.space/platforms): Complete searchable directory of all 653 supported public platforms and endpoints.
+- [OSINT & Reconnaissance Guides](https://userscope.space/guides): In-depth tutorials on username enumeration, handle availability, and footprint audits.
+- [How to Check Username Availability Across Platforms](https://userscope.space/guides/check-username-availability-across-platforms): Guide on claiming and verifying digital handles across 650+ platforms.
+- [What is Username Enumeration?](https://userscope.space/guides/what-is-username-enumeration): Technical primer on response timing, status codes, and application defense.
+- [Find Social Media Profiles by Username](https://userscope.space/guides/find-social-media-profiles-by-username): Practical OSINT methodology for tracing public footprints.
+- [What is OSINT?](https://userscope.space/guides/what-is-osint-guide): Foundations of Open Source Intelligence, intelligence cycles, and ethics.
+- [Top OSINT Tools for Researchers](https://userscope.space/guides/top-osint-tools-for-reconnaissance): Comparison of leading intelligence and reconnaissance tools.
+- [Protect Your Digital Footprint](https://userscope.space/guides/protect-digital-identity-footprint): Guide on auditing personal exposure and removing legacy accounts.
 - [Full LLM Reference](https://userscope.space/llms-full.txt): Complete catalog of platforms, query schemas, and API parameters for LLM agents.
 - [Source Code & Issues](https://github.com/saahiyo/userscope): Open-source GitHub repository, scan rules, and platform contribution guides.
 
