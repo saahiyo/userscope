@@ -11,13 +11,11 @@ import {
   ChevronRight,
   Clock,
   Calendar,
-  User,
-  Share2,
   BookOpen,
   ArrowRight,
   ShieldCheck,
-  CheckCircle2,
   HelpCircle,
+  ListOrdered,
 } from 'lucide-react';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.space';
@@ -163,7 +161,7 @@ export default function GuidePage({ params }: GuidePageProps) {
       />
       <HeaderNav totalPlatforms={PLATFORM_COUNT} />
 
-      <main className="flex-1 max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 w-full">
+      <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-14 w-full">
         {/* Breadcrumb Navigation */}
         <nav
           aria-label="Breadcrumb"
@@ -182,8 +180,8 @@ export default function GuidePage({ params }: GuidePageProps) {
           </span>
         </nav>
 
-        {/* Article Header */}
-        <header className="space-y-4 max-w-3xl pb-8 border-b border-apple-border/60">
+        {/* Focused Article Header */}
+        <header className="space-y-4 pb-8 border-b border-apple-border/60">
           <div className="flex items-center gap-2.5 flex-wrap">
             <span className="text-xs font-semibold uppercase px-2.5 py-0.5 rounded-full bg-apple-blue/10 text-apple-blue border border-apple-blue/20">
               {guide.category}
@@ -199,16 +197,16 @@ export default function GuidePage({ params }: GuidePageProps) {
             </div>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-apple-label leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-[42px] font-extrabold tracking-tight text-apple-label leading-[1.18]">
             {guide.title}
           </h1>
 
-          <p className="text-base sm:text-lg text-apple-label-secondary leading-relaxed">
+          <p className="text-base sm:text-lg text-apple-label-secondary leading-relaxed pt-1">
             {guide.description}
           </p>
 
-          <div className="flex items-center gap-3 pt-2">
-            <div className="w-8 h-8 rounded-full bg-apple-well border border-apple-border flex items-center justify-center text-apple-blue">
+          <div className="flex items-center gap-3 pt-3">
+            <div className="w-8 h-8 rounded-full bg-apple-well border border-apple-border flex items-center justify-center text-apple-blue shrink-0">
               <ShieldCheck className="w-4 h-4" />
             </div>
             <div>
@@ -218,131 +216,132 @@ export default function GuidePage({ params }: GuidePageProps) {
           </div>
         </header>
 
-        {/* Two-Column Body: Content + Sticky Sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mt-8">
-          {/* Main Article Content */}
-          <article className="lg:col-span-8 min-w-0">
-            {/* Interactive Quick Scan Callout */}
-            <GuideQuickScan />
-
-            {/* Markdown Body */}
-            <GuideContent content={guide.content} />
-
-            {/* Frequently Asked Questions */}
-            {guide.faqs.length > 0 && (
-              <section id="faqs" className="mt-16 pt-8 border-t border-apple-border scroll-mt-24">
-                <div className="flex items-center gap-2 mb-6">
-                  <span className="p-1.5 rounded-lg bg-apple-blue/10 text-apple-blue">
-                    <HelpCircle className="w-5 h-5" />
-                  </span>
-                  <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-apple-label">
-                    Frequently Asked Questions
-                  </h3>
-                </div>
-
-                <div className="space-y-4">
-                  {guide.faqs.map((faq, idx) => (
-                    <div
-                      key={idx}
-                      className="p-5 rounded-xl bg-apple-card border border-apple-border/80 space-y-2"
-                    >
-                      <h4 className="text-sm sm:text-base font-semibold text-apple-label">
-                        {faq.question}
-                      </h4>
-                      <p className="text-xs sm:text-sm text-apple-label-secondary leading-relaxed">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Tags */}
-            <div className="mt-12 pt-6 border-t border-apple-border/50 flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-semibold text-apple-label-tertiary uppercase tracking-wider">
-                Topics:
+        {/* Compact, Inline Table of Contents */}
+        {guide.tableOfContents.length > 0 && (
+          <details className="my-8 rounded-xl bg-apple-well/50 border border-apple-border p-4 text-xs group" open>
+            <summary className="font-semibold text-apple-label cursor-pointer flex items-center justify-between select-none">
+              <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-apple-label">
+                <ListOrdered className="w-4 h-4 text-apple-blue" />
+                Table of Contents
               </span>
-              {guide.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-xs px-2.5 py-1 rounded-md bg-apple-well text-apple-label-secondary border border-apple-border"
+              <span className="text-[11px] text-apple-label-tertiary group-open:rotate-90 transition-transform">
+                ▶
+              </span>
+            </summary>
+            <nav className="mt-3.5 pt-3 border-t border-apple-border/50 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+              {guide.tableOfContents.map((item, idx) => (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className="flex items-start gap-1.5 text-apple-label-secondary hover:text-apple-blue transition-colors leading-normal"
                 >
-                  #{tag}
-                </span>
+                  <span className="text-apple-label-tertiary font-mono shrink-0">{idx + 1}.</span>
+                  <span className="line-clamp-1">{item.title}</span>
+                </a>
               ))}
-            </div>
-          </article>
+            </nav>
+          </details>
+        )}
 
-          {/* Sticky Sidebar: Table of Contents & Related */}
-          <aside className="lg:col-span-4 space-y-6">
-            <div className="sticky top-24 space-y-6">
-              {/* Table of Contents */}
-              {guide.tableOfContents.length > 0 && (
-                <div className="p-5 rounded-2xl bg-apple-card border border-apple-border/80 shadow-apple-sm">
-                  <div className="flex items-center gap-2 mb-3.5 pb-2 border-b border-apple-border/60">
-                    <BookOpen className="w-4 h-4 text-apple-blue" />
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-apple-label">
-                      On This Page
-                    </h4>
-                  </div>
-                  <nav className="space-y-1.5 text-xs">
-                    {guide.tableOfContents.map((item) => (
-                      <a
-                        key={item.id}
-                        href={`#${item.id}`}
-                        className="block py-1 text-apple-label-secondary hover:text-apple-blue transition-colors line-clamp-1 leading-normal"
-                      >
-                        {item.title}
-                      </a>
-                    ))}
-                  </nav>
-                </div>
-              )}
+        {/* Focused Reading Body */}
+        <article className="min-w-0">
+          {/* Interactive Quick Scan Callout */}
+          <GuideQuickScan />
 
-              {/* Platform Directory Cross-Promotion */}
-              <div className="p-5 rounded-2xl bg-apple-well/60 border border-apple-border shadow-apple-sm space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-apple-label">
-                  Monitored Platforms
-                </h4>
-                <p className="text-xs text-apple-label-secondary leading-relaxed">
-                  UserScope monitors public profile rules across {PLATFORM_COUNT} platforms in developer, gaming, and social ecosystems.
-                </p>
-                <Link
-                  href="/platforms"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-apple-blue hover:underline"
-                >
-                  <span>Explore Directory</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
+          {/* Markdown Body with Clean Typography */}
+          <GuideContent content={guide.content} />
+
+          {/* Frequently Asked Questions */}
+          {guide.faqs.length > 0 && (
+            <section id="faqs" className="mt-14 pt-8 border-t border-apple-border scroll-mt-24">
+              <div className="flex items-center gap-2 mb-6">
+                <span className="p-1.5 rounded-lg bg-apple-blue/10 text-apple-blue">
+                  <HelpCircle className="w-5 h-5" />
+                </span>
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-apple-label">
+                  Frequently Asked Questions
+                </h3>
               </div>
 
-              {/* Related Guides */}
-              {relatedGuides.length > 0 && (
-                <div className="p-5 rounded-2xl bg-apple-card border border-apple-border/80 shadow-apple-sm space-y-3">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-apple-label">
-                    Related Guides
-                  </h4>
-                  <div className="space-y-3">
-                    {relatedGuides.map((rel) => (
-                      <Link
-                        key={rel.slug}
-                        href={`/guides/${rel.slug}`}
-                        className="block group"
-                      >
-                        <p className="text-xs font-medium text-apple-label group-hover:text-apple-blue transition-colors line-clamp-2">
-                          {rel.title}
-                        </p>
-                        <span className="text-[11px] text-apple-label-tertiary">
-                          {rel.readingTime}
-                        </span>
-                      </Link>
-                    ))}
+              <div className="space-y-4">
+                {guide.faqs.map((faq, idx) => (
+                  <div
+                    key={idx}
+                    className="p-5 rounded-xl bg-apple-card border border-apple-border/80 space-y-2"
+                  >
+                    <h4 className="text-sm sm:text-base font-semibold text-apple-label">
+                      {faq.question}
+                    </h4>
+                    <p className="text-xs sm:text-sm text-apple-label-secondary leading-relaxed">
+                      {faq.answer}
+                    </p>
                   </div>
-                </div>
-              )}
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Topics & Tags */}
+          <div className="mt-12 pt-6 border-t border-apple-border/50 flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-semibold text-apple-label-tertiary uppercase tracking-wider">
+              Topics:
+            </span>
+            {guide.tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-xs px-2.5 py-1 rounded-md bg-apple-well text-apple-label-secondary border border-apple-border"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </article>
+
+        {/* Post-Reading Section: Directory CTA + Related Guides */}
+        <div className="mt-16 pt-10 border-t border-apple-border/80 space-y-10">
+          {/* Platform Directory Cross-Promotion */}
+          <div className="p-6 sm:p-7 rounded-2xl bg-apple-well/60 border border-apple-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <h4 className="text-sm font-bold text-apple-label tracking-tight">
+                Auditing handles across multiple networks?
+              </h4>
+              <p className="text-xs text-apple-label-secondary max-w-md leading-relaxed">
+                UserScope checks unauthenticated profile endpoints across {PLATFORM_COUNT} platforms in developer, social, and gaming networks.
+              </p>
             </div>
-          </aside>
+            <Link
+              href="/platforms"
+              className="px-4 py-2 rounded-xl bg-apple-card hover:bg-apple-chip border border-apple-border text-xs font-semibold text-apple-label inline-flex items-center gap-1.5 shrink-0 shadow-apple-sm transition-all"
+            >
+              <span>Explore Directory</span>
+              <ArrowRight className="w-3.5 h-3.5 text-apple-blue" />
+            </Link>
+          </div>
+
+          {/* Related Guides Grid */}
+          {relatedGuides.length > 0 && (
+            <div className="space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-apple-label-tertiary">
+                Continue Reading
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {relatedGuides.map((rel) => (
+                  <Link
+                    key={rel.slug}
+                    href={`/guides/${rel.slug}`}
+                    className="p-4 rounded-xl bg-apple-card border border-apple-border/80 hover:border-apple-border-focus transition-all group flex flex-col justify-between"
+                  >
+                    <p className="text-xs font-semibold text-apple-label group-hover:text-apple-blue transition-colors line-clamp-2 leading-snug">
+                      {rel.title}
+                    </p>
+                    <span className="text-[11px] text-apple-label-tertiary mt-3 font-mono">
+                      {rel.readingTime}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </main>
 
