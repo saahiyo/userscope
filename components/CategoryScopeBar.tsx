@@ -74,7 +74,7 @@ export const CategoryScopeBar: React.FC<CategoryScopeBarProps> = ({
         </div>
 
         {/* View Mode Segmented Control with animations.dev Sliding Pill Indicator */}
-        <div className="relative inline-flex p-1 rounded-full bg-apple-well border border-apple-border shadow-apple-sm shrink-0 self-start sm:self-auto">
+        <div className="relative flex items-center justify-between sm:justify-start p-1 rounded-full bg-apple-well border border-apple-border shadow-apple-sm w-full sm:w-auto shrink-0">
           {viewModes.map((item) => {
             const isActive = viewMode === item.id;
             return (
@@ -82,7 +82,7 @@ export const CategoryScopeBar: React.FC<CategoryScopeBarProps> = ({
                 key={item.id}
                 type="button"
                 onClick={() => setViewMode(item.id)}
-                className={`relative touch-target-expand px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-colors z-10 ${
+                className={`relative touch-target-expand flex-1 sm:flex-initial px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold flex items-center justify-center gap-1 sm:gap-1.5 transition-colors z-10 ${
                   isActive
                     ? 'text-apple-label'
                     : 'text-apple-label-tertiary hover:text-apple-label'

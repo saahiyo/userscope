@@ -46,23 +46,23 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
       {/* Subtle top sheen highlight */}
       <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/15 dark:via-white/5 to-transparent pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
         {/* Brand Identity - Native Apple App Icon & Typography */}
-        <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
+        <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group shrink-0">
           <motion.div
             whileHover={{ scale: 1.05, rotate: 2 }}
             whileTap={{ scale: 0.95 }}
             transition={springs.snappy}
             className="cursor-pointer"
           >
-            <UserScopeLogo size={36} className="w-8 h-8 sm:w-9 sm:h-9 shadow-sm" />
+            <UserScopeLogo size={32} className="w-7 h-7 sm:w-8 sm:h-8 shadow-sm" />
           </motion.div>
           <div className="flex flex-col justify-center">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <span className="font-semibold text-sm sm:text-base md:text-lg tracking-tight text-apple-label leading-tight group-hover:text-apple-blue transition-colors">
                 UserScope
               </span>
-              <span className="text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase px-1.5 sm:px-2 py-0.5 rounded-full bg-apple-well text-apple-label-secondary border border-apple-border leading-none">
+              <span className="hidden sm:inline-flex text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase px-1.5 sm:px-2 py-0.5 rounded-full bg-apple-well text-apple-label-secondary border border-apple-border leading-none">
                 OSINT Studio
               </span>
             </div>
@@ -73,11 +73,11 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
         </Link>
 
         {/* Center / Right Controls: Directory, Guides, Engine Status & Actions */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           {/* Guides Link */}
           <Link
             href="/guides"
-            className="px-3 py-1.5 rounded-full bg-apple-well/80 hover:bg-apple-chip text-xs font-medium text-apple-label-secondary hover:text-apple-label border border-apple-border transition-all shadow-apple-sm flex items-center gap-1.5 active:scale-95"
+            className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-apple-well/80 hover:bg-apple-chip text-[11px] sm:text-xs font-medium text-apple-label-secondary hover:text-apple-label border border-apple-border transition-all shadow-apple-sm flex items-center gap-1 active:scale-95"
           >
             <span>Guides</span>
           </Link>
@@ -85,7 +85,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           {/* Platform Directory Link */}
           <Link
             href="/platforms"
-            className="px-3 py-1.5 rounded-full bg-apple-well/80 hover:bg-apple-chip text-xs font-medium text-apple-label-secondary hover:text-apple-label border border-apple-border transition-all shadow-apple-sm flex items-center gap-1.5 active:scale-95"
+            className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-apple-well/80 hover:bg-apple-chip text-[11px] sm:text-xs font-medium text-apple-label-secondary hover:text-apple-label border border-apple-border transition-all shadow-apple-sm flex items-center gap-1 active:scale-95"
           >
             <span>Directory</span>
           </Link>
@@ -143,7 +143,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             whileTap={{ scale: 0.88, rotate: 18 }}
             transition={springs.snappy}
             onClick={toggleTheme}
-            className="touch-target-expand w-9 h-9 rounded-full flex items-center justify-center text-apple-label-secondary hover:text-apple-label bg-apple-well hover:bg-apple-chip transition-colors border border-apple-border shadow-apple-sm cursor-pointer"
+            className="touch-target-expand w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-full flex items-center justify-center text-apple-label-secondary hover:text-apple-label bg-apple-well hover:bg-apple-chip transition-colors border border-apple-border shadow-apple-sm cursor-pointer"
             title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             aria-label="Toggle display appearance"
           >

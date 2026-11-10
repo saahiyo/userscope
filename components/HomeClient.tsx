@@ -312,14 +312,14 @@ export function HomeClient({ platformCount, scanRuleCount }: { platformCount: nu
               aria-hidden="true"
             />
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-apple-well border border-apple-border text-[11px] font-medium text-apple-label-secondary shadow-apple-sm">
-              <span className="w-2 h-2 rounded-full bg-apple-green animate-pulse" />
-              <span>{platformCount} Public Platforms in the Directory</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-apple-green animate-pulse" />
+              <span>{platformCount} Monitored Platforms</span>
             </div>
-            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-apple-label leading-[1.15] drop-shadow-sm">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-apple-label leading-[1.15] drop-shadow-sm">
               Search Usernames Across Public Platforms
             </h1>
-            <p className="text-xs sm:text-base text-apple-label-secondary dark:text-neutral-300 max-w-lg mx-auto leading-relaxed">
-              Search a username across {platformCount} listed public platforms. Full scans check {scanRuleCount} endpoint rules and stream results to your browser.
+            <p className="text-xs sm:text-sm md:text-base text-apple-label-secondary dark:text-neutral-300 max-w-lg mx-auto leading-relaxed">
+              Stream real-time profile hits across {scanRuleCount} endpoint rules. 100% free with zero sign-up.
             </p>
           </div>
 
@@ -333,49 +333,56 @@ export function HomeClient({ platformCount, scanRuleCount }: { platformCount: nu
 
           {/* Quick Demo Targets & Live Metrics Bar */}
           <div className="space-y-3 max-w-2xl mx-auto">
-            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-              <span className="text-[11px] font-medium text-apple-label-tertiary mr-1">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+              <span className="text-[11px] font-medium text-apple-label-tertiary shrink-0">
                 Explore targets:
               </span>
-              {[
-                { handle: 'torvalds', note: 'Linux' },
-                { handle: 'taylorotwell', note: 'Laravel' },
-                { handle: 'shadcn', note: 'UI' },
-                { handle: 'leerob', note: 'Next.js' },
-              ].map((item) => (
-                <motion.button
-                  key={item.handle}
-                  type="button"
-                  whileHover={{ y: -2, scale: 1.03 }}
-                  whileTap={microinteractions.chipTap}
-                  transition={springs.snappy}
-                  onClick={() => {
-                    setQuery(item.handle);
-                    startSearch(item.handle);
-                  }}
-                  className="touch-target-expand group px-3 py-1.5 rounded-full bg-apple-well hover:bg-apple-chip border border-apple-border hover:border-apple-border-strong text-xs text-apple-label transition-colors flex items-center gap-1.5 shadow-apple-sm"
-                >
-                  <span className="font-mono font-medium">@{item.handle}</span>
-                  <span className="text-[10px] text-apple-label-secondary group-hover:text-apple-blue transition-colors">
-                    {item.note} &rarr;
-                  </span>
-                </motion.button>
-              ))}
+              <div
+                className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto max-w-full px-1 py-0.5 justify-start sm:justify-center [&::-webkit-scrollbar]:hidden"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {[
+                  { handle: 'torvalds', note: 'Linux' },
+                  { handle: 'taylorotwell', note: 'Laravel' },
+                  { handle: 'shadcn', note: 'UI' },
+                  { handle: 'leerob', note: 'Next.js' },
+                ].map((item) => (
+                  <motion.button
+                    key={item.handle}
+                    type="button"
+                    whileHover={{ y: -2, scale: 1.03 }}
+                    whileTap={microinteractions.chipTap}
+                    transition={springs.snappy}
+                    onClick={() => {
+                      setQuery(item.handle);
+                      startSearch(item.handle);
+                    }}
+                    className="touch-target-expand group px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-apple-well hover:bg-apple-chip border border-apple-border hover:border-apple-border-strong text-[11px] sm:text-xs text-apple-label transition-colors flex items-center gap-1.5 shadow-apple-sm whitespace-nowrap shrink-0"
+                  >
+                    <span className="font-mono font-medium">@{item.handle}</span>
+                    <span className="text-[10px] text-apple-label-secondary group-hover:text-apple-blue transition-colors">
+                      {item.note}
+                    </span>
+                  </motion.button>
+                ))}
+              </div>
             </div>
 
-            {/* Quick Metrics Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 pt-2 text-[11px] font-mono text-apple-label-secondary">
+            {/* Quick Metrics Badges - Single Clean Row */}
+            <div className="flex items-center justify-center gap-2 sm:gap-4 pt-1 text-[10px] sm:text-[11px] font-mono text-apple-label-secondary flex-wrap">
               <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-apple-blue" />
+                <span className="w-1.5 h-1.5 rounded-full bg-apple-blue shrink-0" />
                 <span>{scanRuleCount} Scan Rules</span>
               </span>
+              <span className="text-apple-border/80">•</span>
               <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-apple-green" />
-                <span>Sub-second SSE Streaming</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-apple-green shrink-0" />
+                <span>Real-Time SSE</span>
               </span>
+              <span className="text-apple-border/80">•</span>
               <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-apple-purple" />
-                <span>Server-Processed Scans</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-apple-purple shrink-0" />
+                <span>Server-Processed</span>
               </span>
             </div>
           </div>
