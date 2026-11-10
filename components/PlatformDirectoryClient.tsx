@@ -202,14 +202,12 @@ export const PlatformDirectoryClient: React.FC<PlatformDirectoryClientProps> = (
                     {/* Header: Favicon + Platform Name + Category Badge */}
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-9 h-9 rounded-[10px] bg-apple-well border border-apple-border flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
-                          <PlatformFavicon
-                            src={platform.faviconUrl}
-                            alt={`${platform.name} icon`}
-                            className="w-5 h-5 object-contain"
-                            fallbackSize={18}
-                          />
-                        </div>
+                        <PlatformFavicon
+                          src={platform.faviconUrl}
+                          alt={`${platform.name} icon`}
+                          className="w-8 h-8 object-contain rounded-[6px] shrink-0"
+                          fallbackSize={24}
+                        />
                         <div className="min-w-0">
                           <Link
                             href={`/platforms/${platform.slug}`}

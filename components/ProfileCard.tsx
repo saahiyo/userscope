@@ -46,16 +46,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
           {/* Top Header Row: Platform Favicon & Name, Category Tag, & Outbound Link */}
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 min-w-0">
-              <div className="w-5 h-5 rounded-[6px] p-0.5 bg-apple-well border border-apple-border flex items-center justify-center shrink-0 overflow-hidden shadow-apple-sm">
                 <PlatformFavicon
                   src={profile.faviconUrl}
                   url={profile.profileUrl}
                   name={profile.platform}
                   alt={profile.platform}
-                  className="w-3.5 h-3.5 object-contain"
-                  fallbackSize={12}
+                  className="w-5 h-5 object-contain rounded-[4px] shrink-0"
+                  fallbackSize={16}
                 />
-              </div>
               <span className="font-bold text-xs tracking-wider uppercase text-apple-label truncate">
                 {profile.platform}
               </span>
@@ -113,14 +111,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
                   </div>
                 </div>
               ) : (
-                <div className="w-12 h-12 rounded-[14px] bg-apple-well border border-apple-border flex items-center justify-center shrink-0 shadow-md group-hover:scale-105 transition-transform overflow-hidden">
+                <div className="w-12 h-12 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <PlatformFavicon
                     src={profile.faviconUrl}
                     url={profile.profileUrl}
                     name={profile.platform}
                     alt={profile.platform}
-                    className="w-6 h-6 object-contain"
-                    fallbackSize={22}
+                    className="w-10 h-10 object-contain rounded-[8px]"
+                    fallbackSize={28}
                   />
                 </div>
               )}

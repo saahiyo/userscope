@@ -223,14 +223,12 @@ export default function PlatformPage({ params }: PageProps) {
         {/* Platform Hero Card */}
         <header className="apple-card rounded-[22px] sm:rounded-[26px] p-5 sm:p-7 border border-apple-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 shadow-apple-sm">
           <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[14px] bg-apple-well border border-apple-border flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
-              <PlatformFavicon
-                src={platform.faviconUrl}
-                alt={`${platform.name} favicon`}
-                className="w-7 h-7 sm:w-8 sm:h-8 object-contain"
-                fallbackSize={28}
-              />
-            </div>
+            <PlatformFavicon
+              src={platform.faviconUrl}
+              alt={`${platform.name} favicon`}
+              className="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-[12px] shrink-0"
+              fallbackSize={32}
+            />
 
             <div className="space-y-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2">
@@ -530,14 +528,12 @@ export default function PlatformPage({ params }: PageProps) {
                   className="apple-card rounded-[16px] p-4 border border-apple-border hover:border-apple-border-strong transition-all flex items-center justify-between gap-3 group"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-8 h-8 rounded-[8px] bg-apple-well border border-apple-border flex items-center justify-center shrink-0">
-                      <PlatformFavicon
-                        src={rel.faviconUrl}
-                        alt={`${rel.name} icon`}
-                        className="w-4 h-4 object-contain"
-                        fallbackSize={16}
-                      />
-                    </div>
+                    <PlatformFavicon
+                      src={rel.faviconUrl}
+                      alt={`${rel.name} icon`}
+                      className="w-8 h-8 object-contain rounded-[6px] shrink-0"
+                      fallbackSize={20}
+                    />
                     <div className="min-w-0">
                       <span className="font-semibold text-xs sm:text-sm text-apple-label group-hover:text-apple-blue transition-colors block truncate">
                         {rel.name}
