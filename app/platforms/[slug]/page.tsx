@@ -33,8 +33,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.space';
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const popular = getAllPlatforms().filter((platform) => platform.isPopular);
-  return popular.map((p) => ({
+  return getAllPlatforms().map((p) => ({
     slug: p.slug,
   }));
 }
@@ -54,8 +53,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const title = `Check ${platform.name} Usernames`;
-  const description = `Check whether a public username is present on ${platform.name}. Review the profile URL pattern and start a scan through UserScope.`;
+  const title = `Free ${platform.name} Username Search & Profile Lookup`;
+  const description = `Free ${platform.name} username search and OSINT lookup. Verify public accounts and trace digital footprints across ${PLATFORM_COUNT}+ platforms — no login.`;
 
   return {
     title,
@@ -64,9 +63,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       canonical: `${siteUrl}/platforms/${platform.slug}`,
     },
     robots: {
-      index: platform.isPopular,
+      index: true,
       follow: true,
-      googleBot: { index: platform.isPopular, follow: true },
+      googleBot: { index: true, follow: true },
     },
     openGraph: {
       title: `${title} | UserScope`,

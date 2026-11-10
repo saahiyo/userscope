@@ -3,12 +3,12 @@ import { getAllPlatforms } from '@/lib/osint/platformDirectory';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://userscope.space';
-  const platforms = getAllPlatforms().filter((platform) => platform.isPopular);
+  const platforms = getAllPlatforms();
 
   const platformEntries: MetadataRoute.Sitemap = platforms.map((p) => ({
     url: `${baseUrl}/platforms/${p.slug}`,
     changeFrequency: 'weekly',
-    priority: 0.8,
+    priority: p.isPopular ? 0.8 : 0.6,
   }));
 
   return [
