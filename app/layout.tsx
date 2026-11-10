@@ -160,14 +160,15 @@ export default function RootLayout({
       <head>
         <meta name="color-scheme" content="dark light" />
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=GTM-TM2S2ZMS"
+          src="https://www.googletagmanager.com/gtag/js?id=G-47QQQHVRBK"
           strategy="afterInteractive"
         />
-        <Script id="google-tag-manager" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
+            gtag('config', 'G-47QQQHVRBK');
             gtag('config', 'GTM-TM2S2ZMS');
           `}
         </Script>
