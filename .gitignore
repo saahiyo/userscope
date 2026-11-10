@@ -40,3 +40,6 @@ yarn-error.log*
 .agents/
 skills-lock.json
 
+
+# SEO audit artifacts
+*-audit/

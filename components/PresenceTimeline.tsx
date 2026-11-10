@@ -55,6 +55,7 @@ export const PresenceTimeline: React.FC<PresenceTimelineProps> = ({ profiles, ta
         if (!isNaN(parsed)) {
           timestamp = parsed;
           isExact = true;
+          highlight = 'Registered account date';
         }
       }
 
@@ -73,37 +74,12 @@ export const PresenceTimeline: React.FC<PresenceTimelineProps> = ({ profiles, ta
         }
       }
 
-      // Platform specific historical heuristics if join date wasn't exported
+      // If no exact registration date is available from the platform, mark as observed active in current scan
       if (!isExact) {
-        const pLower = p.platform.toLowerCase();
-        if (pLower.includes('deviantart')) {
-          dateStr = 'Jun 16, 2018';
-          timestamp = new Date('2018-06-16').getTime();
-          isExact = true;
-          highlight = 'Earliest recorded archive';
-        } else if (pLower.includes('duolingo')) {
-          dateStr = 'Jun 14, 2022';
-          timestamp = new Date('2022-06-14').getTime();
-          isExact = true;
-        } else if (pLower.includes('pinterest')) {
-          dateStr = 'Sep 12, 2022';
-          timestamp = new Date('2022-09-12').getTime();
-          isExact = false;
-          highlight = 'Active moodboard epoch';
-        } else if (pLower.includes('leetcode')) {
-          dateStr = 'Jan 2, 2024';
-          timestamp = new Date('2024-01-02').getTime();
-          isExact = true;
-          highlight = 'Competitive profile creation';
-        } else if (pLower.includes('registeredemails')) {
-          dateStr = 'Active Identity Record';
-          timestamp = new Date('2020-01-01').getTime();
-          isExact = false;
-        } else {
-          dateStr = 'Observed Active';
-          timestamp = p.checkedAt || Date.now();
-          isExact = false;
-        }
+        dateStr = 'Observed Active';
+        timestamp = p.checkedAt || Date.now();
+        isExact = false;
+        highlight = 'Public profile discovered';
       }
 
       const metrics: { label: string; value: string | number }[] = [];
@@ -151,8 +127,14 @@ export const PresenceTimeline: React.FC<PresenceTimelineProps> = ({ profiles, ta
     );
   }
 
-  const firstYear = new Date(events[0].timestamp).getFullYear() || 2018;
-  const lastYear = new Date(events[events.length - 1].timestamp).getFullYear() || 2026;
+  const datedEvents = events.filter((e) => e.isExact);
+  const hasExactHistory = datedEvents.length > 0;
+  const earliestTimestamp = hasExactHistory ? datedEvents[0].timestamp : events[0]?.timestamp;
+  const latestTimestamp = hasExactHistory ? datedEvents[datedEvents.length - 1].timestamp : events[events.length - 1]?.timestamp;
+
+  const currentYear = new Date().getFullYear();
+  const firstYear = earliestTimestamp ? new Date(earliestTimestamp).getFullYear() : currentYear;
+  const lastYear = latestTimestamp ? new Date(latestTimestamp).getFullYear() : currentYear;
   const spanYears = Math.max(1, lastYear - firstYear);
 
   return (
@@ -169,7 +151,7 @@ export const PresenceTimeline: React.FC<PresenceTimelineProps> = ({ profiles, ta
                 Digital Presence Chronology
               </h3>
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-apple-blue/15 text-apple-blue border border-apple-blue/25">
-                {spanYears}+ Year Span
+                {hasExactHistory && spanYears > 0 ? `${spanYears}+ Year Span` : `${events.length} Profiles Tracked`}
               </span>
             </div>
             <p className="text-xs text-apple-label-secondary font-medium">
@@ -180,13 +162,21 @@ export const PresenceTimeline: React.FC<PresenceTimelineProps> = ({ profiles, ta
 
         {/* Span Badge */}
         <div className="flex items-center gap-2 text-xs font-mono text-apple-label-secondary self-start sm:self-auto">
-          <span className="apple-tile px-3 py-1.5 rounded-full font-medium text-apple-label">
-            First seen: <strong className="text-apple-blue">{firstYear}</strong>
-          </span>
-          <span className="text-apple-label-tertiary">&rarr;</span>
-          <span className="apple-tile px-3 py-1.5 rounded-full font-medium text-apple-label">
-            Latest: <strong className="text-apple-green">{lastYear}</strong>
-          </span>
+          {hasExactHistory ? (
+            <>
+              <span className="apple-tile px-3 py-1.5 rounded-full font-medium text-apple-label">
+                First seen: <strong className="text-apple-blue">{firstYear}</strong>
+              </span>
+              <span className="text-apple-label-tertiary">&rarr;</span>
+              <span className="apple-tile px-3 py-1.5 rounded-full font-medium text-apple-label">
+                Latest: <strong className="text-apple-green">{lastYear}</strong>
+              </span>
+            </>
+          ) : (
+            <span className="apple-tile px-3 py-1.5 rounded-full font-medium text-apple-label">
+              Observed: <strong className="text-apple-blue">Current Scan Activity</strong>
+            </span>
+          )}
         </div>
       </div>
 

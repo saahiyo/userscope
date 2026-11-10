@@ -1,16 +1,36 @@
 # UserScope
 
-> Username reconnaissance tool for checking public profiles in the UserScope platform directory.
+> Username reconnaissance tool for checking public profiles across 653 platforms in the UserScope platform directory.
 
-UserScope helps security researchers, developers, and account owners check public username presence across its listed platform directory.
+UserScope helps security researchers, developers, and account owners check public username presence across its verified platform directory. Searches check public profile endpoints without authentication and stream verified findings in real time.
 
 - **Website**: https://userscope.space
 - **GitHub Repository**: https://github.com/saahiyo/userscope
 - **License**: MIT Open Source
 
+## Documentation & Resources
+
+- [UserScope Web Application](https://userscope.space/): Real-time OSINT username search across 653 public platforms.
+- [Public Platform Directory](https://userscope.space/platforms): Complete searchable directory of all 653 supported public platforms and endpoints.
+- [Full LLM Reference](https://userscope.space/llms-full.txt): Complete catalog of platforms, query schemas, and API parameters for LLM agents.
+- [Source Code & Issues](https://github.com/saahiyo/userscope): Open-source GitHub repository, scan rules, and platform contribution guides.
+
+## Popular Platform Endpoints
+
+- [GitHub Profile Check](https://userscope.space/platforms/github): Verify username presence and public repository profiles on GitHub.
+- [Reddit Profile Check](https://userscope.space/platforms/reddit): Inspect public profile and account existence on Reddit.
+- [X Profile Check](https://userscope.space/platforms/x): Check handle presence on X (formerly Twitter).
+- [GitLab Profile Check](https://userscope.space/platforms/gitlab): Verify developer accounts and repositories on GitLab.
+- [Docker Hub Profile Check](https://userscope.space/platforms/docker-hub): Search Docker container publisher handles.
+- [npm Profile Check](https://userscope.space/platforms/npm): Check JavaScript package author profiles on npm.
+- [PyPI Profile Check](https://userscope.space/platforms/pypi): Verify Python package maintainer handles on PyPI.
+- [Discord Tag Check](https://userscope.space/platforms/discord): Verify Discord username and invite link patterns.
+- [Telegram Handle Check](https://userscope.space/platforms/telegram): Check public Telegram channel and handle endpoints.
+- [Steam Profile Check](https://userscope.space/platforms/steam): Verify public gaming community profiles on Steam.
+
 ## Capabilities
 
-- **Real-Time Reconnaissance Engine**: UserScope's server checks public APIs and profile endpoints, then streams results to the browser with Server-Sent Events (SSE).
+- **Real-Time Reconnaissance Engine**: Server-side validation against public APIs and profile endpoints, streaming results to the browser via Server-Sent Events (SSE).
 - **Identity Synthesis**: Aggregates verified profile photos, banners, discovered emails, locations, account creation dates, and aliases.
 - **Multimodal Visualizations**: Explore results through interactive relationship graphs, chronological presence timelines, or responsive masonry card layouts.
 - **Forensic Data Export**: Download verified findings anytime in standardized JSON or spreadsheet-ready CSV formats.
@@ -34,5 +54,5 @@ Example: `https://userscope.space/?q=torvalds`
 
 ## Privacy & Ethical OSINT Architecture
 
-- **Passive Unauthenticated Queries**: UserScope only queries public endpoints open to the worldwide web. It never bypasses access controls or authenticates as a user.
-- **Search Processing**: Search usernames are sent to UserScope's server for processing. The app does not provide saved search history; infrastructure log retention depends on the service operator.
+- **Passive Unauthenticated Queries**: UserScope only queries public endpoints open to the worldwide web. It never bypasses access controls, never attempts brute-forcing, and never authenticates as a user.
+- **Search Processing**: Search usernames are sent to UserScope's server for processing. The app does not store persistent search history; infrastructure log retention depends on the service operator.

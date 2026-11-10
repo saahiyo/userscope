@@ -83,7 +83,7 @@ export const FeatureBento: React.FC<{ scanRuleCount: number }> = ({ scanRuleCoun
             </div>
           </div>
           <div className="mt-4 pt-3 border-t border-apple-border flex items-center justify-between text-xs font-medium text-apple-green">
-            <span>Unlimited Lookups</span>
+            <span>Free Public Access</span>
             <span className="text-[10px] font-mono uppercase bg-apple-green/10 px-2 py-0.5 rounded-full">
               No API Keys
             </span>

@@ -66,8 +66,8 @@ export function HomeClient({ platformCount, scanRuleCount }: { platformCount: nu
   const [stats, setStats] = useState({
     profilesFound: 0,
     timeElapsed: 0,
-    firstSeen: 'Jun 16, 2018',
-    lastSeen: 'Aug 26, 2026',
+    firstSeen: undefined as string | undefined,
+    lastSeen: undefined as string | undefined,
     checkedCount: 0,
     totalCount: scanRuleCount,
   });
@@ -122,8 +122,8 @@ export function HomeClient({ platformCount, scanRuleCount }: { platformCount: nu
       setStats({
         profilesFound: 0,
         timeElapsed: 0,
-        firstSeen: 'Jun 16, 2018',
-        lastSeen: 'Aug 26, 2026',
+        firstSeen: undefined,
+        lastSeen: undefined,
         checkedCount: 0,
         totalCount: plat ? 1 : scanRuleCount,
       });
@@ -156,6 +156,8 @@ export function HomeClient({ platformCount, scanRuleCount }: { platformCount: nu
             timeElapsed: payload.timeElapsedMs ? Number((payload.timeElapsedMs / 1000).toFixed(1)) : prev.timeElapsed,
             checkedCount: payload.checkedCount ?? prev.checkedCount,
             totalCount: payload.totalCount ?? prev.totalCount,
+            firstSeen: payload.summary?.firstSeen ?? prev.firstSeen,
+            lastSeen: payload.summary?.lastSeen ?? prev.lastSeen,
           }));
 
           if (payload.type === 'complete' || payload.type === 'error') {

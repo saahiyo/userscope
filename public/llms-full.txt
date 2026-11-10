@@ -1,0 +1,95 @@
+# UserScope: Full Technical Reference & Agent Specification
+
+> Complete specification, architecture documentation, query interface, and platform directory for UserScope.
+
+- **Canonical URL**: https://userscope.space
+- **Specification Version**: 1.0.0
+- **License**: MIT Open Source (https://opensource.org/licenses/MIT)
+- **Repository**: https://github.com/saahiyo/userscope
+
+---
+
+## 1. System Overview
+
+UserScope is an open-source passive intelligence reconnaissance suite designed for security analysts, identity researchers, and developers. It validates the existence of public user profiles across 653 internet ecosystems by checking unauthenticated public endpoints, REST APIs, and profile pages.
+
+### Core Philosophy
+1. **Zero Intrusion**: Does not authenticate, bypass access controls, or scrape private user data.
+2. **Real-Time Streaming**: Emits live check telemetry over Server-Sent Events (SSE).
+3. **Structured Outputs**: Yields standardized schema objects compatible with forensic analysis workflows.
+
+---
+
+## 2. Agent & Query Interfaces
+
+### URL Parameters
+Agents and web clients can trigger scans via HTTP GET query parameters on the root URL:
+- `https://userscope.space/?q={username}`
+- `https://userscope.space/?username={username}`
+
+Example:
+`https://userscope.space/?q=octocat`
+
+### Content Negotiation
+- **HTML**: Standard browser response with interactive UI, visual relationship graph, and timeline.
+- **Markdown**: Clients requesting `Accept: text/markdown` or querying `https://userscope.space/index.md` receive dualmark-compatible clean Markdown summaries.
+- **Link Headers**: All web pages declare `Link: </index.md>; rel="alternate"; type="text/markdown"`.
+
+---
+
+## 3. Platform Directory Taxonomy
+
+UserScope categorizes platforms into 6 primary functional domains:
+
+### 3.1 Developer & Code
+- **Scope**: Source control repositories, package managers, continuous integration registries, coding sandboxes.
+- **Key Registries**: GitHub, GitLab, Bitbucket, Docker Hub, npm, PyPI, Crates.io, Rubygems, Packagist, Hugging Face, Kaggle, HackerRank, Codeberg, Replit, CodePen, LeetCode.
+
+### 3.2 Social & Identity
+- **Scope**: Social networks, decentralized federations, discussion forums, identity services.
+- **Key Registries**: X (Twitter), Reddit, Bluesky, Mastodon, Telegram, Discord, Threads, Lemmy, Discourse, Pinterest, Tumblr, Keybase, Gravatar, Linktree.
+
+### 3.3 Media & Creative
+- **Scope**: Audio streaming, video distribution, art portfolios, photography archives.
+- **Key Registries**: YouTube, Spotify, SoundCloud, Vimeo, Behance, Dribbble, DeviantArt, Flickr, 500px, Bandcamp, ArtStation, Last.fm, Letterboxd.
+
+### 3.4 Professional & Writing
+- **Scope**: Blogging platforms, newsletters, product discovery, freelance marketplaces.
+- **Key Registries**: Medium, Substack, Dev.to, Hashnode, ProductHunt, About.me, Freelancer, Fiverr, Buy Me a Coffee, Patreon.
+
+### 3.5 Gaming & Virtual
+- **Scope**: Gaming networks, speedrun tracking, virtual worlds, chess communities.
+- **Key Registries**: Steam, Twitch, Chess.com, Lichess, Roblox, Speedrun.com, NexusMods, Minecraft, Xbox, PlayStation Network.
+
+### 3.6 Global Services & Community
+- **Scope**: Wikis, public archives, developer docs, regional platforms.
+- **Key Registries**: Wikipedia, OpenStreetMap, SourceForge, Instructables, Wikidot, Pastebin, HackerNews.
+
+---
+
+## 4. Verification Check Types
+
+UserScope employs three non-intrusive public verification mechanisms:
+
+1. **REST API Checks**: Queries public JSON endpoints (e.g. `api.github.com/users/{username}`) and verifies HTTP status codes (200 OK vs 404 Not Found).
+2. **HTTP Status Code Matching**: Sends HEAD/GET requests to canonical public profile URLs where platforms return distinct HTTP status codes (200 vs 404).
+3. **Public Body Pattern Matching**: Performs string/regex analysis on public error pages where platforms return 200 status codes with "User Not Found" or account-deactivated DOM markers.
+
+---
+
+## 5. Structured Data Schema
+
+The application publishes Schema.org JSON-LD structured data on all pages:
+- `@type: WebSite`: Defines site search action (`SearchAction`) enabling direct search integration.
+- `@type: WebApplication`: Details software version, pricing (Free, 0 USD), and feature lists.
+- `@type: FAQPage`: Answers questions regarding reconnaissance methodologies and privacy.
+- `@type: BreadcrumbList`: Navigational breadcrumbs across platform directories (`Home > Platforms > {Platform}`).
+
+---
+
+## 6. Privacy & Legal Compliance
+
+UserScope is designed strictly for authorized reconnaissance, brand defense, and ethical footprint analysis:
+- Does not log, sell, or monetize search queries.
+- Queries are executed in-memory and streamed to the requesting client.
+- Always consult applicable platform terms of service and local cyber regulations before conducting OSINT investigations.

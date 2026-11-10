@@ -9,6 +9,10 @@ const nextConfig = {
         source: '/(.*)',
         headers: [
           {
+            key: 'Vary',
+            value: 'Accept',
+          },
+          {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
           },

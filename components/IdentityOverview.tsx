@@ -32,8 +32,8 @@ export const IdentityOverview: React.FC<IdentityOverviewProps> = ({
   targetUsername,
   totalFound,
   timeElapsed,
-  firstSeen = 'Jun 16, 2018',
-  lastSeen = 'Aug 26, 2026',
+  firstSeen,
+  lastSeen,
 }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -118,8 +118,8 @@ export const IdentityOverview: React.FC<IdentityOverviewProps> = ({
               <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-apple-label">
                 @{targetUsername}
               </h2>
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase px-2.5 py-0.5 rounded-full bg-apple-green/15 text-apple-green border border-apple-green/30 tracking-wider shadow-sm">
-                Verified Footprint
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase px-2.5 py-0.5 rounded-full bg-apple-blue/15 text-apple-blue border border-apple-blue/30 tracking-wider shadow-sm">
+                Public Footprint
               </span>
             </div>
             <p className="text-xs text-apple-label-secondary font-medium mt-0.5">
@@ -136,9 +136,15 @@ export const IdentityOverview: React.FC<IdentityOverviewProps> = ({
           <span className="px-3 py-1.5 rounded-full apple-tile shadow-sm">
             {timeElapsed}s scan
           </span>
-          <span className="px-3 py-1.5 rounded-full apple-tile text-[11px] shadow-sm">
-            Active {firstSeen} &rarr; {lastSeen}
-          </span>
+          {firstSeen ? (
+            <span className="px-3 py-1.5 rounded-full apple-tile text-[11px] shadow-sm">
+              Active {firstSeen}{lastSeen && lastSeen !== firstSeen ? ` → ${lastSeen}` : ''}
+            </span>
+          ) : (
+            <span className="px-3 py-1.5 rounded-full apple-tile text-[11px] shadow-sm">
+              Live Public Scan
+            </span>
+          )}
         </div>
       </div>
 

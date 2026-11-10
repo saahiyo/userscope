@@ -139,15 +139,28 @@ async function checkDeviantArt(username: string): Promise<DiscoveredProfile | nu
                         html.match(/data-icon="(https:\/\/a\.deviantart\.net\/avatars-big\/[^"]+)"/i);
     const avatarUrl = avatarMatch ? avatarMatch[1] : `https://a.deviantart.net/avatars-big/l/i/${username}.jpg?4`;
 
-    // Scrape location
-    let location = undefined;
-    if (html.includes('>India</span>') || html.includes('e81d3y">India') || html.includes('India')) {
-      location = 'India';
+    // Scrape location if present in user metadata block
+    let location: string | undefined = undefined;
+    const locationMatch = html.match(/itemprop="address"[^>]*>([^<]+)</i) ||
+                          html.match(/class="[^"]*country[^"]*"[^>]*>([^<]+)</i);
+    if (locationMatch && locationMatch[1]) {
+      const locText = locationMatch[1].trim();
+      if (locText && locText.length < 50) {
+        location = locText;
+      }
     }
 
     // Scrape Watchers & Watching
     const watchersMatch = html.match(/>Watchers<\/a>\s*<span[^>]*>(\d+)</i);
     const watchingMatch = html.match(/>Watching<\/a>\s*<span[^>]*>(\d+)</i);
+
+    const followers = watchersMatch ? Number(watchersMatch[1]) : undefined;
+    const following = watchingMatch ? Number(watchingMatch[1]) : undefined;
+
+    const extraFields: Record<string, string | number> = {};
+    if (location) extraFields['Location'] = location;
+    if (followers !== undefined) extraFields['Watchers'] = followers;
+    if (following !== undefined) extraFields['Watching'] = following;
 
     return {
       id: `deviantart-${username}`,
@@ -158,17 +171,13 @@ async function checkDeviantArt(username: string): Promise<DiscoveredProfile | nu
       displayName: `${username} on DeviantArt`,
       avatarUrl,
       location,
-      followers: watchersMatch ? Number(watchersMatch[1]) : 2,
-      following: watchingMatch ? Number(watchingMatch[1]) : 17,
-      posts: 4,
-      bio: `Digital artist & hobby illustrator on DeviantArt. Artworks: 4 · Followers: ${watchersMatch ? watchersMatch[1] : 2}`,
+      followers,
+      following,
+      bio: followers !== undefined
+        ? `Artist on DeviantArt · Watchers: ${followers}`
+        : `${username}'s public profile on DeviantArt`,
       verified: true,
-      extraFields: {
-        'Location': location || 'India',
-        'Artworks': 4,
-        'Watchers': watchersMatch ? watchersMatch[1] : 2,
-        'Watching': watchingMatch ? watchingMatch[1] : 17
-      },
+      extraFields: Object.keys(extraFields).length > 0 ? extraFields : undefined,
       checkedAt: Date.now()
     };
   } catch {
@@ -262,37 +271,7 @@ async function checkChess(username: string): Promise<DiscoveredProfile | null> {
   }
 }
 
-// 6. RegisteredEmails / Holehe email correlation
-async function checkRegisteredEmails(username: string): Promise<DiscoveredProfile | null> {
-  // Check if query is already an email or derive primary candidate
-  const emailCandidate = username.includes('@') ? username : `${username}@gmail.com`;
-  const [localPart, domainPart] = emailCandidate.split('@');
-  const domain = domainPart || 'gmail.com';
-
-  const maskedRecovery = localPart.length > 3
-    ? `${localPart.slice(0, 2)}***${localPart.slice(-1)}@${domain}`
-    : `${localPart.slice(0, 1)}***@${domain}`;
-
-  return {
-    id: `registeredemails-${username}`,
-    platform: 'REGISTEREDEMAILS',
-    category: 'social',
-    username,
-    profileUrl: `mailto:${emailCandidate}`,
-    displayName: localPart,
-    email: emailCandidate,
-    verified: true,
-    bio: 'Email linkage verified across public registration records',
-    extraFields: {
-      'Primary Email': emailCandidate,
-      'Recovery Email': maskedRecovery,
-      'Deliverable Status': 'Active Mailbox'
-    },
-    checkedAt: Date.now()
-  };
-}
-
-// 7. Specialized Pinterest extractor with authentic user avatar
+// 6. Specialized Pinterest extractor with authentic user avatar
 async function checkPinterest(username: string): Promise<DiscoveredProfile | null> {
   try {
     const profileUrl = `https://www.pinterest.com/${encodeURIComponent(username)}/`;
@@ -326,13 +305,24 @@ async function checkPinterest(username: string): Promise<DiscoveredProfile | nul
 
     // About / Bio
     const aboutMatch = html.match(/"about":\s*"([^"]+)"/);
-    const bio = aboutMatch?.[1] ? aboutMatch[1].replace(/\\n/g, ' ') : 'Visual inspiration and moodboards on Pinterest';
+    const bio = aboutMatch?.[1] ? aboutMatch[1].replace(/\\n/g, ' ') : undefined;
 
     // Counts
     const followerMatch = html.match(/"follower_count":\s*(\d+)/);
     const followingMatch = html.match(/"following_count":\s*(\d+)/);
     const boardMatch = html.match(/"board_count":\s*(\d+)/);
     const pinMatch = html.match(/"pin_count":\s*(\d+)/);
+
+    const followers = followerMatch ? Number(followerMatch[1]) : undefined;
+    const following = followingMatch ? Number(followingMatch[1]) : undefined;
+    const boards = boardMatch ? Number(boardMatch[1]) : undefined;
+    const pins = pinMatch ? Number(pinMatch[1]) : undefined;
+
+    const extraFields: Record<string, string | number> = {};
+    if (boards !== undefined) extraFields['Boards'] = boards;
+    if (pins !== undefined) extraFields['Pins'] = pins;
+    if (followers !== undefined) extraFields['Followers'] = followers;
+    if (following !== undefined) extraFields['Following'] = following;
 
     return {
       id: `pinterest-${username}`,
@@ -342,16 +332,11 @@ async function checkPinterest(username: string): Promise<DiscoveredProfile | nul
       displayName,
       profileUrl,
       avatarUrl,
-      bio,
-      followers: followerMatch ? Number(followerMatch[1]) : 3,
-      following: followingMatch ? Number(followingMatch[1]) : 27,
-      posts: boardMatch ? Number(boardMatch[1]) : 26,
-      extraFields: {
-        'Boards': boardMatch ? Number(boardMatch[1]) : 26,
-        'Pins': pinMatch ? Number(pinMatch[1]) : 5,
-        'Followers': followerMatch ? Number(followerMatch[1]) : 3,
-        'Following': followingMatch ? Number(followingMatch[1]) : 27
-      },
+      bio: bio || `${displayName}'s boards and visual pins on Pinterest`,
+      followers,
+      following,
+      posts: boards,
+      extraFields: Object.keys(extraFields).length > 0 ? extraFields : undefined,
       verified: true,
       checkedAt: Date.now()
     };
@@ -435,13 +420,16 @@ export async function runDynamicOsintScan(
   const aggregatedSummary: SearchAggregatedSummary = {
     profilePictures: [],
     banners: [],
-    emails: [],
+    emails: cleanUsername.includes('@') ? [cleanUsername] : [],
     locations: [],
     names: [],
     usernames: [cleanUsername],
-    firstSeen: 'Jun 16, 2018',
-    lastSeen: 'Aug 26, 2026'
+    firstSeen: undefined,
+    lastSeen: undefined
   };
+
+  let earliestTimestamp: number | null = null;
+  let latestTimestamp: number | null = null;
 
   const discoveredMap = new Map<string, DiscoveredProfile>();
 
@@ -449,6 +437,20 @@ export async function runDynamicOsintScan(
     if (signal?.aborted) return;
     if (discoveredMap.has(p.platform)) return;
     discoveredMap.set(p.platform, p);
+
+    if (p.joinedDate) {
+      const parsed = Date.parse(p.joinedDate);
+      if (!isNaN(parsed)) {
+        if (earliestTimestamp === null || parsed < earliestTimestamp) {
+          earliestTimestamp = parsed;
+          aggregatedSummary.firstSeen = p.joinedDate;
+        }
+        if (latestTimestamp === null || parsed > latestTimestamp) {
+          latestTimestamp = parsed;
+          aggregatedSummary.lastSeen = p.joinedDate;
+        }
+      }
+    }
 
     if (p.avatarUrl && !aggregatedSummary.profilePictures.includes(p.avatarUrl)) {
       aggregatedSummary.profilePictures.push(p.avatarUrl);
@@ -540,7 +542,6 @@ export async function runDynamicOsintScan(
   // Multi-Platform Full Scan Mode (Default)
   // 1. Run high-accuracy specialized extractors in parallel
   const specializedExtractors = [
-    () => checkRegisteredEmails(cleanUsername),
     () => checkLeetCode(cleanUsername),
     () => checkDeviantArt(cleanUsername),
     () => checkDuolingo(cleanUsername),
