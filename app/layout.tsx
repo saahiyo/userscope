@@ -16,10 +16,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Free Username Search Across Public Platforms | UserScope',
+    default: `UserScope — Free Username Search Across ${PLATFORM_COUNT} Platforms`,
     template: '%s | UserScope',
   },
-  description: `Free username search across ${PLATFORM_COUNT} public platforms. Check public profile endpoints and follow results as they stream to your browser.`,
+  description: `Instant username lookup across ${PLATFORM_COUNT} public platforms. Check handle availability, trace digital footprints, and stream real-time results. 100% free & no sign-up.`,
   keywords: [
     'UserScope',
     'OSINT',
@@ -55,8 +55,8 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: 'Free Username Search Across Public Platforms | UserScope',
-    description: `Search public handles across ${PLATFORM_COUNT} public platforms with live result streaming.`,
+    title: `UserScope — Free Username Search Across ${PLATFORM_COUNT} Platforms`,
+    description: `Instant username lookup across ${PLATFORM_COUNT} public platforms. Trace digital footprints and stream real-time results with zero login.`,
     url: siteUrl,
     siteName: 'UserScope',
     locale: 'en_US',
@@ -72,8 +72,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Username Search Across Public Platforms | UserScope',
-    description: `Search public handles across ${PLATFORM_COUNT} public platforms with live result streaming.`,
+    title: `UserScope — Free Username Search Across ${PLATFORM_COUNT} Platforms`,
+    description: `Instant username lookup across ${PLATFORM_COUNT} public platforms. Trace digital footprints and stream real-time results with zero login.`,
     images: ['/og.png'],
   },
   robots: {

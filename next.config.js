@@ -44,14 +44,6 @@ const nextConfig = {
       },
     ];
   },
-  async rewrites() {
-    return [
-      {
-        source: '/favicon.ico',
-        destination: '/icon.svg',
-      },
-    ];
-  },
   async redirects() {
     return [
       {
