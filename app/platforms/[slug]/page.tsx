@@ -13,13 +13,13 @@ import {
   PLATFORM_COUNT,
   SCAN_RULE_COUNT,
 } from '@/lib/osint/platformDirectory';
+import { getUsernameRules } from '@/lib/osint/usernameRules';
 import {
   ChevronRight,
   ExternalLink,
   ShieldCheck,
   CheckCircle2,
   Cpu,
-  Zap,
   Lock,
   ArrowRight,
   Search,
@@ -55,6 +55,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = `Free ${platform.name} Username Search & Profile Lookup`;
   const description = `Free ${platform.name} username search and OSINT lookup. Verify public accounts and trace digital footprints across ${PLATFORM_COUNT}+ platforms — no login.`;
+  const ogImageUrl = `${siteUrl}/platforms/${platform.slug}/opengraph-image`;
 
   return {
     title,
@@ -74,7 +75,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       siteName: 'UserScope',
       images: [
         {
-          url: '/og.png',
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: `UserScope - Check Username on ${platform.name}`,
@@ -85,7 +86,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: 'summary_large_image',
       title: `${title} | UserScope`,
       description,
-      images: ['/og.png'],
+      images: [ogImageUrl],
     },
   };
 }
@@ -99,6 +100,7 @@ export default function PlatformPage({ params }: PageProps) {
 
   const related = getRelatedPlatforms(platform, 4);
   const categoryInfo = CATEGORIES[platform.categoryKey];
+  const rules = getUsernameRules(platform);
 
   const faqs = [
     {
@@ -106,16 +108,24 @@ export default function PlatformPage({ params }: PageProps) {
       a: `UserScope inspects public endpoints on ${platform.name} (${platform.domain}) using passive query patterns (${platform.checkType}). It verifies whether the username returns an active profile or an unregistered 404 response without making unauthorized modifications or alerting the account owner.`,
     },
     {
-      q: `How does UserScope process searches for ${platform.name}?`,
-      a: `Searches are sent to UserScope's server, which checks public endpoints. The app does not provide saved search history; infrastructure log retention depends on the service operator.`,
+      q: `What username length and characters are allowed on ${platform.name}?`,
+      a: `Handles on ${platform.name} typically range from ${rules.minLength} to ${rules.maxLength} characters. Allowed characters include ${rules.allowedChars}. Note that queries should be entered without any leading '@' or URL symbols.`,
     },
     {
-      q: `What format should I use when looking up handles on ${platform.name}?`,
-      a: `Provide the raw alphanumeric handle without URL prefixes or '@' symbols. The standard profile URL pattern for ${platform.name} resolves to ${platform.urlPattern}.`,
+      q: `Does ${platform.name} notify the account owner when a search is performed?`,
+      a: `No. UserScope issues unauthenticated, read-only requests against public HTTP or API endpoints. The account owner is never notified, and no account credentials or sessions are used.`,
+    },
+    {
+      q: `How does UserScope process searches for ${platform.name}?`,
+      a: `Searches are sent to UserScope's server, which checks public endpoints and streams live telemetry to your browser via Server-Sent Events (SSE). The application does not save search histories.`,
     },
     {
       q: `Why is checking ${platform.name} valuable during OSINT investigations?`,
       a: `As part of the ${platform.category} ecosystem, usernames on ${platform.name} frequently correlate across other public registries. Correlating identical handles across multiple platforms helps identify digital footprints, verify online presence, or protect personal brand identity.`,
+    },
+    {
+      q: `What does it mean if a handle on ${platform.name} returns 404?`,
+      a: `A 404 status indicates that the handle is currently unregistered or unallocated on ${platform.name}. It may be open for brand registration or was previously deactivated by the platform.`,
     },
   ];
 
@@ -274,6 +284,73 @@ export default function PlatformPage({ params }: PageProps) {
           scanRuleCount={SCAN_RULE_COUNT}
         />
 
+        {/* Username Constraints & Guidelines Section */}
+        <section className="space-y-4">
+          <div className="space-y-1">
+            <h2 className="text-base sm:text-lg font-bold text-apple-label tracking-tight flex items-center gap-2">
+              <FileText className="w-4 h-4 text-apple-blue" />
+              <span>{platform.name} Username Format & Constraints</span>
+            </h2>
+            <p className="text-xs text-apple-label-secondary leading-relaxed">
+              Namespace rules, character limitations, and valid handle syntax for {platform.name}:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="apple-card rounded-[16px] p-4 border border-apple-border space-y-1">
+              <span className="text-[11px] font-semibold text-apple-label-tertiary uppercase tracking-wider block">
+                Character Length
+              </span>
+              <span className="text-sm font-bold text-apple-label font-mono">
+                {rules.minLength} – {rules.maxLength} chars
+              </span>
+            </div>
+
+            <div className="apple-card rounded-[16px] p-4 border border-apple-border space-y-1">
+              <span className="text-[11px] font-semibold text-apple-label-tertiary uppercase tracking-wider block">
+                Case Sensitivity
+              </span>
+              <span className="text-sm font-bold text-apple-label font-mono">
+                {rules.caseSensitive ? 'Case Sensitive' : 'Case Insensitive'}
+              </span>
+            </div>
+
+            <div className="apple-card rounded-[16px] p-4 border border-apple-border space-y-1 sm:col-span-2">
+              <span className="text-[11px] font-semibold text-apple-label-tertiary uppercase tracking-wider block">
+                Allowed Characters
+              </span>
+              <span className="text-xs font-semibold text-apple-label leading-tight block">
+                {rules.allowedChars}
+              </span>
+            </div>
+          </div>
+
+          <div className="apple-card rounded-[18px] p-4 sm:p-5 border border-apple-border space-y-3">
+            <div className="text-xs font-semibold text-apple-label flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-apple-teal" />
+              <span>Namespace Policy & Platform Rules</span>
+            </div>
+            <ul className="space-y-2 text-xs text-apple-label-secondary list-disc list-inside">
+              {rules.specialRules.map((rule, idx) => (
+                <li key={idx} className="leading-relaxed">
+                  {rule}
+                </li>
+              ))}
+            </ul>
+
+            <div className="pt-2 border-t border-apple-border/60 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+              <div className="p-2.5 rounded-[10px] bg-apple-green/10 border border-apple-green/20 text-apple-green flex items-center justify-between">
+                <span className="text-[11px] font-bold">Valid Example:</span>
+                <span className="font-semibold">{rules.exampleValid}</span>
+              </div>
+              <div className="p-2.5 rounded-[10px] bg-apple-pink/10 border border-apple-pink/20 text-apple-pink flex items-center justify-between">
+                <span className="text-[11px] font-bold">Disallowed Example:</span>
+                <span className="line-through opacity-80">{rules.exampleInvalid}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Technical Reconnaissance Blueprint */}
         <section className="space-y-4">
           <h2 className="text-base sm:text-lg font-bold text-apple-label tracking-tight">
@@ -408,7 +485,7 @@ export default function PlatformPage({ params }: PageProps) {
               <span>Frequently Asked Questions about {platform.name} Reconnaissance</span>
             </h2>
             <p className="text-xs text-apple-label-secondary leading-relaxed">
-              Common questions regarding handle verification, privacy, and footprint detection on {platform.name}:
+              Common questions regarding handle verification, namespace rules, and privacy on {platform.name}:
             </p>
           </div>
 
